@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "city_slug": "jawai",
+    "title": "Sunset Gypsy Safari",
+    "duration": "4 hours",
+    "price": 1500,
+    "capacity": 6,
+    "images": ["https://source.unsplash.com/800x600/?safari"],
+    "description": "Evening safari to spot leopards and migratory birds."
+  },
+  {
+    "id": 2,
+    "city_slug": "jodhpur",
+    "title": "Full Day Wildlife Drive",
+    "duration": "8 hours",
+    "price": 3000,
+    "capacity": 6,
+    "images": ["https://source.unsplash.com/800x600/?jeep,safari"],
+    "description": "Explore outskirts and local villages with an experienced guide."
+  }
+]

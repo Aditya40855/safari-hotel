@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "city_slug": "jodhpur",
+    "name": "Blue City Inn",
+    "slug": "blue-city-inn",
+    "address": "Near Mehrangarh Fort, Jodhpur",
+    "price_from": 1999,
+    "rating": 4.3,
+    "images": ["https://source.unsplash.com/800x600/?hotel"],
+    "rooms": [{"type":"Deluxe","price":1999}]
+  },
+  {
+    "id": 2,
+    "city_slug": "jodhpur",
+    "name": "Desert View Hotel",
+    "slug": "desert-view-hotel",
+    "address": "Old City, Jodhpur",
+    "price_from": 2499,
+    "rating": 4.6,
+    "images": ["https://source.unsplash.com/800x600/?resort"],
+    "rooms": [{"type":"Standard","price":2499}]
+  },
+  {
+    "id": 3,
+    "city_slug": "jawai",
+    "name": "Jawai Lodge",
+    "slug": "jawai-lodge",
+    "address": "Near Jawai Bandh",
+    "price_from": 2999,
+    "rating": 4.8,
+    "images": ["https://source.unsplash.com/800x600/?wildlife"],
+    "rooms": [{"type":"Cottage","price":2999}]
+  }
+]
