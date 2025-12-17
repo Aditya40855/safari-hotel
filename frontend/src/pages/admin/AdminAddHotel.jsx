@@ -180,7 +180,7 @@ export default function AdminAddHotel() {
   {imagesInput && (
     <div className="flex gap-2 mt-2 overflow-x-auto">
       {imagesInput.split(',').map(s => s.trim()).filter(Boolean).map((src, i) => (
-         <img key={i} src={src.startsWith('http') ? src : `http://localhost:4000${src}`} alt="Preview" className="h-16 w-16 object-cover rounded border" />
+         <img key={i} src={src.startsWith('http') ? src : `${API_BASE}${src}`} alt="Preview" className="h-16 w-16 object-cover rounded border" />
       ))}
     </div>
   )}

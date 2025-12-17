@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { deleteSafari, getSafaris, getAuthToken } from "../../lib/api";
+import { API_BASE } from '../lib/api';
 
 export default function AdminInventory() {
   const [hotels, setHotels] = useState([]);
   const [safaris, setSafaris] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Smart URL: Uses localhost for now, but ready for real server later
-  const API_BASE = window.location.hostname === "localhost" ? "http://localhost:4000" : "/api";
 
   useEffect(() => {
     loadData();
