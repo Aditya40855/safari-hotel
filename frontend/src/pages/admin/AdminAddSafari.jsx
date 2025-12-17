@@ -172,7 +172,7 @@ export default function AdminAddSafari() {
               {imagesInput.split(',').map(s => s.trim()).filter(Boolean).map((src, i) => (
                 <img 
                   key={i} 
-                  // If it starts with /uploads, prepend localhost:4000
+                  // If it starts with /uploads, prepend 
                   src={src.startsWith('/uploads') ? `${API_BASE}${src}` : src} 
                   alt="Preview" 
                   className="h-20 w-20 object-cover rounded border shadow-sm" 
