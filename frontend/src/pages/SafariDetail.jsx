@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getSafariById } from "../lib/api";
 import BookingWidgetSafariSingleDay from "../components/BookingWidgetSafariSingleDay";
 import ReviewSection from "../components/ReviewSection"; // Import Reviews
+import { API_BASE } from '../lib/api';
 
 export default function SafariDetail() {
   const { id } = useParams();
@@ -35,7 +36,7 @@ export default function SafariDetail() {
   // Smart Image Fix
   let mainImg = (safari.images && safari.images.length && safari.images[0]) || "/images/safari-placeholder.jpg";
   if (mainImg.startsWith("/uploads")) {
-    mainImg = `http://localhost:4000${mainImg}`;
+    mainImg = `${API_BASE}${mainImg}`;
   }
 
   return (

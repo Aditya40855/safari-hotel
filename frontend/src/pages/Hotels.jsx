@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom"; // Added useSearchParams
 import { getCities, getAuthToken } from "../lib/api";
+import { API_BASE } from '../lib/api';
+
+
 
 export default function Hotels() {
   const [allHotels, setAllHotels] = useState([]);
@@ -13,7 +16,7 @@ export default function Hotels() {
   const [searchParams] = useSearchParams();
   const initialCity = searchParams.get("city") || "";
 
-  const API_BASE = window.location.hostname === "localhost" ? "http://localhost:4000" : "/api";
+ 
 
   const [selectedCity, setSelectedCity] = useState(initialCity); // Set initial value from URL
   const [maxPrice, setMaxPrice] = useState(100000); 

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getSafaris, getHotelsByCity, getCities } from "../lib/api";
 import SEO from "../components/SEO"; // <--- 1. Import SEO Component
+import { API_BASE } from '../lib/api';
 
-// --- CONFIG ---
-const API_BASE = window.location.hostname === "localhost" ? "http://localhost:4000" : "/api";
 
 // --- COMPONENT: HERO SEARCH ---
 function HeroSearch({ cities }) {

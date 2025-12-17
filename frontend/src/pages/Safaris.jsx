@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getSafaris } from "../lib/api";
+import { API_BASE } from '../lib/api';
 
 // --- UPDATED SAFARI CARD ---
 function SafariCard({ s }) {
@@ -10,7 +11,7 @@ function SafariCard({ s }) {
 
   // 2. SMART FIX: Point uploads to Port 4000
   if (img && img.startsWith("/uploads")) {
-    img = `http://localhost:4000${img}`;
+    img = `${API_BASE}${img}`;
   }
 
   return (

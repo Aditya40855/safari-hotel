@@ -1,29 +1,40 @@
+// ==========================================
+// 1. CONFIGURATION
+// ==========================================
 
-const BASE = (import.meta.env.VITE_API_URL || "").trim();
+// This automatically selects the correct backend URL
+export const API_BASE = window.location.hostname === "localhost" 
+  ? "http://localhost:4000" 
+  : "https://safari-backend-ht61.onrender.com";
+
+// Internal reference for this file's functions
+const BASE = API_BASE;
 
 // Debug: print what base the frontend is using
 if (typeof console !== "undefined") {
-  console.info("[API] BASE =", BASE, "VITE_API_URL=", import.meta.env.VITE_API_URL);
+  console.info("[API] BASE =", BASE);
 }
 
+// ==========================================
+// 2. HELPER FUNCTIONS
+// ==========================================
 
 // Token helpers
-
 export function setAuthToken(token) {
   if (token) localStorage.setItem("token", token);
   else localStorage.removeItem("token");
 }
+
 export function getAuthToken() {
   return localStorage.getItem("token");
 }
+
 // get all safaris (no city filter)
 export async function getAllSafaris(opts = {}) {
   return getList("/api/safaris", opts);
 }
 
-
 // One-time backend banner for developer UX
-
 let _bannerShown = false;
 function showBackendWarning(message) {
   if (_bannerShown) return;
@@ -74,16 +85,12 @@ function showBackendWarning(message) {
   }
 }
 
-
 async function fetchJson(path, opts = {}) {
   // build URL: if BASE provided use absolute, otherwise relative path ("/api/..")
   const url = BASE ? `${BASE}${path}` : path;
 
-
   const signal = opts.signal;
-
   const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
-
 
   const token = getAuthToken();
   if (token && !opts.skipAuth) {
@@ -124,9 +131,7 @@ async function fetchJson(path, opts = {}) {
   throw apiErr;
 }
 
-
 // Helper: GET list where 404 => []
-
 async function getList(path, opts = {}) {
   try {
     return await fetchJson(path, { method: "GET", ...opts });
@@ -135,6 +140,11 @@ async function getList(path, opts = {}) {
     throw err;
   }
 }
+
+// ==========================================
+// 3. API EXPORTS
+// ==========================================
+
 // Admin API calls
 export async function adminCreateHotel(payload) {
   // payload: { name, description, price, rating, images: [], city_slug }
@@ -152,19 +162,19 @@ export async function adminCreateSafari(payload) {
   });
 }
 
-
 // Public API functions
-
 
 // GET /api/cities
 export async function getCities(opts = {}) {
   return getList("/api/cities", opts);
 }
+
 export async function deleteBooking(id) {
   return fetchJson(`/api/bookings/${encodeURIComponent(id)}`, {
     method: "DELETE"
   });
 }
+
 // GET /api/hotels?city=slug
 export async function getHotelsByCity(slug, opts = {}) {
   if (!slug) return [];
@@ -218,6 +228,7 @@ export async function login(email, password) {
     skipAuth: true, 
   });
 }
+
 // PATCH /api/bookings/:id/status (Admin)
 export async function updateBookingStatus(id, status) {
   return fetchJson(`/api/bookings/${encodeURIComponent(id)}/status`, {
@@ -225,6 +236,7 @@ export async function updateBookingStatus(id, status) {
     body: JSON.stringify({ status }),
   });
 }
+
 export async function getReviews(type, itemId) {
   return fetchJson(`/api/reviews?type=${type}&itemId=${itemId}`);
 }
@@ -235,6 +247,7 @@ export async function createReview(data) {
     body: JSON.stringify(data),
   });
 }
+
 export async function deleteHotel(id) {
   return fetchJson(`/api/admin/hotels/${id}`, { method: "DELETE" });
 }
@@ -242,6 +255,7 @@ export async function deleteHotel(id) {
 export async function deleteSafari(id) {
   return fetchJson(`/api/admin/safaris/${id}`, { method: "DELETE" });
 }
+
 // Upload a single file
 export async function uploadImage(file) {
   const formData = new FormData();
@@ -271,6 +285,4 @@ export async function signup(userData) {
     body: JSON.stringify(userData),
     skipAuth: true,
   });
-
-  
 }

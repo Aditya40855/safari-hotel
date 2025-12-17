@@ -173,7 +173,7 @@ export default function AdminAddSafari() {
                 <img 
                   key={i} 
                   // If it starts with /uploads, prepend localhost:4000
-                  src={src.startsWith('/uploads') ? `http://localhost:4000${src}` : src} 
+                  src={src.startsWith('/uploads') ? `${API_BASE}${src}` : src} 
                   alt="Preview" 
                   className="h-20 w-20 object-cover rounded border shadow-sm" 
                   onError={(e) => e.target.style.display = 'none'}

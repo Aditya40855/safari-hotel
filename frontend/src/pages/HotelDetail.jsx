@@ -5,6 +5,8 @@ import BookingWidget from "../components/BookingWidget";
 import Modal from "../components/Modal";
 import ReviewSection from "../components/ReviewSection";
 import SEO from "../components/SEO"; 
+import { API_BASE } from '../lib/api';
+
 
 export default function HotelDetail() {
   const { id } = useParams();
@@ -12,6 +14,8 @@ export default function HotelDetail() {
   const [loading, setLoading] = useState(true);
   const [bookOpen, setBookOpen] = useState(false);
   const [error, setError] = useState("");
+
+  
 
   useEffect(() => {
     let mounted = true;
@@ -33,7 +37,7 @@ export default function HotelDetail() {
 
   // --- SMART IMAGE URL FIX ---
   let mainImg = (hotel.images && hotel.images[0]) || "/images/hotel-placeholder.jpg";
-  const API_BASE = window.location.hostname === "localhost" ? "http://localhost:4000" : ""; // Helper for backend check
+ 
   
   if (mainImg.startsWith("/uploads")) {
     mainImg = `${API_BASE}${mainImg}`;
