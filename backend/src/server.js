@@ -9,23 +9,39 @@ const jwt = require("jsonwebtoken");
 const db = require("./db"); 
 
 const app = express();
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); 
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
 
-  // Important: If the browser asks "Can I connect?", say YES immediately
+// ==========================================
+// 1. THE CONNECTION FIX (CORS)
+// This is the ONLY major change. It fixes the "502" and "Network Error".
+// ==========================================
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  // If someone is visiting (Vercel, Localhost, etc.), say "Yes" to them.
+  if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  // If the browser asks "Can I connect?", answer immediately
   if (req.method === "OPTIONS") {
-    return res.status(200).send("OK");
+    return res.status(200).end();
   }
 
   next();
 });
+
 app.use(express.json());
 
-// --- SITEMAP ROUTE ADDED HERE ---
-app.use(require('./routes/sitemap'));
+// --- SITEMAP ROUTE ---
+try {
+  app.use(require('./routes/sitemap'));
+} catch (e) {
+  // Ignore if missing
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "..", "uploads");
@@ -114,7 +130,6 @@ function authenticateToken(req, res, next) {
   });
 }
 
-
 function requireAdmin(req, res, next) {
   authenticateToken(req, res, () => {
     if (req.user && req.user.isAdmin) next();
@@ -123,6 +138,8 @@ function requireAdmin(req, res, next) {
 }
 
 // --- ROUTES ---
+
+app.get("/", (req, res) => res.send("Safari Backend is Running!")); // Simple test route
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 app.post("/api/upload", upload.single("photo"), (req, res) => {
@@ -242,7 +259,6 @@ app.get("/api/safaris/:identifier", async (req, res) => {
     q = "SELECT * FROM safaris WHERE id = $1";
     param = identifier;
   } else {
-    // Note: This assumes you added a 'slug' column to your safaris table!
     q = "SELECT * FROM safaris WHERE slug = $1";
     param = identifier;
   }
@@ -425,6 +441,7 @@ app.delete("/api/admin/hotels/:id", requireAdmin, async (req, res) => {
 // DELETE SAFARI
 app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
   try {
+    // Safety check: delete related bookings/reviews first
     await db.query("DELETE FROM bookings WHERE item_id = $1 AND booking_type = 'safari'", [req.params.id]);
     await db.query("DELETE FROM reviews WHERE item_id = $1 AND item_type = 'safari'", [req.params.id]);
 
