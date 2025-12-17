@@ -9,12 +9,19 @@ const jwt = require("jsonwebtoken");
 const db = require("./db"); 
 
 const app = express();
-app.use(cors({
-  origin: "*",  // <--- The asterisk "*" means "Allow EVERYONE"
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); 
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  // Important: If the browser asks "Can I connect?", say YES immediately
+  if (req.method === "OPTIONS") {
+    return res.status(200).send("OK");
+  }
+
+  next();
+});
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
