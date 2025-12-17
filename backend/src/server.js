@@ -9,7 +9,14 @@ const jwt = require("jsonwebtoken");
 const db = require("./db"); 
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: [
+    "http://localhost:5173",                      // Localhost (for testing)
+    "https://safari-hotel-coral.vercel.app"       // Your Vercel Website (IMPORTANT)
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true
+}));
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
