@@ -10,11 +10,9 @@ const db = require("./db");
 
 const app = express();
 app.use(cors({
-  origin: [
-    "http://localhost:5173",                      // Localhost (for testing)
-    "https://safari-hotel-coral.vercel.app"       // Your Vercel Website (IMPORTANT)
-  ],
+  origin: "*",  // <--- The asterisk "*" means "Allow EVERYONE"
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
 app.use(express.json());
