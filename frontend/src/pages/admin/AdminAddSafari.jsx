@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getCities, adminCreateSafari } from "../../lib/api";
 import ImageUploader from "../../components/ImageUploader"; // Import the uploader
 import SafeImage from "@/components/SafeImage"
+import { API_BASE } from "@/lib/api";
 
 export default function AdminAddSafari() {
   const [title, setTitle] = useState("");
@@ -172,13 +173,19 @@ export default function AdminAddSafari() {
             <div className="flex gap-2 overflow-x-auto p-2 border rounded bg-gray-50">
               {imagesInput.split(',').map(s => s.trim()).filter(Boolean).map((src, i) => (
                 <SafeImage 
-                  key={i} 
-                  // If it starts with /uploads, prepend 
-                  src={src.startsWith('/uploads') ? `${API_BASE}${src}` : src} 
-                  alt="Preview" 
-                  className="h-20 w-20 object-cover rounded border shadow-sm" 
-                  onError={(e) => e.target.style.display = 'none'}
-                />
+                key={i} 
+                src={
+                  src.startsWith('http') 
+                    ? src 
+                    : `${API_BASE}${src.startsWith('/') ? '' : '/'}${src}`
+                } 
+                alt="Preview" 
+                className="h-20 w-20 object-cover rounded border shadow-sm" 
+                onError={(e) => {
+                  e.target.onerror = null; // Prevent infinite loops in Safari
+                  e.target.style.display = 'none';
+                }}
+              />
               ))}
             </div>
           )}
