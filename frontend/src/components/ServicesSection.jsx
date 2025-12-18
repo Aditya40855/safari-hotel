@@ -1,5 +1,5 @@
 import React from "react";
-import SafeImage from "../components/SafeImage"
+import SafeImage from "../../components/SafeImage"
 
 export default function ServicesSection() {
   const services = [

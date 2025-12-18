@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCities, adminCreateSafari } from "../../lib/api";
 import ImageUploader from "../../components/ImageUploader"; // Import the uploader
-import SafeImage from "../components/SafeImage"
+import SafeImage from "../../components/SafeImage"
 
 export default function AdminAddSafari() {
   const [title, setTitle] = useState("");
