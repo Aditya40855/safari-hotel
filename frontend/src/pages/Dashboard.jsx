@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { listBookings, getHotelById, getSafariById } from "../lib/api"; // Added fetchers
 import { useNavigate } from "react-router-dom";
-import SafeImage from "../../components/SafeImage"
+import SafeImage from "../components/SafeImage";
 
 // Helper for dates
 function fmt(d) {

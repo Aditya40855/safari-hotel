@@ -6,7 +6,7 @@ import Modal from "../components/Modal";
 import ReviewSection from "../components/ReviewSection";
 import SEO from "../components/SEO"; 
 import { API_BASE } from '../lib/api';
-import SafeImage from "../../components/SafeImage"
+import SafeImage from "../components/SafeImage";
 
 export default function HotelDetail() {
   const { id } = useParams();
