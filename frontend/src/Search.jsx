@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getHotelsByCity, getCities } from "../lib/api";
 import { API_BASE } from '../lib/api';
-import SafeImage from "../../components/SafeImage"
+import SafeImage from "@/components/SafeImage"
 
 export default function Search() {
   const [allHotels, setAllHotels] = useState([]);

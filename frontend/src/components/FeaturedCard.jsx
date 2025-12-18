@@ -1,6 +1,6 @@
 // src/components/FeaturedCard.jsx
 import React from "react";
-import SafeImage from "../../components/SafeImage"
+import SafeImage from "@/components/SafeImage"
 
 export default function FeaturedCard({ title, subtitle, price, img, ctaText = "Book now" }) {
   return (

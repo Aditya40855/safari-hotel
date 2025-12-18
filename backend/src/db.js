@@ -1,6 +1,9 @@
+// 1. Add this line at the very top to load your local .env file
+require('dotenv').config(); 
+
 const { neon } = require('@neondatabase/serverless');
 
-// Use the connection string from cPanel environment variables
+// Use the connection string from environment variables (works in cPanel and local .env)
 const connectionString = process.env.DATABASE_URL;
 const sql = neon(connectionString);
 

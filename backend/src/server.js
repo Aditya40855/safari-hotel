@@ -450,7 +450,7 @@ app.use((req, res) => {
   });
 });
 app.use(cors({
-  origin: ['https://jawaiunfiltered.com', 'https://your-site.vercel.app'],
+  origin: ['https://jawaiunfiltered.com', 'https://your-site.vercel.app','http://localhost:5173'],
   credentials: true
 }));
 
