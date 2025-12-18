@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // Fix: Merged imports and used the correct path (../../ matches your folder structure)
 import { deleteSafari, getSafaris, getAuthToken, API_BASE } from "../../lib/api";
+import SafeImage from "../components/SafeImage"
 
 export default function AdminInventory() {
   const [hotels, setHotels] = useState([]);
@@ -119,7 +120,7 @@ export default function AdminInventory() {
                     <tr key={h.id} className="hover:bg-gray-50 transition duration-150">
                       <td className="p-4 w-24">
                         <div className="h-12 w-12 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
-                          <img src={img} className="w-full h-full object-cover" alt="hotel" />
+                          <SafeImage src={img} className="w-full h-full object-cover" alt="hotel" />
                         </div>
                       </td>
                       <td className="p-4">
@@ -177,7 +178,7 @@ export default function AdminInventory() {
                     <tr key={s.id} className="hover:bg-gray-50 transition duration-150">
                       <td className="p-4 w-24">
                          <div className="h-12 w-12 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
-                           <img src={img} className="w-full h-full object-cover" alt="safari" />
+                           <SafeImage src={img} className="w-full h-full object-cover" alt="safari" />
                          </div>
                       </td>
                       <td className="p-4">

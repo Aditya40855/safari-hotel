@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { listBookings, getHotelById, getSafariById } from "../lib/api"; // Added fetchers
 import { useNavigate } from "react-router-dom";
+import SafeImage from "../components/SafeImage"
 
 // Helper for dates
 function fmt(d) {
@@ -40,7 +41,7 @@ function BookingCard({ b, onCancel }) {
       <div className="w-full sm:w-48 flex-none">
         <div className="h-32 bg-gray-100 rounded overflow-hidden relative">
           {b.image ? (
-            <img 
+            <SafeImage 
               src={b.image} 
               alt={b.item_name}
               className="w-full h-full object-cover"

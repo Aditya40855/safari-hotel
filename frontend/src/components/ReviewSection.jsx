@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getReviews, createReview, getAuthToken } from "../lib/api";
 import ImageUploader from "./ImageUploader";
 import { API_BASE } from '../lib/api';
+import SafeImage from "../components/SafeImage"
 
 function StarRating({ rating, setRating, editable = false }) {
   return (
@@ -113,7 +114,7 @@ export default function ReviewSection({ type, itemId }) {
              {imagesInput && (
                <div className="flex gap-2 mt-2 overflow-x-auto">
                  {imagesInput.split(',').map(s=>s.trim()).filter(Boolean).map((src, i) => (
-                    <img key={i} src={src.startsWith('/uploads') ? `${API_BASE}${src}` : src} className="h-12 w-12 object-cover rounded border" />
+                    <SafeImage key={i} src={src.startsWith('/uploads') ? `${API_BASE}${src}` : src} className="h-12 w-12 object-cover rounded border" />
                  ))}
                </div>
              )}
@@ -151,7 +152,7 @@ export default function ReviewSection({ type, itemId }) {
               {r.images && r.images.length > 0 && (
                 <div className="flex gap-2 mt-3 overflow-x-auto">
                    {r.images.map((img, i) => (
-                     <img 
+                     <SafeImage 
                        key={i} 
                        src={img.startsWith('/uploads') ? `${API_BASE}${img}` : img} 
                        alt="Review attachment"

@@ -5,7 +5,7 @@ export default function HotelCard({ hotel }) {
   if (!hotel) return null;
   return (
     <div className="bg-white rounded shadow overflow-hidden">
-      <img src={hotel.images?.[0]} alt={hotel.name} className="w-full h-44 object-cover" />
+      <SafeImage src={hotel.images?.[0]} alt={hotel.name} className="w-full h-44 object-cover" />
       <div className="p-4">
         <h3 className="font-semibold text-lg">{hotel.name}</h3>
         <p className="text-sm text-gray-600">{hotel.address}</p>

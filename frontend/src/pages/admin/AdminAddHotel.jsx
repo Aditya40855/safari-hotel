@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCities, adminCreateHotel } from "../../lib/api";
 import ImageUploader from "../../components/ImageUploader";
+import SafeImage from "../components/SafeImage"
 
 export default function AdminAddHotel() {
   const [name, setName] = useState("");
@@ -180,7 +181,7 @@ export default function AdminAddHotel() {
   {imagesInput && (
     <div className="flex gap-2 mt-2 overflow-x-auto">
       {imagesInput.split(',').map(s => s.trim()).filter(Boolean).map((src, i) => (
-         <img key={i} src={src.startsWith('http') ? src : `${API_BASE}${src}`} alt="Preview" className="h-16 w-16 object-cover rounded border" />
+         <SafeImage key={i} src={src.startsWith('http') ? src : `${API_BASE}${src}`} alt="Preview" className="h-16 w-16 object-cover rounded border" />
       ))}
     </div>
   )}
