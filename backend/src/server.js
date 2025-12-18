@@ -9,39 +9,11 @@ const jwt = require("jsonwebtoken");
 const db = require("./db"); 
 
 const app = express();
-
-// ==========================================
-// 1. THE CONNECTION FIX (CORS)
-// This is the ONLY major change. It fixes the "502" and "Network Error".
-// ==========================================
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  
-  // If someone is visiting (Vercel, Localhost, etc.), say "Yes" to them.
-  if (origin) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // If the browser asks "Can I connect?", answer immediately
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  next();
-});
-
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
-// --- SITEMAP ROUTE ---
-try {
-  app.use(require('./routes/sitemap'));
-} catch (e) {
-  // Ignore if missing
-}
+// --- SITEMAP ROUTE ADDED HERE ---
+app.use(require('./routes/sitemap'));
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "..", "uploads");
@@ -79,7 +51,7 @@ async function ensureSchema() {
         SELECT column_name FROM information_schema.columns 
         WHERE table_name='bookings' AND column_name=$1
       `, [col.name]);
-      if (res.rows.length === 0) {
+      if (!res.rows || res.rows.length === 0) {
         console.log(`⚠️ Missing column '${col.name}' in bookings. Adding it...`);
         await db.query(`ALTER TABLE bookings ADD COLUMN ${col.name} ${col.type}`);
         console.log(`✅ Added '${col.name}'.`);
@@ -112,7 +84,7 @@ async function ensureSchema() {
 
     console.log("✅ Database Schema check complete.");
   } catch (err) {
-    console.error("❌ DB Migration check failed:", err.message);
+    console.error("❌ DB Migration check failed:", err);
   }
 }
 ensureSchema();
@@ -130,6 +102,7 @@ function authenticateToken(req, res, next) {
   });
 }
 
+
 function requireAdmin(req, res, next) {
   authenticateToken(req, res, () => {
     if (req.user && req.user.isAdmin) next();
@@ -139,14 +112,30 @@ function requireAdmin(req, res, next) {
 
 // --- ROUTES ---
 
-app.get("/", (req, res) => res.send("Safari Backend is Running!")); // Simple test route
-
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 app.post("/api/upload", upload.single("photo"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   res.json({ url: `/uploads/${req.file.filename}` });
 });
-
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "Welcome to Jawai Unfiltered API", 
+    status: "running",
+    endpoints: ["/api/hotels", "/api/safaris", "/health"]
+  });
+});
+// This route specifically handles the /api link to show all available endpoints
+app.get("/api", (req, res) => {
+  res.json({
+    message: "Welcome to the Jawai Unfiltered API",
+    available_endpoints: {
+      hotels: "/api/hotels",
+      safaris: "/api/safaris",
+      cities: "/api/cities",
+      health_check: "/health"
+    }
+  });
+});
 // Auth
 app.post("/api/auth/signup", async (req, res) => {
   try {
@@ -259,6 +248,7 @@ app.get("/api/safaris/:identifier", async (req, res) => {
     q = "SELECT * FROM safaris WHERE id = $1";
     param = identifier;
   } else {
+    // Note: This assumes you added a 'slug' column to your safaris table!
     q = "SELECT * FROM safaris WHERE slug = $1";
     param = identifier;
   }
@@ -441,7 +431,6 @@ app.delete("/api/admin/hotels/:id", requireAdmin, async (req, res) => {
 // DELETE SAFARI
 app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
   try {
-    // Safety check: delete related bookings/reviews first
     await db.query("DELETE FROM bookings WHERE item_id = $1 AND booking_type = 'safari'", [req.params.id]);
     await db.query("DELETE FROM reviews WHERE item_id = $1 AND item_type = 'safari'", [req.params.id]);
 
@@ -451,5 +440,29 @@ app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
 });
 
 app.use("/uploads", express.static(UPLOAD_DIR));
+// 1. Handle 404 - When a user visits a link that doesn't exist
+app.use((req, res) => {
+  console.error(`❌ 404 Error: User tried to access ${req.originalUrl}`);
+  res.status(404).json({
+    error: "Route not found",
+    requested_url: req.originalUrl,
+    suggestion: "Check /api/hotels or /api/safaris"
+  });
+});
+app.use(cors({
+  origin: ['https://jawaiunfiltered.com', 'https://your-site.vercel.app'],
+  credentials: true
+}));
+
+// 2. Global Error Handler - Catch database or code crashes
+app.use((err, req, res, next) => {
+  console.error("❌ INTERNAL SERVER ERROR:", err.stack);
+  res.status(500).json({
+    error: "Internal Server Error",
+    message: err.message
+  });
+});
+
+// --- CRITICAL UPDATED LISTEN BLOCK ---
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, "0.0.0.0", () => console.log(`✅ Backend running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Backend running on assigned port ${PORT}`));

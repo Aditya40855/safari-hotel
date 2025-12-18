@@ -71,17 +71,14 @@ export default function HotelDetail() {
     <div className="max-w-5xl mx-auto p-6 grid md:grid-cols-2 gap-6">
       
       {/* 3. Inject SEO Tags */}
-      <SEO 
-        title={`${hotel.name} - Luxury Stay in ${hotel.city_slug}`}
-        description={`Book your stay at ${hotel.name}. Experience luxury in ${hotel.city_slug} starting from ₹${hotel.price}. Verified reviews and instant booking.`}
-        image={mainImg}
-        schema={hotelSchema}
-      />
-      <SEO 
-        title="Luxury Stays & Heritage Hotels in Jawai" 
-        description="Browse the best resorts, camps, and heritage hotels in Jawai. Compare prices, view photos, and book authentic stays instantly."
-        url="https://safariandhotels.com/hotels"
-      />
+      {/* DELETE the two separate SEO components and replace with this ONE */}
+<SEO 
+  title={`${hotel.name} - Luxury Stays & Heritage Hotels in ${hotel.city_slug}`}
+  description={`Book your stay at ${hotel.name} in ${hotel.city_slug}. Luxury heritage experience starting from ₹${hotel.price}. View photos and book instantly.`}
+  url={`https://jawaiunfiltered.com/hotels/${hotel.slug}`} // Use the dynamic hotel slug
+  image={mainImg}
+  schema={hotelSchema}
+/>
 
       <div>
         <div className="w-full h-80 bg-gray-100 rounded overflow-hidden mb-4 border relative">

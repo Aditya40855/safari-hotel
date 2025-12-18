@@ -1,21 +1,33 @@
-// backend/src/db.js
-const { Pool } = require('pg');
+const { neon } = require('@neondatabase/serverless');
 
-// 1. Get the connection string from Render (or use localhost for dev)
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/app';
-
-// 2. Check if we are in "Production" (Render) or "Development" (Localhost)
-const isProduction = process.env.NODE_ENV === 'production';
-
-const pool = new Pool({
-  connectionString,
-  // ⚠️ IMPORTANT: Add SSL for Cloud Database (Neon)
-  ssl: isProduction ? { rejectUnauthorized: false } : false,
-  max: 10,
-  idleTimeoutMillis: 30000
-});
+// Use the connection string from cPanel environment variables
+const connectionString = process.env.DATABASE_URL;
+const sql = neon(connectionString);
 
 module.exports = {
-  query: (text, params) => pool.query(text, params),
-  pool
+  // Fixed mapping for parameters ($1, $2, etc.)
+  query: async (text, params = []) => {
+    try {
+      // The neon driver requires text and params as separate arguments
+      const result = await sql(text, params);
+      
+      // Return the result in a 'rows' property for compatibility
+      return { rows: result };
+    } catch (err) {
+      console.error("❌ Neon HTTP Query Error:", err);
+      throw err;
+    }
+  },
+  // Compatibility object for existing pool.query calls
+  pool: {
+    query: async (text, params) => {
+      try {
+        const result = await sql(text, params);
+        return { rows: result };
+      } catch (err) {
+        console.error("❌ Pool Query Error:", err);
+        throw err;
+      }
+    }
+  }
 };
