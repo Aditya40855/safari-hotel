@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCities, adminCreateHotel } from "../../lib/api";
 import ImageUploader from "../../components/ImageUploader";
-import SafeImage from "../components/SafeImage"
+import SafeImage from "../../components/SafeImage"
 
 export default function AdminAddHotel() {
   const [name, setName] = useState("");
