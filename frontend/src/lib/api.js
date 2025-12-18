@@ -1,16 +1,14 @@
-// ==========================================
-// 1. CONFIGURATION
-// ==========================================
+// 1. Get the URL from environment variables (set in .env for local, or Vercel dashboard for live)
+// 2. Fallback to GoViralHost if the variable is missing
+// 3. Fallback to Localhost if you are running locally
+export const API_BASE = 
+  process.env.NEXT_PUBLIC_API_URL || 
+  (typeof window !== "undefined" && window.location.hostname === "localhost" 
+    ? "http://localhost:4000" 
+    : "https://api.jawaiunfiltered.com");
 
-// This automatically selects the correct backend URL
-export const API_BASE = window.location.hostname === "localhost" 
-  ? "http://localhost:4000" 
-  : "https://safari-backend-ht61.onrender.com";
-
-// Internal reference for this file's functions
 const BASE = API_BASE;
 
-// Debug: print what base the frontend is using
 if (typeof console !== "undefined") {
   console.info("[API] BASE =", BASE);
 }
