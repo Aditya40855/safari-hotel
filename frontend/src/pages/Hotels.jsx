@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom"; // Added useSearchParams
 import { getCities, getAuthToken } from "../lib/api";
 import { API_BASE } from '../lib/api';
-import SafeImage from "../components/SafeImage";
+import SafeImage from "@/components/SafeImage";
 
 
 

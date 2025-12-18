@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getReviews, createReview, getAuthToken } from "../lib/api";
 import ImageUploader from "./ImageUploader";
 import { API_BASE } from '../lib/api';
-import SafeImage from "../../components/SafeImage"
+import SafeImage from "@/components/SafeImage"
 
 function StarRating({ rating, setRating, editable = false }) {
   return (

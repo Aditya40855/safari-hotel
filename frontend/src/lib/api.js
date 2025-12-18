@@ -1,10 +1,7 @@
-// 1. Get the URL from environment variables (set in .env for local, or Vercel dashboard for live)
-// 2. Fallback to GoViralHost if the variable is missing
-// 3. Fallback to Localhost if you are running locally
 export const API_BASE = 
-  process.env.NEXT_PUBLIC_API_URL || 
+  import.meta.env.VITE_API_URL || 
   (typeof window !== "undefined" && window.location.hostname === "localhost" 
-    ? "http://localhost:4000" 
+    ? "http://localhost:5173" 
     : "https://api.jawaiunfiltered.com");
 
 const BASE = API_BASE;

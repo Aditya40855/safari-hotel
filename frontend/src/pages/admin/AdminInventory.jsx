@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // Fix: Merged imports and used the correct path (../../ matches your folder structure)
 import { deleteSafari, getSafaris, getAuthToken, API_BASE } from "../../lib/api";
-import SafeImage from "../../components/SafeImage"
+import SafeImage from "@/components/SafeImage"
 
 export default function AdminInventory() {
   const [hotels, setHotels] = useState([]);
