@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getHotelsByCity, getCities } from "../lib/api";
 import { API_BASE } from '../lib/api';
+import SafeImage from "../components/SafeImage"
 
 export default function Search() {
   const [allHotels, setAllHotels] = useState([]);
@@ -59,7 +60,7 @@ export default function Search() {
         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredHotels.length === 0 ? <p>No hotels match filters.</p> : filteredHotels.map(h => (
             <Link key={h.id} to={`/hotels/${h.id}`} className="bg-white shadow rounded-lg overflow-hidden block">
-              <img src={(h.images && h.images[0]) ? (h.images[0].startsWith('/uploads') ? `${API_BASE}${h.images[0]}` : h.images[0]) : "/images/hotel-placeholder.jpg"} className="h-48 w-full object-cover" />
+              <SafeImage src={(h.images && h.images[0]) ? (h.images[0].startsWith('/uploads') ? `${API_BASE}${h.images[0]}` : h.images[0]) : "/images/hotel-placeholder.jpg"} className="h-48 w-full object-cover" />
               <div className="p-4">
                 <h3 className="font-bold">{h.name}</h3>
                 <p className="text-orange-600 font-bold">₹{h.price}</p>

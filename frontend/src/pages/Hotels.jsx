@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom"; // Added useSearchParams
 import { getCities, getAuthToken } from "../lib/api";
 import { API_BASE } from '../lib/api';
+import SafeImage from "../components/SafeImage"
 
 
 
@@ -134,7 +135,7 @@ export default function Hotels() {
                     className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 ease-out"
                   >
                     <div className="relative h-64 overflow-hidden">
-                      <img src={img} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-1000 ease-in-out" />
+                      <SafeImage src={img} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-1000 ease-in-out" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
                       <div className="absolute bottom-4 left-4 text-white">
                         <div className="text-xs font-bold uppercase tracking-widest mb-1 opacity-90">{hotel.city_slug}</div>

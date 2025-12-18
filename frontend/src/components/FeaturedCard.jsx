@@ -1,12 +1,13 @@
 // src/components/FeaturedCard.jsx
 import React from "react";
+import SafeImage from "../components/SafeImage"
 
 export default function FeaturedCard({ title, subtitle, price, img, ctaText = "Book now" }) {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden max-w-sm">
       <div className="h-40 bg-gray-100">
         {img ? (
-          <img src={img} alt={title} className="w-full h-40 object-cover" />
+          <SafeImage src={img} alt={title} className="w-full h-40 object-cover" />
         ) : (
           <div className="w-full h-40 flex items-center justify-center text-gray-400">No image</div>
         )}

@@ -1,4 +1,5 @@
 import React from "react";
+import SafeImage from "../components/SafeImage"
 
 export default function ServicesSection() {
   const services = [
@@ -37,7 +38,7 @@ export default function ServicesSection() {
             key={i}
             className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
           >
-            <img src={s.img} alt={s.title} className="w-full h-48 object-cover" />
+            <SafeImage src={s.img} alt={s.title} className="w-full h-48 object-cover" />
             <div className="p-5">
               <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
               <p className="text-gray-600">{s.desc}</p>

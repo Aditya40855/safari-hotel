@@ -6,7 +6,7 @@ import Modal from "../components/Modal";
 import ReviewSection from "../components/ReviewSection";
 import SEO from "../components/SEO"; 
 import { API_BASE } from '../lib/api';
-
+import SafeImage from "../components/SafeImage"
 
 export default function HotelDetail() {
   const { id } = useParams();
@@ -82,7 +82,7 @@ export default function HotelDetail() {
 
       <div>
         <div className="w-full h-80 bg-gray-100 rounded overflow-hidden mb-4 border relative">
-          <img 
+          <SafeImage 
             src={mainImg} 
             alt={hotel.name} 
             className="object-cover w-full h-full"

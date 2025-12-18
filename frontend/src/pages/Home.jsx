@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getSafaris, getHotelsByCity, getCities } from "../lib/api";
 import SEO from "../components/SEO"; // <--- 1. Import SEO Component
 import { API_BASE } from '../lib/api';
+import SafeImage from "../components/SafeImage"
 
 
 // --- COMPONENT: HERO SEARCH ---
@@ -76,7 +77,7 @@ function StableCard({ item, type }) {
     >
       {/* Image Container - Aspect Ratio 4:3 keeps it consistent */}
       <div className="relative aspect-[4/3] w-full bg-gray-200 overflow-hidden">
-        <img 
+        <SafeImage 
           src={img} 
           alt={`Luxury stay at ${item.name} in ${item.city_slug} Rajasthan`}
           loading="lazy" 
