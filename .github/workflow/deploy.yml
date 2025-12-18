@@ -1,0 +1,30 @@
+name: 🚀 Deploy Backend to GoViral
+on:
+  push:
+    branches:
+      - main  # Change this to 'master' if your main branch is named master
+
+jobs:
+  web-deploy:
+    name: 📂 Sync Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+
+      - name: 📤 FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # This is the path on GoViralHost. 
+          # Change './public_html/' to the specific folder if needed.
+          server-dir: ./public_html/api/
+          # We ignore git and node files to keep the server clean
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .env
+            README.md
