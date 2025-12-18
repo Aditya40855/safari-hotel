@@ -23,7 +23,7 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // 3. Redirect
-      navigate("/dashboard");
+      navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "Login failed. Please try again.");
