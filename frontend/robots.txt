@@ -9,4 +9,4 @@ Disallow: /signup
 
 # SEO: Tell Google where your Sitemap is
 # (Replace this URL with your actual domain when you buy it)
-Sitemap: https://safariandhotels.com/sitemap.xml
+Sitemap: https://jawaiunfiltered.com/sitemap.xml
