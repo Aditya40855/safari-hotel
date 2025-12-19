@@ -3,34 +3,53 @@ require('dotenv').config();
 
 const { neon } = require('@neondatabase/serverless');
 
-// Use the connection string from environment variables (works in cPanel and local .env)
+// Use the connection string from environment variables
 const connectionString = process.env.DATABASE_URL;
 const sql = neon(connectionString);
 
-module.exports = {
-  // Fixed mapping for parameters ($1, $2, etc.)
-  query: async (text, params = []) => {
+/**
+ * Helper function to execute SQL with a retry loop for Neon cold starts.
+ * It waits 2 seconds between attempts, up to 5 times.
+ */
+const executeWithRetry = async (text, params = []) => {
+  const MAX_RETRIES = 5;
+  const DELAY = 2000; // 2 seconds
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      // The neon driver requires text and params as separate arguments
+      // Execute the query
       const result = await sql(text, params);
-      
-      // Return the result in a 'rows' property for compatibility
       return { rows: result };
     } catch (err) {
-      console.error("❌ Neon HTTP Query Error:", err);
+      // Detect common "Cold Start" or transient network errors
+      const isTransient = 
+        err.message.includes('fetch failed') || 
+        err.message.includes('timeout') || 
+        err.code === '57P01'; // Admin shutdown during restart
+
+      if (isTransient && attempt < MAX_RETRIES) {
+        console.warn(`⚠️ Neon Cold Start (Attempt ${attempt}/${MAX_RETRIES}). Retrying in 2s...`);
+        await new Promise(res => setTimeout(res, DELAY));
+        continue;
+      }
+
+      // If it's a real syntax error or we've exhausted retries, throw it
+      console.error("❌ Database Error:", err.message);
       throw err;
     }
+  }
+};
+
+module.exports = {
+  // Primary query method
+  query: async (text, params = []) => {
+    return await executeWithRetry(text, params);
   },
+  
   // Compatibility object for existing pool.query calls
   pool: {
-    query: async (text, params) => {
-      try {
-        const result = await sql(text, params);
-        return { rows: result };
-      } catch (err) {
-        console.error("❌ Pool Query Error:", err);
-        throw err;
-      }
+    query: async (text, params = []) => {
+      return await executeWithRetry(text, params);
     }
   }
 };

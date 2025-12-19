@@ -2,12 +2,20 @@ name: 🚀 Deploy Backend to GoViral
 on:
   push:
     branches:
-      - main  # Make sure this matches your branch name (usually main or master)
+      - main
 
 jobs:
   web-deploy:
     name: 📂 Sync Files
     runs-on: ubuntu-latest
+    # Added environment variables to the job level
+    env:
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4

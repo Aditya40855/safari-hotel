@@ -13,6 +13,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
+const { sendNotification } = require("./mailer"); // Assuming you create lib/mailer.js
 app.use(require('./routes/sitemap'));
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
@@ -329,10 +330,35 @@ app.post("/api/bookings", async (req, res) => {
 app.patch("/api/bookings/:id/status", requireAdmin, async (req, res) => {
   try {
     const { status } = req.body;
-    const r = await db.query("UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *", [status, req.params.id]);
+    const bookingId = req.params.id;
+
+    // 1. Update status in the database
+    const r = await db.query(
+      "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *", 
+      [status, bookingId]
+    );
+    
     if (!r.rows.length) return res.status(404).json({ error: "Not found" });
-    res.json(r.rows[0]);
-  } catch (err) { res.status(500).json({ error: "db error" }); }
+    const booking = r.rows[0];
+
+    // 2. Fetch User Email to notify them
+    // We fetch from the 'users' table using the 'user_id' stored in the booking
+    const userRes = await db.query("SELECT email, name FROM users WHERE id = $1", [booking.user_id]);
+    
+    if (userRes.rows.length > 0) {
+      const user = userRes.rows[0];
+      const subject = `Booking Update: ${status.toUpperCase()}`;
+      const message = `Hello ${user.name}, your booking for ${booking.booking_type} (ID: ${bookingId}) is now ${status}.`;
+
+      // 3. Send the email
+      await sendNotification(user.email, subject, message); //
+    }
+
+    res.json(booking);
+  } catch (err) { 
+    console.error("Patch error:", err);
+    res.status(500).json({ error: "db error" }); 
+  }
 });
 
 app.delete("/api/bookings/:id", authenticateToken, async (req, res) => {
