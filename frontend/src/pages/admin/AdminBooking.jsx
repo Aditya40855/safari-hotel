@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // <--- Import Link
+import { Link } from "react-router-dom";
 import { listBookings, updateBookingStatus } from "../../lib/api";
+import UserBadge from '../../components/UserBadge'; // Component already imported
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -21,7 +22,7 @@ export default function AdminBookings() {
       setLoading(false);
     }
   }
-
+ 
   async function handleStatus(id, newStatus) {
     if (!window.confirm(`Mark booking #${id} as ${newStatus}?`)) return;
     try {
@@ -37,16 +38,15 @@ export default function AdminBookings() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       
-      {/* --- NEW: DASHBOARD HEADER WITH BUTTONS --- */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="text-gray-500 mt-1">Manage bookings and inventory</p>
         </div>
         <div className="flex gap-3">
-        <Link to="/admin/inventory" className="bg-gray-800 text-white px-4 py-2 rounded">
-     Manage Inventory
-  </Link>
+          <Link to="/admin/inventory" className="bg-gray-800 text-white px-4 py-2 rounded">
+            Manage Inventory
+          </Link>
         </div>
         <div className="flex gap-3">
           <Link 
@@ -63,7 +63,6 @@ export default function AdminBookings() {
           </Link>
         </div>
       </div>
-      {/* ------------------------------------------ */}
 
       <div className="bg-white rounded-xl shadow border overflow-hidden">
         <div className="p-4 border-b bg-gray-50">
@@ -93,8 +92,13 @@ export default function AdminBookings() {
                   <tr key={b.id} className="hover:bg-gray-50 transition">
                     <td className="px-6 py-4 font-mono text-xs text-gray-400">#{b.id}</td>
                     <td className="px-6 py-4">
-                      <div className="font-bold text-gray-900">{b.name || "Unknown"}</div>
+                      {/* --- UPDATE: Badge added here next to name --- */}
+                      <div className="flex items-center gap-2">
+                        <div className="font-bold text-gray-900">{b.name || "Unknown"}</div>
+                        <UserBadge type={b.user_type} />
+                      </div>
                       <div className="text-xs text-gray-500">{b.contact}</div>
+                      <div className="text-xs text-blue-500 italic">{b.email}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="capitalize text-gray-900 font-medium">{b.booking_type}</span>
@@ -119,6 +123,7 @@ export default function AdminBookings() {
                         {b.status}
                       </span>
                     </td>
+                    
                     <td className="px-6 py-4 text-right space-x-2">
                       {b.status === 'pending' && (
                         <>
