@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -5,6 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { createBooking } = require('./controllers/bookingController');
 
 const db = require("./db"); 
 
@@ -13,7 +15,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
-const { sendNotification } = require("./mailer"); // Assuming you create lib/mailer.js
+const { sendNotification ,generateBookingEmail} = require('./services/mailer');
 app.use(require('./routes/sitemap'));
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
@@ -44,6 +46,7 @@ async function ensureSchema() {
       { name: "user_id", type: "INTEGER REFERENCES users(id)" },
       { name: "contact", type: "TEXT" },
       { name: "name", type: "TEXT" }, 
+      { name: "email", type: "TEXT" },
       { name: "status", type: "TEXT DEFAULT 'pending'" },
       { name: "time_slot", type: "TEXT" }
     ];
@@ -148,6 +151,11 @@ app.post("/api/auth/signup", async (req, res) => {
     const r = await db.query(q, [name, email, phone, hash]);
     const user = r.rows[0];
     const token = jwt.sign({ id: user.id, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: "7d" });
+    sendNotification(user.email, "Welcome to Jawai Unfiltered", "WELCOME", {
+      name: user.name
+    }).catch(err => {
+      console.error("Welcome Mail Failed. Server Response:", err.response);
+    });
     res.status(201).json({ user, token });
   } catch (err) { res.status(500).json({ error: "Signup failed" }); }
 });
@@ -267,59 +275,91 @@ app.get("/api/safaris/:identifier", async (req, res) => {
 // Bookings
 app.get("/api/bookings", authenticateToken, async (req, res) => {
   try {
+    // We select ALL columns (including user_type)
     let q = "SELECT * FROM bookings";
     let params = [];
+
+    // Security Logic: Admins see everything, users see only theirs
     if (!req.user.isAdmin) {
       q += " WHERE user_id = $1";
       params.push(req.user.id);
     }
+
     q += " ORDER BY created_at DESC";
+
     const r = await db.query(q, params);
+    
+    // Each row now contains 'user_type' ('guest' or 'member')
     res.json(r.rows);
-  } catch (err) { res.status(500).json({ error: "db error" }); }
+  } catch (err) { 
+    console.error("Fetch bookings error:", err);
+    res.status(500).json({ error: "db error" }); 
+  }
 });
 
 // --- UPDATED BOOKING ROUTE (Allows Guest Bookings) ---
 app.post("/api/bookings", async (req, res) => {
   try {
-    // 1. OPTIONAL AUTH: Check if user is logged in
     let userId = null;
+    let userEmail = null;
+    let userName = null;
+
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
+    
     if (token) {
         try {
             const decoded = jwt.verify(token, JWT_SECRET);
             userId = decoded.id;
-        } catch (e) { 
-            // Invalid token? Continue as Guest.
-        }
+            const userLookup = await db.query("SELECT email, name FROM users WHERE id = $1", [userId]);
+            if (userLookup.rows.length > 0) {
+                userEmail = userLookup.rows[0].email;
+                userName = userLookup.rows[0].name;
+            }
+        } catch (e) { /* Guest fallback */ }
     }
 
-    const { booking_type, item_id, start_date, end_date, guests, contact, name, time_slot } = req.body;
+    const { booking_type, item_id, start_date, end_date, guests, contact, name, email, time_slot } = req.body;
+    
+    const finalEmail = email || userEmail;
+    const finalName = name || userName;
 
-    // 2. VALIDATION
-    if (!booking_type || !item_id || !start_date || !end_date) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
-    // Name/Contact mandatory for Guests
-    if (!userId && (!name || !contact)) {
-        return res.status(400).json({ error: "Name and Contact are required for guest bookings." });
+    if (!booking_type || !item_id || !start_date || !finalEmail) {
+        return res.status(400).json({ error: "Missing required fields: Email is mandatory." });
     }
 
-    // 3. INSERT
+    // --- LOGIC UPDATE: Determine User Type for the Badge ---
+    const userType = userId ? 'member' : 'guest';
+
     const q = `
       INSERT INTO bookings 
-      (booking_type, item_id, start_date, end_date, guests, contact, name, status, user_id, time_slot, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending', $8, $9, now())
+      (booking_type, item_id, start_date, end_date, guests, contact, name, email, status, user_id, time_slot, created_at, user_type)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'pending', $9, $10, now(), $11)
       RETURNING *
     `;
     const values = [
       booking_type, item_id, start_date, end_date, guests || 1, 
-      contact, name, userId, time_slot || null
+      contact, finalName, finalEmail, userId, time_slot || null,
+      userType // Stores "guest" or "member" directly
     ];
 
     const r = await db.query(q, values);
-    res.status(201).json(r.rows[0]);
+    const booking = r.rows[0];
+
+    // --- EMAIL TRIGGER LOGIC (Stays the same) ---
+    if (finalEmail) {
+      const subject = `Request Confirmed: ${booking_type.toUpperCase()}`;
+      const emailHtml = generateBookingEmail(finalName, booking_type, start_date, contact, guests || 1);
+
+      sendNotification(finalEmail, subject, emailHtml)
+        .catch(err => console.error("Background User Email Error:", err));
+      
+      const adminAlertBody = `New booking from ${finalName} (${finalEmail}) for ${booking_type}.`;
+      sendNotification("adityasingh.aiml@gmail.com", "NEW BOOKING ALERT", adminAlertBody)
+        .catch(err => console.error("Background Admin Email Error:", err));
+    }
+
+    res.status(201).json(booking);
 
   } catch (err) {
     console.error("Booking create error", err);

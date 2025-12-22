@@ -4,10 +4,13 @@ import { getSafariById } from "../lib/api";
 import BookingWidgetSafariSingleDay from "../components/BookingWidgetSafariSingleDay";
 import ReviewSection from "../components/ReviewSection"; // Import Reviews
 import { API_BASE } from '../lib/api';
+import { useAuth } from "../context/AuthContext";
+
 
 export default function SafariDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [safari, setSafari] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -83,10 +86,12 @@ export default function SafariDetail() {
           <h3 className="text-lg font-semibold mb-4">Book your seat</h3>
 
           <BookingWidgetSafariSingleDay
-            itemId={safari.id}
-            price={safari.price}
-            onBooked={() => navigate("/bookings")}
-          />
+      // THE FIX: The key ensures the form resets on login/logout
+      key={user ? user.id : "guest-safari"} 
+      itemId={safari.id}
+      price={safari.price}
+      onBooked={() => navigate("/bookings")}
+    />
           
           <p className="text-xs text-gray-400 mt-4 text-center">
             Book Now And Our Agent Will Connect you shortly.

@@ -8,12 +8,14 @@ import SEO from "../components/SEO";
 import { API_BASE } from '../lib/api';
 import SafeImage from "@/components/SafeImage";
 
+
 export default function HotelDetail() {
   const { id } = useParams();
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookOpen, setBookOpen] = useState(false);
   const [error, setError] = useState("");
+
 
   
 
