@@ -138,19 +138,19 @@ const generateFinalConfirmationEmail = (name, bookingType, startDate, guests, am
     `;
     return getBaseLayout(content);
   };
-  const generateOTPEmail = (name, otp) => {
+  const generateResetLinkEmail = (name, resetUrl) => {
     const content = `
-      <div class="status-header">SECURITY VERIFICATION</div>
+      <div class="status-header">SECURE ACCESS</div>
       <h2 style="font-size: 24px; font-weight: 300; margin: 0 0 20px 0; color: ${COLORS.primary};">Password Reset Request</h2>
-      <p>Dear ${name}, we received a request to reset your password for your Jawai Unfiltered account.</p>
+      <p>Dear ${name},</p>
+      <p>We received a request to access your account. To choose a new password, please click the secure button below.</p>
       
-      <div style="background-color: ${COLORS.bgSection}; border: 1px solid ${COLORS.border}; padding: 30px; text-align: center; margin: 30px 0;">
-          <p style="margin: 0 0 10px 0; font-size: 12px; color: ${COLORS.textMuted}; letter-spacing: 2px; font-weight: bold;">YOUR VERIFICATION CODE</p>
-          <h1 style="margin: 0; font-size: 42px; letter-spacing: 10px; color: ${COLORS.accent}; font-family: monospace;">${otp}</h1>
+      <div style="text-align: center; margin: 40px 0;">
+          <a href="${resetUrl}" class="btn-action" style="background-color: ${COLORS.primary}; color: #ffffff; padding: 18px 40px; text-decoration: none; display: inline-block; font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">Reset My Password</a>
       </div>
       
-      <p style="font-size: 13px; color: ${COLORS.textMuted}; line-height: 1.8;">
-          This code is valid for 10 minutes. If you did not request this change, please ignore this email or contact our support desk if you have security concerns.
+      <p style="font-size: 12px; color: ${COLORS.textMuted}; text-align: center;">
+          This link is valid for 1 hour. If you did not make this request, you can safely ignore this email.
       </p>
     `;
     return getBaseLayout(content);
@@ -174,5 +174,6 @@ module.exports = {
   generateBookingEmail,
   generateWelcomeEmail,
   generateFinalConfirmationEmail,
-  generateOTPEmail
+  generateResetLinkEmail
+  
 };
