@@ -7,18 +7,21 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { createBooking } = require('./controllers/bookingController');
-const { generateWelcomeEmail , generateFinalConfirmationEmail , generateResetLinkEmail} = require("./services/mailer");
+const { generateWelcomeEmail , generateFinalConfirmationEmail ,sendNotification ,generateBookingEmail} = require("./services/mailer");
 
 
 
 const db = require("./db"); 
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: ['https://jawaiunfiltered.com', 'http://localhost:5173'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
-const { sendNotification ,generateBookingEmail} = require('./services/mailer');
 app.use(require('./routes/sitemap'));
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
@@ -543,10 +546,7 @@ app.use((req, res) => {
     suggestion: "Check /api/hotels or /api/safaris"
   });
 });
-app.use(cors({
-  origin: ['https://jawaiunfiltered.com', 'https://your-site.vercel.app','http://localhost:5173'],
-  credentials: true
-}));
+
 
 // 2. Global Error Handler - Catch database or code crashes
 app.use((err, req, res, next) => {
