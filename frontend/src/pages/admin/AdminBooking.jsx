@@ -22,6 +22,22 @@ export default function AdminBookings() {
       setLoading(false);
     }
   }
+  async function handleStatus(id, newStatus) {
+    let amount = 0;
+    if (newStatus === 'confirmed') {
+      amount = window.prompt("Enter the total booking amount (₹):", "0");
+      if (amount === null) return; // Cancel if no amount entered
+    }
+  
+    if (!window.confirm(`Mark booking #${id} as ${newStatus}?`)) return;
+  
+    try {
+      await updateBookingStatus(id, newStatus, amount); // Send amount to backend
+      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
+    } catch (err) {
+      alert("Failed to update status");
+    }
+  }
  
   async function handleStatus(id, newStatus) {
     if (!window.confirm(`Mark booking #${id} as ${newStatus}?`)) return;
