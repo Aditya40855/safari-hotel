@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import RequireAuth from "./components/RequireAuth";
 import Loading from "./components/Loading"; // <--- Import your new loader
 
+
 // --- LAZY LOAD PAGES (Split Code) ---
 // This tells React: "Only download this file when the user visits the route"
 const Home = lazy(() => import("./pages/Home"));
@@ -14,6 +15,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Contact = lazy(() => import("./pages/Contact"));
+const ForgotPassword =lazy(()=> import('./pages/ForgotPassword'))
 
 const Hotels = lazy(() => import("./pages/Hotels"));
 const HotelDetail = lazy(() => import("./pages/HotelDetail"));
@@ -44,6 +46,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             {/* Listings */}
             <Route path="/hotels" element={<Hotels />} /> 

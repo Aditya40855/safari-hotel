@@ -7,6 +7,9 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { createBooking } = require('./controllers/bookingController');
+const { generateWelcomeEmail , generateFinalConfirmationEmail , generateOTPEmail} = require("./services/mailer");
+
+
 
 const db = require("./db"); 
 
@@ -140,26 +143,85 @@ app.get("/api", (req, res) => {
     }
   });
 });
+app.post("/api/auth/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+    const userRes = await db.query("SELECT id, name FROM users WHERE email = $1", [email]);
+    
+    if (userRes.rows.length === 0) return res.status(404).json({ error: "User not found" });
+    const user = userRes.rows[0];
+
+    // Generate 6-digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expires = new Date(Date.now() + 10 * 60000); // 10 minutes from now
+
+    // Store OTP in database (requires 'otp_code' and 'otp_expires' columns in users table)
+    await db.query("UPDATE users SET otp_code = $1, otp_expires = $2 WHERE id = $3", [otp, expires, user.id]);
+
+    const html = generateOTPEmail(user.name, otp);
+    await sendNotification(email, "Your Password Reset Code", html);
+
+    res.json({ message: "OTP sent to your email" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+app.post("/api/auth/reset-password", async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    const userRes = await db.query(
+      "SELECT * FROM users WHERE email = $1 AND otp_code = $2 AND otp_expires > now()", 
+      [email, otp]
+    );
+
+    if (userRes.rows.length === 0) return res.status(400).json({ error: "Invalid or expired OTP" });
+
+    const hash = await bcrypt.hash(newPassword, 10);
+    
+    // Update password and clear OTP fields
+    await db.query(
+      "UPDATE users SET password_hash = $1, otp_code = NULL, otp_expires = NULL WHERE email = $2", 
+      [hash, email]
+    );
+
+    res.json({ message: "Password reset successful" });
+  } catch (err) {
+    res.status(500).json({ error: "Reset failed" });
+  }
+});
 // Auth
 app.post("/api/auth/signup", async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
+    
+    // Check user
     const check = await db.query("SELECT id FROM users WHERE email = $1", [email]);
     if (check.rows.length > 0) return res.status(400).json({ error: "User exists" });
+    
+    // Hash and Insert
     const hash = await bcrypt.hash(password, 10);
     const q = `INSERT INTO users (name, email, phone, password_hash, is_admin, created_at) VALUES ($1, $2, $3, $4, false, now()) RETURNING id, name, email, is_admin`;
     const r = await db.query(q, [name, email, phone, hash]);
+    
     const user = r.rows[0];
     const token = jwt.sign({ id: user.id, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: "7d" });
-    sendNotification(user.email, "Welcome to Jawai Unfiltered", "WELCOME", {
-      name: user.name
-    }).catch(err => {
-      console.error("Welcome Mail Failed. Server Response:", err.response);
-    });
-    res.status(201).json({ user, token });
-  } catch (err) { res.status(500).json({ error: "Signup failed" }); }
-});
 
+    // --- FIX: Ensure generateWelcomeEmail is defined/imported ---
+    try {
+      const welcomeHtml = generateWelcomeEmail(user.name);
+      sendNotification(user.email, "Welcome to Jawai Unfiltered", welcomeHtml);
+    } catch (mailErr) {
+      console.error("Mailer setup error:", mailErr.message);
+      // We don't want to crash the whole signup if just the template fails
+    }
+
+    res.status(201).json({ user, token });
+  } catch (err) { 
+    console.error("Signup Crash Details:", err); // This will show you exactly why it's 500 in your terminal
+    res.status(500).json({ error: "Signup failed" }); 
+  }
+});
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -369,35 +431,48 @@ app.post("/api/bookings", async (req, res) => {
 
 app.patch("/api/bookings/:id/status", requireAdmin, async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, amount } = req.body; 
     const bookingId = req.params.id;
 
-    // 1. Update status in the database
     const r = await db.query(
       "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *", 
       [status, bookingId]
     );
     
-    if (!r.rows.length) return res.status(404).json({ error: "Not found" });
+    if (!r.rows.length) return res.status(404).json({ error: "Booking not found" });
     const booking = r.rows[0];
 
-    // 2. Fetch User Email to notify them
-    // We fetch from the 'users' table using the 'user_id' stored in the booking
+    // Fetch User details
     const userRes = await db.query("SELECT email, name FROM users WHERE id = $1", [booking.user_id]);
     
     if (userRes.rows.length > 0) {
       const user = userRes.rows[0];
-      const subject = `Booking Update: ${status.toUpperCase()}`;
-      const message = `Hello ${user.name}, your booking for ${booking.booking_type} (ID: ${bookingId}) is now ${status}.`;
+      let htmlContent;
 
-      // 3. Send the email
-      await sendNotification(user.email, subject, message); //
+      if (status === 'confirmed') {
+        // Safe check: If amount is missing, provide a default string to prevent crashes
+        const displayAmount = amount || "Pending Quote";
+        
+        htmlContent = generateFinalConfirmationEmail(
+          user.name, 
+          booking.booking_type, 
+          booking.start_date, 
+          booking.guests, 
+          displayAmount
+        );
+      } else {
+        htmlContent = `<p>Hello ${user.name}, your booking status is now: ${status.toUpperCase()}</p>`;
+      }
+
+      // Send email in background (don't 'await' here to keep the response fast)
+      sendNotification(user.email, `Booking Update: ${status.toUpperCase()}`, htmlContent)
+        .catch(e => console.error("Email notification failed:", e));
     }
 
     res.json(booking);
   } catch (err) { 
-    console.error("Patch error:", err);
-    res.status(500).json({ error: "db error" }); 
+    console.error("CRITICAL PATCH ERROR:", err.message); // This will tell you the EXACT error in your terminal
+    res.status(500).json({ error: "Internal Server Error" }); 
   }
 });
 
