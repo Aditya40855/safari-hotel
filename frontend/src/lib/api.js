@@ -28,24 +28,7 @@ export function getAuthToken() {
 export async function getAllSafaris(opts = {}) {
   return getList("/api/safaris", opts);
 }
-export async function requestOtp(email) {
-  return fetchJson("/api/auth/forgot-password", {
-    method: "POST",
-    body: JSON.stringify({ email }),
-    skipAuth: true, 
-  });
-}
-/**
- * Reset Password with OTP
- * Updates: Aligned path and parameters with backend app.post route
- */
-export async function resetPassword(email, otp, newPassword) {
-  return fetchJson("/api/auth/reset-password", {
-    method: "POST",
-    body: JSON.stringify({ email, otp, newPassword }),
-    skipAuth: true,
-  });
-}
+
 
 // One-time backend banner for developer UX
 let _bannerShown = false;

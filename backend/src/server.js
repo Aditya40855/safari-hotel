@@ -1,5 +1,4 @@
 require('dotenv').config();
-const crypto = require('crypto');
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -143,60 +142,6 @@ app.get("/api", (req, res) => {
       health_check: "/health"
     }
   });
-});
-app.post("/api/auth/forgot-password", async (req, res) => {
-  try {
-    const { email } = req.body;
-    const userRes = await db.query("SELECT id, name FROM users WHERE email = $1", [email]);
-    
-    if (userRes.rows.length === 0) return res.status(404).json({ error: "User not found" });
-    const user = userRes.rows[0];
-
-    // Create a secure token
-    const token = crypto.randomBytes(32).toString('hex');
-    const expires = new Date(Date.now() + 3600000); // 1 hour expiry
-
-    await db.query(
-      "UPDATE users SET reset_token = $1, reset_token_expires = $2 WHERE id = $3", 
-      [token, expires, user.id]
-    );
-
-    // Build the URL for your production site
-    const resetUrl = `https://jawaiunfiltered.com/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
-
-    // Send the email using the new template
-    const html = generateResetLinkEmail(user.name, resetUrl);
-    await sendNotification(email, "Secure Password Reset Link", html);
-
-    res.json({ message: "Reset link sent to your email" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-// 2. Reset Password using Token
-app.post("/api/auth/reset-password", async (req, res) => {
-  try {
-    const { email, token, newPassword } = req.body;
-
-    const userRes = await db.query(
-      "SELECT id FROM users WHERE email = $1 AND reset_token = $2 AND reset_token_expires > now()",
-      [email, token]
-    );
-
-    if (userRes.rows.length === 0) return res.status(400).json({ error: "Invalid or expired reset link" });
-
-    const hash = await bcrypt.hash(newPassword, 10);
-    await db.query(
-      "UPDATE users SET password_hash = $1, reset_token = NULL, reset_token_expires = NULL WHERE email = $2",
-      [hash, email]
-    );
-
-    res.json({ message: "Password updated successfully" });
-  } catch (err) {
-    res.status(500).json({ error: "Reset failed" });
-  }
 });
 // Auth
 app.post("/api/auth/signup", async (req, res) => {
