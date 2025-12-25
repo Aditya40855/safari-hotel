@@ -138,6 +138,15 @@ app.get("/", (req, res) => {
     endpoints: ["/api/hotels", "/api/safaris", "/health"]
   });
 });
+app.get("/api/test-mail", async (req, res) => {
+  try {
+    const testEmail = "adityasingh.aiml@gmail.com"; 
+    const result = await sendNotification(testEmail, "Live Server Test", "<h1>Success</h1>");
+    res.json({ success: result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // This route specifically handles the /api link to show all available endpoints
 app.get("/api", (req, res) => {
   res.json({
@@ -397,28 +406,6 @@ app.post("/api/bookings", async (req, res) => {
   } catch (err) {
     console.error("❌ CRITICAL BOOKING ERROR:", err.message);
     res.status(500).json({ error: "Server error: " + err.message });
-  }
-});
-// --- TEMPORARY TEST ROUTE ---
-app.get("/api/test-mail", async (req, res) => {
-  try {
-    console.log("🚀 Manual test-mail route triggered...");
-    
-    // Replace with your personal email to verify receipt
-    const testEmail = "adityasingh.aiml@gmail.com"; 
-    const subject = "Live Server Test: Resend API";
-    const html = `<h1>It Works!</h1><p>This email was sent from the <b>deployed</b> server at ${new Date().toLocaleString()}.</p>`;
-
-    const result = await sendNotification(testEmail, subject, html);
-
-    if (result) {
-      res.json({ success: true, message: `Email sent to ${testEmail}. Check your inbox and Resend dashboard.` });
-    } else {
-      res.status(500).json({ success: false, error: "Mailer returned false. Check cPanel logs." });
-    }
-  } catch (err) {
-    console.error("❌ Test Route Crash:", err.message);
-    res.status(500).json({ error: err.message });
   }
 });
 app.patch("/api/bookings/:id/status", requireAdmin, async (req, res) => {
