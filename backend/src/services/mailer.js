@@ -1,30 +1,16 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// 1. Optimized Transporter for cPanel/iseencloud
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'server596.iseencloud.net',
-  port: parseInt(process.env.EMAIL_PORT) || 465,
-  secure: true, 
-  auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS,
-  },
-  // Fixes "self-signed certificate" errors on production servers
-  tls: {
-    rejectUnauthorized: false
-  },
-  // Detailed logs for cPanel troubleshooting
-  debug: false,
-  logger: false 
-});
+
+// Initialize the Resend client using your API key from cPanel Environment Variables
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const COLORS = {
-  primary: '#1a1a1a',    // Deep Onyx
-  accent: '#a68546',     // Muted Safari Gold
-  border: '#e5e5e5',     // Light Architectural Gray
-  bgSection: '#fcfcfc',  // Subtle Contrast White
-  textMain: '#333333',   // Professional Gray-Black
-  textMuted: '#666666'   // Slate Gray
+  primary: '#1a1a1a',    
+  accent: '#a68546',     
+  border: '#e5e5e5',     
+  bgSection: '#fcfcfc',  
+  textMain: '#333333',   
+  textMuted: '#666666'   
 };
 
 const getBaseLayout = (content) => `
@@ -102,16 +88,23 @@ const generateFinalConfirmationEmail = (name, bookingType, startDate, guests, am
 module.exports = { 
   sendNotification: async (to, subject, html) => {
     try {
-        const info = await transporter.sendMail({
-            from: `"Jawai Unfiltered" <${process.env.EMAIL_USER}>`,
-            to: to,
+        // Updated to use the Resend SDK emails.send method
+        const { data, error } = await resend.emails.send({
+            from: 'Jawai Unfiltered <info@jawaiunfiltered.com>', // MUST be your verified domain
+            to: [to], // SDK expects an array for recipients
             subject: subject,
             html: html
-          });
-        console.log("✅ Email sent successfully:", info.messageId);
+        });
+
+        if (error) {
+            console.error("❌ Resend API Error:", error);
+            return false;
+        }
+
+        console.log("✅ Email sent successfully via Resend API. ID:", data.id);
         return true;
     } catch (error) {
-        console.error("❌ Notification Error:", error.message);
+        console.error("❌ Notification Crash:", error.message);
         return false;
     }
   }, 
