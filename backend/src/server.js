@@ -19,10 +19,25 @@ const db = require("./db");
 
 const app = express();
 app.use(cors({
-  origin: ['https://jawaiunfiltered.com', 'http://localhost:5173'],
+  origin: [
+    'https://jawaiunfiltered.com', 
+    'https://www.jawaiunfiltered.com', // Added the 'www' version for safety
+    'http://localhost:5173'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly allow OPTIONS
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'https://www.jawaiunfiltered.com');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(200); // Forces the "HTTP OK" status browsers need
+});
 
+// Add this IMMEDIATELY after the cors middleware above
+// This specifically handles the "Preflight" check that was failing
+app.options('*', cors());
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
