@@ -57,17 +57,17 @@ export default function Footer() {
             <li className="flex items-start gap-3">
               <span className="text-orange-500 mt-1">📍</span>
               <span>
-                123 Leopard Trail, Jawai,<br/>
-                Rajasthan, India - 306126
+                Sena , Jawai,<br/>
+                Rajasthan, India - 306707
               </span>
             </li>
             <li className="flex items-center gap-3">
               <span className="text-orange-500">📞</span>
-              <a href="tel:+919876543210" className="hover:text-white font-medium">+91 98765 43210</a>
+              <a href="tel:+919876543210" className="hover:text-white font-medium">+91 9351411559</a>
             </li>
             <li className="flex items-center gap-3">
               <span className="text-orange-500">✉️</span>
-              <a href="mailto:hello@safarihotels.com" className="hover:text-white">hello@safarihotels.com</a>
+              <a href="mailto:hello@safarihotels.com" className="hover:text-white">info@safarihotels.com</a>
             </li>
           </ul>
           
