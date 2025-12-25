@@ -9,7 +9,8 @@ const jwt = require("jsonwebtoken");
 const { 
   sendNotification, 
   generateBookingEmail, // Add this here
-  generateWelcomeEmail 
+  generateWelcomeEmail,
+  generateFinalConfirmationEmail
 } = require('./services/mailer');
 
 
@@ -19,10 +20,30 @@ const db = require("./db");
 
 const app = express();
 app.use(cors({
-  origin: ['https://jawaiunfiltered.com', 'http://localhost:5173'],
+  origin: [
+    'https://jawaiunfiltered.com', 
+    'https://www.jawaiunfiltered.com', 
+    'http://localhost:5173'
+  ],
+  // Add PATCH to this array explicitly
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], 
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
+// Update your options handler as well to be safe
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    // Ensure PATCH is included here
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(200);
+});// Forces the "HTTP OK" status browsers need
+
+
+// Add this IMMEDIATELY after the cors middleware above
+// This specifically handles the "Preflight" check that was failing
+app.options('*', cors());
 app.use(express.json());
 
 // --- SITEMAP ROUTE ADDED HERE ---
@@ -137,15 +158,6 @@ app.get("/", (req, res) => {
     status: "running",
     endpoints: ["/api/hotels", "/api/safaris", "/health"]
   });
-});
-app.get("/api/test-mail", async (req, res) => {
-  try {
-    const testEmail = "adityasingh.aiml@gmail.com"; 
-    const result = await sendNotification(testEmail, "Live Server Test", "<h1>Success</h1>");
-    res.json({ success: result });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 });
 // This route specifically handles the /api link to show all available endpoints
 app.get("/api", (req, res) => {
@@ -413,29 +425,54 @@ app.patch("/api/bookings/:id/status", requireAdmin, async (req, res) => {
     const { status } = req.body; 
     const bookingId = req.params.id;
 
-    // 1. Update the booking status in the database
+    // 1. Update status in DB and return all columns
     const r = await db.query(
       "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *", 
       [status, bookingId]
     );
     
-    // 2. Check if the booking actually exists
     if (!r.rows.length) {
       return res.status(404).json({ error: "Booking not found" });
     }
 
     const booking = r.rows[0];
 
-    // 3. Return the updated booking to the Admin dashboard
-    // Note: Mail logic has been removed as per request
-    res.json(booking);
+    // 2. Trigger Email if status is 'confirmed'
+    if (status === 'confirmed' && booking.email) {
+      try {
+        const formattedDate = new Date(booking.start_date).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
 
+        // Use the new function from your mailer.js
+        const emailHtml = generateFinalConfirmationEmail(
+          booking.name, 
+          booking.booking_type, 
+          formattedDate, 
+          booking.guests, 
+          booking.price || 'Amount Pending' // Ensure price column exists or use fallback
+        );
+
+        await sendNotification(
+          booking.email, 
+          `CONFIRMED: Your ${booking.booking_type.toUpperCase()} at Jawai`, 
+          emailHtml
+        );
+        
+        console.log(`✅ Final confirmation email sent to ${booking.email}`);
+      } catch (mailError) {
+        console.error("❌ Confirmation mailer failed:", mailError.message);
+      }
+    }
+
+    res.json(booking);
   } catch (err) { 
     console.error("ADMIN PATCH ERROR:", err.message);
     res.status(500).json({ error: "Internal Server Error" }); 
   }
 });
-
 app.delete("/api/bookings/:id", authenticateToken, async (req, res) => {
   try {
     let q = "DELETE FROM bookings WHERE id = $1";
