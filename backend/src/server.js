@@ -17,7 +17,7 @@ const {
   generateFinalConfirmationEmail
 } = require('./services/mailer');
 
-
+// backend is updating automatic done haha
 
 
 const db = require("./db"); 
