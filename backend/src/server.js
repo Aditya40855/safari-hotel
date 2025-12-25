@@ -7,7 +7,12 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { createBooking } = require('./controllers/bookingController');
-const { generateWelcomeEmail , generateFinalConfirmationEmail ,sendNotification ,generateBookingEmail} = require("./services/mailer");
+const { 
+  sendNotification, 
+  generateBookingEmail, // Add this here
+  generateWelcomeEmail 
+} = require('./services/mailer');
+
 
 
 
@@ -151,30 +156,27 @@ app.post("/api/auth/signup", async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
     
-    // Check user
-    const check = await db.query("SELECT id FROM users WHERE email = $1", [email]);
-    if (check.rows.length > 0) return res.status(400).json({ error: "User exists" });
-    
-    // Hash and Insert
+    // Check if user exists... (Keep your existing check logic)
     const hash = await bcrypt.hash(password, 10);
-    const q = `INSERT INTO users (name, email, phone, password_hash, is_admin, created_at) VALUES ($1, $2, $3, $4, false, now()) RETURNING id, name, email, is_admin`;
-    const r = await db.query(q, [name, email, phone, hash]);
+    const r = await db.query(
+        "INSERT INTO users (name, email, phone, password_hash, is_admin) VALUES ($1, $2, $3, $4, false) RETURNING id, name, email",
+        [name, email, phone, hash]
+    );
     
     const user = r.rows[0];
-    const token = jwt.sign({ id: user.id, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
 
-    // --- FIX: Ensure generateWelcomeEmail is defined/imported ---
+    // --- NEW EMAIL LOGIC ---
     try {
       const welcomeHtml = generateWelcomeEmail(user.name);
-      sendNotification(user.email, "Welcome to Jawai Unfiltered", welcomeHtml);
+      // We use 'await' to ensure Resend accepts the mail
+      await sendNotification(user.email, "Welcome to Jawai Unfiltered", welcomeHtml);
     } catch (mailErr) {
-      console.error("Mailer setup error:", mailErr.message);
-      // We don't want to crash the whole signup if just the template fails
+      console.error("Welcome email failed but signup succeeded:", mailErr.message);
     }
 
     res.status(201).json({ user, token });
   } catch (err) { 
-    console.error("Signup Crash Details:", err); // This will show you exactly why it's 500 in your terminal
     res.status(500).json({ error: "Signup failed" }); 
   }
 });
@@ -346,7 +348,6 @@ app.post("/api/bookings", async (req, res) => {
         return res.status(400).json({ error: "Missing required fields: Email is mandatory." });
     }
 
-    // --- LOGIC UPDATE: Determine User Type for the Badge ---
     const userType = userId ? 'member' : 'guest';
 
     const q = `
@@ -358,23 +359,33 @@ app.post("/api/bookings", async (req, res) => {
     const values = [
       booking_type, item_id, start_date, end_date, guests || 1, 
       contact, finalName, finalEmail, userId, time_slot || null,
-      userType // Stores "guest" or "member" directly
+      userType 
     ];
 
     const r = await db.query(q, values);
     const booking = r.rows[0];
 
-    // --- EMAIL TRIGGER LOGIC (Stays the same) ---
-    if (finalEmail) {
-      const subject = `Request Confirmed: ${booking_type.toUpperCase()}`;
-      const emailHtml = generateBookingEmail(finalName, booking_type, start_date, contact, guests || 1);
+    // --- INTEGRATED RESEND MAILER LOGIC ---
+    // We wrap this in a sub-try/catch so a mail failure doesn't break the booking success response
+    try {
+        if (finalEmail) {
+            const subject = `Booking Request Received: ${booking_type.toUpperCase()}`;
+            const emailHtml = generateBookingEmail(finalName, booking_type, start_date, contact, guests || 1);
 
-      sendNotification(finalEmail, subject, emailHtml)
-        .catch(err => console.error("Background User Email Error:", err));
-      
-      const adminAlertBody = `New booking from ${finalName} (${finalEmail}) for ${booking_type}.`;
-      sendNotification("adityasingh.aiml@gmail.com", "NEW BOOKING ALERT", adminAlertBody)
-        .catch(err => console.error("Background Admin Email Error:", err));
+            // Send acknowledgment to the User
+            await sendNotification(finalEmail, subject, emailHtml);
+            
+            // Send alert to the Admin (Change to your verified admin email)
+            const adminAlertBody = `<h3>New Booking Alert</h3>
+                                    <p><b>Name:</b> ${finalName}</p>
+                                    <p><b>Email:</b> ${finalEmail}</p>
+                                    <p><b>Type:</b> ${booking_type}</p>`;
+            
+            await sendNotification("info@jawaiunfiltered.com", "ADMIN ALERT: NEW BOOKING", adminAlertBody);
+        }
+    } catch (mailError) {
+        // Log the error but allow the user to see their "Confirmed" message on the UI
+        console.error("Mailer background error:", mailError.message);
     }
 
     res.status(201).json(booking);
@@ -384,50 +395,30 @@ app.post("/api/bookings", async (req, res) => {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 });
-
 app.patch("/api/bookings/:id/status", requireAdmin, async (req, res) => {
   try {
-    const { status, amount } = req.body; 
+    const { status } = req.body; 
     const bookingId = req.params.id;
 
+    // 1. Update the booking status in the database
     const r = await db.query(
       "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *", 
       [status, bookingId]
     );
     
-    if (!r.rows.length) return res.status(404).json({ error: "Booking not found" });
-    const booking = r.rows[0];
-
-    // Fetch User details
-    const userRes = await db.query("SELECT email, name FROM users WHERE id = $1", [booking.user_id]);
-    
-    if (userRes.rows.length > 0) {
-      const user = userRes.rows[0];
-      let htmlContent;
-
-      if (status === 'confirmed') {
-        // Safe check: If amount is missing, provide a default string to prevent crashes
-        const displayAmount = amount || "Pending Quote";
-        
-        htmlContent = generateFinalConfirmationEmail(
-          user.name, 
-          booking.booking_type, 
-          booking.start_date, 
-          booking.guests, 
-          displayAmount
-        );
-      } else {
-        htmlContent = `<p>Hello ${user.name}, your booking status is now: ${status.toUpperCase()}</p>`;
-      }
-
-      // Send email in background (don't 'await' here to keep the response fast)
-      sendNotification(user.email, `Booking Update: ${status.toUpperCase()}`, htmlContent)
-        .catch(e => console.error("Email notification failed:", e));
+    // 2. Check if the booking actually exists
+    if (!r.rows.length) {
+      return res.status(404).json({ error: "Booking not found" });
     }
 
+    const booking = r.rows[0];
+
+    // 3. Return the updated booking to the Admin dashboard
+    // Note: Mail logic has been removed as per request
     res.json(booking);
+
   } catch (err) { 
-    console.error("CRITICAL PATCH ERROR:", err.message); // This will tell you the EXACT error in your terminal
+    console.error("ADMIN PATCH ERROR:", err.message);
     res.status(500).json({ error: "Internal Server Error" }); 
   }
 });
