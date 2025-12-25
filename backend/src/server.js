@@ -6,6 +6,10 @@ const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sharp = require('sharp'); 
+const compression = require('compression');
+const NodeCache = require("node-cache");
+const myCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
 const { 
   sendNotification, 
   generateBookingEmail, // Add this here
@@ -30,6 +34,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+app.use(compression()); 
 
 // Update your options handler as well to be safe
 app.options('*', (req, res) => {
@@ -148,16 +153,32 @@ function requireAdmin(req, res, next) {
 // --- ROUTES ---
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
-app.post("/api/upload", upload.single("photo"), (req, res) => {
+app.post("/api/upload", upload.single("photo"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  res.json({ url: `/uploads/${req.file.filename}` });
-});
-app.get("/", (req, res) => {
-  res.json({ 
-    message: "Welcome to Jawai Unfiltered API", 
-    status: "running",
-    endpoints: ["/api/hotels", "/api/safaris", "/health"]
-  });
+
+  try {
+    const originalPath = req.file.path;
+    // We create a new filename ending in .webp
+    const webpFilename = `opt-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`;
+    const outputPath = path.join(UPLOAD_DIR, webpFilename);
+
+    // Process: Resize to 1200px max width, convert to WebP at 80% quality
+    await sharp(originalPath)
+      .resize(1200, null, { withoutEnlargement: true }) 
+      .webp({ quality: 80 }) 
+      .toFile(outputPath);
+
+    // IMPORTANT: Delete the original heavy file to save server space
+    if (fs.existsSync(originalPath)) {
+      fs.unlinkSync(originalPath);
+    }
+
+    // Return the new optimized URL to the admin panel
+    res.json({ url: `/uploads/${webpFilename}` });
+  } catch (err) {
+    console.error("❌ Image optimization failed:", err);
+    res.status(500).json({ error: "Failed to process image" });
+  }
 });
 // This route specifically handles the /api link to show all available endpoints
 app.get("/api", (req, res) => {
@@ -225,21 +246,32 @@ app.get("/api/cities", async (req, res) => {
 app.get("/api/hotels", async (req, res) => {
   try {
     const city = (req.query.city || "").toLowerCase();
-    // Debug logs
-    console.log(`🔎 SEARCHING HOTELS. City Filter: '${city}'`);
+    
+    // 1. Define a unique key for this specific request
+    const cacheKey = `hotels_${city || 'all'}`;
+    
+    // 2. Check if we already have this data in memory
+    const cachedData = myCache.get(cacheKey);
+    if (cachedData) {
+      console.log(`⚡ Serving HOTELS from Cache for: ${city || 'all'}`);
+      return res.json(cachedData); // Return instantly
+    }
 
+    // 3. If NOT in cache, run the database query
+    console.log(`🔎 Cache Miss. Fetching from DB for: '${city}'`);
     let q = "SELECT * FROM hotels"; 
     const params = [];
-
     if (city) {
       q += " WHERE LOWER(city_slug) = $1";
       params.push(city);
     }
-    
     q += " ORDER BY created_at DESC"; 
     
     const r = await db.query(q, params);
-    console.log(`✅ FOUND ${r.rows.length} HOTELS in Database.`);
+    
+    // 4. Save the result in cache for future requests
+    myCache.set(cacheKey, r.rows); 
+    console.log(`✅ Cached ${r.rows.length} HOTELS.`);
     
     res.json(r.rows);
   } catch (err) {
@@ -247,7 +279,6 @@ app.get("/api/hotels", async (req, res) => {
     res.status(500).json({ error: "db error" });
   }
 });
-
 // ✅ UPDATED: Get Hotel by ID OR Slug
 app.get("/api/hotels/:identifier", async (req, res) => {
   const { identifier } = req.params;
@@ -274,16 +305,37 @@ app.get("/api/hotels/:identifier", async (req, res) => {
 
 // --- SAFARIS (Smart Route: ID or Slug) ---
 app.get("/api/safaris", async (req, res) => {
-  const city = (req.query.city || "").toLowerCase();
-  // Changed to SELECT * to ensure we get the 'slug' column if needed
-  let q = "SELECT * FROM safaris";
-  const params = [];
-  if (city) { q += " WHERE LOWER(city_slug) = $1"; params.push(city); }
-  q += " ORDER BY name";
   try {
+    const city = (req.query.city || "").toLowerCase();
+    
+    // 1. Create a unique cache key for safaris
+    const cacheKey = `safaris_${city || 'all'}`;
+    
+    // 2. Try to get data from memory
+    const cachedData = myCache.get(cacheKey);
+    if (cachedData) {
+      console.log(`⚡ Serving SAFARIS from Cache for: ${city || 'all'}`);
+      return res.json(cachedData); 
+    }
+
+    // 3. Cache miss - Query the database
+    console.log(`🔎 Cache Miss. Fetching SAFARIS from DB for: '${city}'`);
+    let q = "SELECT * FROM safaris";
+    const params = [];
+    if (city) { 
+      q += " WHERE LOWER(city_slug) = $1"; 
+      params.push(city); 
+    }
+    q += " ORDER BY name";
+
     const r = await db.query(q, params);
+    
+    // 4. Save to cache for 10 minutes
+    myCache.set(cacheKey, r.rows); 
+    
     res.json(r.rows);
   } catch (err) {
+    console.error("❌ SAFARI FETCH ERROR:", err);
     res.status(500).json({ error: "db error" });
   }
 });
@@ -539,20 +591,32 @@ app.post("/api/admin/hotels", requireAdmin, async (req, res) => {
     const { name, city_slug, price, rating, images, description, slug } = req.body;
     let baseSlug = slug || slugify(name || "hotel") + "-" + Date.now();
     let imgs = Array.isArray(images) ? images : (images ? [images] : []);
+    
     const q = `INSERT INTO hotels (name, slug, city_slug, description, price, rating, images, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7, now()) RETURNING *`;
     const r = await db.query(q, [name, baseSlug, city_slug, description, price, rating, imgs]);
+
+    // --- CACHE CLEARING LOGIC ---
+    myCache.flushAll(); // Clears hotel and safari lists
+    console.log("🧹 Cache cleared: New Hotel added.");
+
     res.json(r.rows[0]);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
-   try {
-    const { name, title, city_slug, price, duration, images, description } = req.body;
-    let imgs = Array.isArray(images) ? images : (images ? [images] : []);
-    const q = `INSERT INTO safaris (city_slug, name, duration, price, description, images, created_at) VALUES ($1,$2,$3,$4,$5,$6, now()) RETURNING *`;
-    const r = await db.query(q, [city_slug, name||title, duration, price, description, imgs]);
-    res.json(r.rows[0]);
-   } catch(err) { res.status(500).json({ error: err.message }); }
+  try {
+   const { name, title, city_slug, price, duration, images, description } = req.body;
+   let imgs = Array.isArray(images) ? images : (images ? [images] : []);
+   
+   const q = `INSERT INTO safaris (city_slug, name, duration, price, description, images, created_at) VALUES ($1,$2,$3,$4,$5,$6, now()) RETURNING *`;
+   const r = await db.query(q, [city_slug, name||title, duration, price, description, imgs]);
+
+   // --- CACHE CLEARING LOGIC ---
+   myCache.flushAll(); //
+   console.log("🧹 Cache cleared: New Safari added.");
+
+   res.json(r.rows[0]);
+  } catch(err) { res.status(500).json({ error: err.message }); }
 });
 // DELETE HOTEL
 app.delete("/api/admin/hotels/:id", requireAdmin, async (req, res) => {

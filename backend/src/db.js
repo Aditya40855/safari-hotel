@@ -1,39 +1,44 @@
-// 1. Add this line at the very top to load your local .env file
 require('dotenv').config(); 
+const { Pool } = require('pg');
 
-const { neon } = require('@neondatabase/serverless');
-
-// Use the connection string from environment variables
-const connectionString = process.env.DATABASE_URL;
-const sql = neon(connectionString);
+// Initialize the Pool with production-grade settings
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Required for Neon SSL connections
+  },
+  max: 20, // Reuse up to 20 connections
+  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+  connectionTimeoutMillis: 10000, // Wait 10s for Neon to wake up (Cold Start fix)
+});
 
 /**
- * Helper function to execute SQL with a retry loop for Neon cold starts.
- * It waits 2 seconds between attempts, up to 5 times.
+ * Enhanced execution with retry logic.
+ * This keeps your existing logic but uses the high-performance Pool.
  */
 const executeWithRetry = async (text, params = []) => {
   const MAX_RETRIES = 5;
-  const DELAY = 2000; // 2 seconds
+  const DELAY = 2000; 
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      // Execute the query
-      const result = await sql(text, params);
-      return { rows: result };
+      // Use the pool to execute the query
+      const result = await pool.query(text, params);
+      return result; // Result already contains 'rows'
     } catch (err) {
-      // Detect common "Cold Start" or transient network errors
+      // Detect transient errors like cold starts or fetch failures
       const isTransient = 
         err.message.includes('fetch failed') || 
         err.message.includes('timeout') || 
-        err.code === '57P01'; // Admin shutdown during restart
+        err.code === '57P01' ||
+        err.code === 'ECONNREFUSED';
 
       if (isTransient && attempt < MAX_RETRIES) {
-        console.warn(`⚠️ Neon Cold Start (Attempt ${attempt}/${MAX_RETRIES}). Retrying in 2s...`);
+        console.warn(`⚠️ Database Cold Start/Transient Error (Attempt ${attempt}/${MAX_RETRIES}). Retrying in 2s...`);
         await new Promise(res => setTimeout(res, DELAY));
         continue;
       }
 
-      // If it's a real syntax error or we've exhausted retries, throw it
       console.error("❌ Database Error:", err.message);
       throw err;
     }
