@@ -6,7 +6,6 @@ const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { createBooking } = require('./controllers/bookingController');
 const { 
   sendNotification, 
   generateBookingEmail, // Add this here
@@ -365,34 +364,61 @@ app.post("/api/bookings", async (req, res) => {
     const r = await db.query(q, values);
     const booking = r.rows[0];
 
-    // --- INTEGRATED RESEND MAILER LOGIC ---
-    // We wrap this in a sub-try/catch so a mail failure doesn't break the booking success response
-    try {
-        if (finalEmail) {
+    // --- ENHANCED PRODUCTION MAILER LOGIC ---
+    if (finalEmail) {
+        try {
             const subject = `Booking Request Received: ${booking_type.toUpperCase()}`;
             const emailHtml = generateBookingEmail(finalName, booking_type, start_date, contact, guests || 1);
 
-            // Send acknowledgment to the User
-            await sendNotification(finalEmail, subject, emailHtml);
-            
-            // Send alert to the Admin (Change to your verified admin email)
-            const adminAlertBody = `<h3>New Booking Alert</h3>
-                                    <p><b>Name:</b> ${finalName}</p>
-                                    <p><b>Email:</b> ${finalEmail}</p>
-                                    <p><b>Type:</b> ${booking_type}</p>`;
-            
+            // 1. Mandatory await for User Email
+            const userMailSent = await sendNotification(finalEmail, subject, emailHtml);
+            if (userMailSent) console.log(`✅ User notification dispatched to ${finalEmail}`);
+
+            // 2. Mandatory await for Admin Alert
+            const adminAlertBody = `
+                <h3>New Booking Alert</h3>
+                <p><b>Name:</b> ${finalName}</p>
+                <p><b>Email:</b> ${finalEmail}</p>
+                <p><b>Type:</b> ${booking_type}</p>
+                <p><b>Platform:</b> Deployed Web</p>
+            `;
             await sendNotification("info@jawaiunfiltered.com", "ADMIN ALERT: NEW BOOKING", adminAlertBody);
+            console.log(`✅ Admin alert dispatched to info@jawaiunfiltered.com`);
+
+        } catch (mailError) {
+            // Logs to stderr.log in cPanel
+            console.error("❌ PRODUCTION MAILER ERROR:", mailError.message);
         }
-    } catch (mailError) {
-        // Log the error but allow the user to see their "Confirmed" message on the UI
-        console.error("Mailer background error:", mailError.message);
     }
 
+    // Response is sent ONLY after the mail functions are awaited
     res.status(201).json(booking);
 
   } catch (err) {
-    console.error("Booking create error", err);
+    console.error("❌ CRITICAL BOOKING ERROR:", err.message);
     res.status(500).json({ error: "Server error: " + err.message });
+  }
+});
+// --- TEMPORARY TEST ROUTE ---
+app.get("/api/test-mail", async (req, res) => {
+  try {
+    console.log("🚀 Manual test-mail route triggered...");
+    
+    // Replace with your personal email to verify receipt
+    const testEmail = "adityasingh.aiml@gmail.com"; 
+    const subject = "Live Server Test: Resend API";
+    const html = `<h1>It Works!</h1><p>This email was sent from the <b>deployed</b> server at ${new Date().toLocaleString()}.</p>`;
+
+    const result = await sendNotification(testEmail, subject, html);
+
+    if (result) {
+      res.json({ success: true, message: `Email sent to ${testEmail}. Check your inbox and Resend dashboard.` });
+    } else {
+      res.status(500).json({ success: false, error: "Mailer returned false. Check cPanel logs." });
+    }
+  } catch (err) {
+    console.error("❌ Test Route Crash:", err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 app.patch("/api/bookings/:id/status", requireAdmin, async (req, res) => {
