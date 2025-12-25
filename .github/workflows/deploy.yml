@@ -1,0 +1,32 @@
+name: 🚀 Deploy Website on Push
+on:
+  push:
+    branches:
+      - main  # Change this to 'master' if your main branch is named master
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    env:
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4 # Always use the latest version
+
+    - name: 📂 Sync files to cPanel
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        # '.' means it will upload all files from your repo to your server
+        server-dir: ./ 
+        # These are ignored to keep your server clean
+        exclude: |
+          **/.git*
+          **/.github*
+          **/node_modules/**
