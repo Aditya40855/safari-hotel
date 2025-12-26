@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import RequireAuth from "./components/RequireAuth";
 import Loading from "./components/Loading";
 import Home from "./pages/Home"; // <--- Home is now standard for instant start
+import FAQPage from './pages/SEO/Header_Faq';
 
 // 2. SEMI-CRITICAL: Lazy load but prioritized by the browser
 const Hotels = lazy(() => import("./pages/Hotels"));
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/hotels/:id" element={<HotelDetail />} />
             <Route path="/safaris" element={<Safaris />} />
             <Route path="/safaris/:id" element={<SafariDetail />} />
+            <Route path="/faq" element={<FAQPage />} />
 
             <Route path="/bookings" element={<RequireAuth><Dashboard /></RequireAuth>} />
             <Route path="/admin/bookings" element={<RequireAuth><AdminBookings /></RequireAuth>} />

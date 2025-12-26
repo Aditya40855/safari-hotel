@@ -1,6 +1,6 @@
 // src/components/Header.jsx
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link,NavLink, useNavigate, useLocation } from "react-router-dom";
 import { getAuthToken, setAuthToken } from "../lib/api";
 
 export default function Header() {
@@ -46,7 +46,6 @@ export default function Header() {
                 <span>Hotels</span>
               </Link>
             </div>
-
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8 text-gray-700 font-medium">
               <Link to="/" className="hover:text-orange-600 transition">Home</Link>
@@ -58,6 +57,7 @@ export default function Header() {
                 <Link to="/bookings" className="hover:text-orange-600 transition">My Bookings</Link>
               )}
 
+              <Link to="/faq" className="hover:text-orange-600 transition">FAQ</Link>
               <Link to="/contact" className="hover:text-orange-600 transition">Contact</Link>
 
               {/* Admin Link (Only visible to Admins) */}
@@ -137,6 +137,7 @@ export default function Header() {
             )}
             
             <Link to="/contact" className="text-lg font-medium text-gray-800">Contact</Link>
+            <Link to="/faq" className="text-lg font-medium text-gray-800">FAQ</Link>
 
             {user?.is_admin && (
                <Link to="/admin" className="text-lg font-medium text-red-600">Admin Panel</Link>
