@@ -34,7 +34,7 @@ function AdminVisitorCounter() {
 }
 
 // --- COMPONENT: STICKY MOBILE BOOKING BAR ---
-function StickyBookingBar({ price = 4000 }) {
+/*function StickyBookingBar({ price = 4000 }) {
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-[9998] animate-in slide-in-from-bottom-full duration-500">
       <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] flex items-center justify-between">
@@ -59,7 +59,7 @@ function StickyBookingBar({ price = 4000 }) {
       </div>
     </div>
   );
-}
+}*/
 
 // --- COMPONENT: URGENCY PLUS (Live Activity Pulse) ---
 function LiveIncentive() {
@@ -365,7 +365,7 @@ export default function Home() {
       {/* RENDER NEW INTERACTIVE ELEMENTS */}
       <LiveIncentive />
       <AdminVisitorCounter />
-      <StickyBookingBar price={4000} />
+     
 
     </main>
   );
