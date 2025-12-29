@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 
@@ -6,7 +7,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import RequireAuth from "./components/RequireAuth";
 import Loading from "./components/Loading";
-import Home from "./pages/Home"; // <--- Home is now standard for instant start
+import ContactHub from './components/ContactHub'; // <--- Ensure this path is correct
+import Home from "./pages/Home";
 import FAQPage from './pages/SEO/Header_Faq';
 
 // 2. SEMI-CRITICAL: Lazy load but prioritized by the browser
@@ -29,15 +31,18 @@ const AdminInventory = lazy(() => import("./pages/admin/AdminInventory"));
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col">
+    /* Added 'relative' and 'overflow-x-hidden' to ensure fixed elements stay in view */
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col relative overflow-x-hidden">
       <Header />
-      <div className="pt-20 flex-grow">
+      
+      <main className="pt-20 flex-grow">
         <Suspense fallback={<Loading />}>
           <Routes>
-            {/* Home loads instantly from the main bundle */}
+            {/* Home and SEO pages load instantly */}
             <Route path="/" element={<Home />} />
+            <Route path="/faq" element={<FAQPage />} />
             
-            {/* Everything else loads on demand */}
+            {/* Lazy-loaded routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/contact" element={<Contact />} />
@@ -45,8 +50,8 @@ export default function App() {
             <Route path="/hotels/:id" element={<HotelDetail />} />
             <Route path="/safaris" element={<Safaris />} />
             <Route path="/safaris/:id" element={<SafariDetail />} />
-            <Route path="/faq" element={<FAQPage />} />
 
+            {/* Protected routes */}
             <Route path="/bookings" element={<RequireAuth><Dashboard /></RequireAuth>} />
             <Route path="/admin/bookings" element={<RequireAuth><AdminBookings /></RequireAuth>} />
             <Route path="/admin/inventory" element={<RequireAuth><AdminInventory /></RequireAuth>} />
@@ -54,8 +59,14 @@ export default function App() {
             <Route path="/admin/safaris/new" element={<RequireAuth><AdminAddSafari /></RequireAuth>} />
           </Routes>
         </Suspense>
-      </div>
+      </main>
+
       <Footer />
+
+      {/* CRITICAL: ContactHub must be OUTSIDE Suspense/Routes.
+          This ensures it remains persistent and floats above the entire layout.
+      */}
+      <ContactHub /> 
     </div>
   );
 }
