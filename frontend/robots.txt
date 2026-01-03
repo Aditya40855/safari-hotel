@@ -1,12 +1,37 @@
+# JAWAI UNFILTERED - ADVANCED SEO ROBOTS.TXT
+# Optimized for Googlebot, Bingbot, and AI Search Crawlers
+
 User-agent: *
 Allow: /
+Allow: /safaris/
+Allow: /hotels/
+Allow: /celebrate
+Allow: /legal
 
-# Security: Keep Google out of Admin & Account pages
+# 1. SECURITY: Block sensitive and private user paths
 Disallow: /admin/
-Disallow: /bookings
 Disallow: /login
 Disallow: /signup
+Disallow: /bookings
+Disallow: /account
 
-# SEO: Tell Google where your Sitemap is
-# (Replace this URL with your actual domain when you buy it)
+# 2. CRAWL BUDGET: Block technical routes that don't need indexing
+Disallow: /api/
+Disallow: /static/js/
+Disallow: /node_modules/
+
+# 3. DUPLICATE CONTENT: Prevent indexing of filter/sort results
+# This ensures only your clean safari URLs are ranked
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*?_limit=
+
+# 4. BOT SPECIFIC: Allow AI Search (Gemini/GPT) to discover your events
+# This helps you appear in AI-generated travel plans
+User-agent: GPTBot
+Allow: /celebrate
+Allow: /safaris
+
+# 5. SITEMAP: The master map for crawlers
 Sitemap: https://jawaiunfiltered.com/sitemap.xml
