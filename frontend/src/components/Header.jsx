@@ -56,6 +56,13 @@ export default function Header() {
               {token && (
                 <Link to="/bookings" className="hover:text-orange-600 transition">My Bookings</Link>
               )}
+              <Link to="/celebrate" className="relative group hover:text-orange-500 font-bold transition-all">
+    Celebrate 
+    <span className="absolute -top-1 -right-4 flex h-2 w-2">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+     
+    </span>
+  </Link>
 
               <Link to="/faq" className="hover:text-orange-600 transition">FAQ</Link>
               <Link to="/contact" className="hover:text-orange-600 transition">Contact</Link>
@@ -136,8 +143,10 @@ export default function Header() {
                <Link to="/bookings" className="text-lg font-medium text-gray-800">My Bookings</Link>
             )}
             
+            
             <Link to="/contact" className="text-lg font-medium text-gray-800">Contact</Link>
             <Link to="/faq" className="text-lg font-medium text-gray-800">FAQ</Link>
+            <Link to="/celebrate" className="text-lg font-medium text-gray-800">Plan Your Moment</Link>
 
             {user?.is_admin && (
                <Link to="/admin" className="text-lg font-medium text-red-600">Admin Panel</Link>
