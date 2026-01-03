@@ -10,6 +10,8 @@ import Loading from "./components/Loading";
 import ContactHub from './components/ContactHub'; // <--- Ensure this path is correct
 import Home from "./pages/Home";
 import FAQPage from './pages/SEO/Header_Faq';
+import LegalPages from "./pages/LegalPages";
+import Celebrations from "./pages/Celebrations";
 
 // 2. SEMI-CRITICAL: Lazy load but prioritized by the browser
 const Hotels = lazy(() => import("./pages/Hotels"));
@@ -50,7 +52,8 @@ export default function App() {
             <Route path="/hotels/:id" element={<HotelDetail />} />
             <Route path="/safaris" element={<Safaris />} />
             <Route path="/safaris/:id" element={<SafariDetail />} />
-
+            <Route path="/legal" element={<LegalPages />} />
+            <Route path="/celebrate" element={<Celebrations />} />
             {/* Protected routes */}
             <Route path="/bookings" element={<RequireAuth><Dashboard /></RequireAuth>} />
             <Route path="/admin/bookings" element={<RequireAuth><AdminBookings /></RequireAuth>} />
