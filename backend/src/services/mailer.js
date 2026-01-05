@@ -101,7 +101,7 @@ module.exports = {
             return false;
         }
 
-        console.log("✅ Email sent successfully via Resend API. ID:", data.id);
+        console.log("✅ Email sent successfully via Resend API. ID--7742540855:", data.id);
         return true;
     } catch (error) {
         console.error("❌ Notification Crash:", error.message);
