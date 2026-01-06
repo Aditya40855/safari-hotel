@@ -1,20 +1,23 @@
 require('dotenv').config(); 
 const { Pool } = require('pg');
 
-// Initialize the Pool with production-grade settings
+// Initialize the Pool with optimized production-grade settings
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // Required for Neon SSL connections
+    // Critical: bypasses certificate validation which often fails on shared hosts
+    rejectUnauthorized: false, 
   },
   max: 20, // Reuse up to 20 connections
-  idleTimeoutMillis: 300000, // Close idle clients after 30 seconds
-  connectionTimeoutMillis: 100000, // Wait 10s for Neon to wake up (Cold Start fix)
+  
+  // Adjusted timeouts to prevent "hanging" connections
+  idleTimeoutMillis: 30000,    // Standard 30s: Close idle clients to free memory
+  connectionTimeoutMillis: 10000, // Standard 10s: Fail fast if DB doesn't respond
 });
 
 /**
  * Enhanced execution with retry logic.
- * This keeps your existing logic but uses the high-performance Pool.
+ * Keeps existing logic but uses the optimized Pool.
  */
 const executeWithRetry = async (text, params = []) => {
   const MAX_RETRIES = 5;
@@ -22,16 +25,15 @@ const executeWithRetry = async (text, params = []) => {
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      // Use the pool to execute the query
       const result = await pool.query(text, params);
-      return result; // Result already contains 'rows'
+      return result; 
     } catch (err) {
       // Detect transient errors like cold starts or fetch failures
       const isTransient = 
         err.message.includes('fetch failed') || 
         err.message.includes('timeout') || 
-        err.code === '57P01' ||
-        err.code === 'ECONNREFUSED';
+        err.code === '57P01' || // Admin shutdown
+        err.code === 'ECONNREFUSED'; // Connection rejected
 
       if (isTransient && attempt < MAX_RETRIES) {
         console.warn(`⚠️ Database Cold Start/Transient Error (Attempt ${attempt}/${MAX_RETRIES}). Retrying in 2s...`);
@@ -46,12 +48,9 @@ const executeWithRetry = async (text, params = []) => {
 };
 
 module.exports = {
-  // Primary query method
   query: async (text, params = []) => {
     return await executeWithRetry(text, params);
   },
-  
-  // Compatibility object for existing pool.query calls
   pool: {
     query: async (text, params = []) => {
       return await executeWithRetry(text, params);
