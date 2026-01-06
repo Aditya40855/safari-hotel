@@ -8,8 +8,8 @@ const pool = new Pool({
     rejectUnauthorized: false, // Required for Neon SSL connections
   },
   max: 20, // Reuse up to 20 connections
-  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-  connectionTimeoutMillis: 10000, // Wait 10s for Neon to wake up (Cold Start fix)
+  idleTimeoutMillis: 300000, // Close idle clients after 30 seconds
+  connectionTimeoutMillis: 100000, // Wait 10s for Neon to wake up (Cold Start fix)
 });
 
 /**
