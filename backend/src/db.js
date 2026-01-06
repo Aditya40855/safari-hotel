@@ -1,23 +1,33 @@
 require('dotenv').config();
-const { Pool } = require('pg');
+const mysql = require('mysql2/promise');
 
 /**
- * Optimized for cPanel and Neon:
- * Forces Port 6543 to bypass firewall restrictions.
+ * Optimized for cPanel Local MySQL:
+ * Bypasses all external firewall blocks by using localhost.
  */
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  port: 6543, // Forces the connection to use the pooling port
-  ssl: {
-    rejectUnauthorized: false, // Essential for shared hosting SSL
-  },
-  max: 10, // Recommended for small/shared servers to prevent memory spikes
-  connectionTimeoutMillis: 10000, // Wait 10s for the DB to respond
-  idleTimeoutMillis: 30000,       // Close idle clients after 30s
+const pool = mysql.createPool({
+  host: '84.247.128.38', // Standard for local cPanel database connections
+  user: 'jawaiunf_admin_pro', // Correct username from your screenshot
+  password: 'Aditya@77425',    // Your requested password
+  database: 'jawaiunf_jawai_pro', // Correct database name from your screenshot
+  waitForConnections: true,
+  connectionLimit: 5,  // Optimized for shared hosting memory limits
+  queueLimit: 0
 });
 
-// Simplified query method: Removes complex retry logic for a cleaner start
 module.exports = {
-  query: (text, params) => pool.query(text, params),
-  pool: pool // Exporting the raw pool for transactions if needed
+  /**
+   * Returns { rows: results } to maintain compatibility with 
+   * your previous PostgreSQL-style logic in server.js.
+   */
+  query: async (sql, params) => {
+    try {
+      const [results] = await pool.execute(sql, params); 
+      return { rows: results };
+    } catch (err) {
+      console.error("❌ MySQL Query Error:", err.message);
+      throw err;
+    }
+  },
+  pool: pool
 };
