@@ -1,7 +1,7 @@
 export const API_BASE = 
   import.meta.env.VITE_API_URL || 
   (typeof window !== "undefined" && window.location.hostname === "localhost" 
-    ? "http://localhost:8080" // If your fetchJson paths start with /api, BASE should NOT end with /api
+    ? "http://localhost:4000" // If your fetchJson paths start with /api, BASE should NOT end with /api
     : "https://api.jawaiunfiltered.com");
 
 const BASE = API_BASE;
