@@ -91,6 +91,14 @@ export default function AdminAddSafari() {
       setSubmitting(false);
     }
   }
+  const generateSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with a hyphen
+      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6">

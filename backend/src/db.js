@@ -6,13 +6,14 @@ const mysql = require('mysql2/promise');
  * Bypasses all external firewall blocks by using localhost.
  */
 const pool = mysql.createPool({
-  host: '84.247.128.38', // Standard for local cPanel database connections
-  user: 'jawaiunf_admin_pro', // Correct username from your screenshot
-  password: 'Aditya@77425',    // Your requested password
-  database: 'jawaiunf_jawai_pro', // Correct database name from your screenshot
+  host: process.env.DB_HOST,       // cPanel: localhost
+  user: process.env.DB_USER,       // cPanel DB user
+  password: process.env.DB_PASSWORD,   // cPanel DB password
+  database: process.env.DB_NAME,   // cPanel DB name
   waitForConnections: true,
-  connectionLimit: 5,  // Optimized for shared hosting memory limits
-  queueLimit: 0
+  connectionLimit: 5,              // SAFE for shared hosting
+  queueLimit: 0,
+  charset: "utf8mb4"
 });
 
 module.exports = {
