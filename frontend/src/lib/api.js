@@ -1,14 +1,11 @@
-// ==========================================
-// 1. API BASE CONFIG
-// ==========================================
-
 export const API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
+  import.meta.env.DEV
     ? "http://localhost:4000/api"
-    : "/api");
+    : "/api";
 
 export const BASE = API_BASE;
+
+console.info("[API] BASE =", BASE);
 
 if (typeof console !== "undefined") {
   console.info("[API] BASE =", BASE);
