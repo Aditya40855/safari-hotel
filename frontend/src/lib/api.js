@@ -1,20 +1,23 @@
-export const API_BASE = 
-  import.meta.env.VITE_API_URL || 
-  (typeof window !== "undefined" && window.location.hostname === "localhost" 
-    ? "http://localhost:4000" // If your fetchJson paths start with /api, BASE should NOT end with /api
-    : "https://api.jawaiunfiltered.com");
+// ==========================================
+// 1. API BASE CONFIG
+// ==========================================
 
-const BASE = API_BASE;
+export const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname === "localhost"
+    ? "http://localhost:4000/api"
+    : "/api");
+
+export const BASE = API_BASE;
 
 if (typeof console !== "undefined") {
   console.info("[API] BASE =", BASE);
 }
 
 // ==========================================
-// 2. HELPER FUNCTIONS
+// 2. AUTH TOKEN HELPERS
 // ==========================================
 
-// Token helpers
 export function setAuthToken(token) {
   if (token) localStorage.setItem("token", token);
   else localStorage.removeItem("token");
@@ -24,18 +27,15 @@ export function getAuthToken() {
   return localStorage.getItem("token");
 }
 
-// get all safaris (no city filter)
-export async function getAllSafaris(opts = {}) {
-  return getList("/api/safaris", opts);
-}
+// ==========================================
+// 3. BACKEND WARNING BANNER (DEV UX)
+// ==========================================
 
-
-// One-time backend banner for developer UX
 let _bannerShown = false;
 function showBackendWarning(message) {
   if (_bannerShown) return;
   _bannerShown = true;
-  if (typeof document === "undefined") return; // not running in browser
+  if (typeof document === "undefined") return;
 
   try {
     const el = document.createElement("div");
@@ -54,8 +54,7 @@ function showBackendWarning(message) {
     el.style.display = "flex";
     el.style.alignItems = "center";
     el.style.justifyContent = "space-between";
-    el.style.gap = "12px";
-    el.textContent = `⚠️ Backend unreachable at ${BASE || "/api"} — ${message}`;
+    el.textContent = `⚠️ Backend unreachable at ${BASE}`;
 
     const btn = document.createElement("button");
     btn.textContent = "Dismiss";
@@ -65,28 +64,28 @@ function showBackendWarning(message) {
     btn.style.border = "none";
     btn.style.padding = "6px 10px";
     btn.style.borderRadius = "6px";
-    btn.style.cursor = "pointer";
     btn.onclick = () => el.remove();
 
     el.appendChild(btn);
     document.body.prepend(el);
 
-    // Auto remove after 30s
-    setTimeout(() => {
-      try { el.remove(); } catch (e) {}
-    }, 30000);
+    setTimeout(() => el.remove(), 30000);
   } catch (e) {
-    // ignore DOM errors
-    console.warn("[API] could not show backend banner", e);
+    console.warn("[API] banner error", e);
   }
 }
 
-async function fetchJson(path, opts = {}) {
-  // build URL: if BASE provided use absolute, otherwise relative path ("/api/..")
-  const url = BASE ? `${BASE}${path}` : path;
+// ==========================================
+// 4. CORE FETCH JSON HANDLER (SAFE)
+// ==========================================
 
-  const signal = opts.signal;
-  const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
+async function fetchJson(path, opts = {}) {
+  const url = `${BASE}${path}`;
+
+  const headers = Object.assign(
+    { "Content-Type": "application/json" },
+    opts.headers || {}
+  );
 
   const token = getAuthToken();
   if (token && !opts.skipAuth) {
@@ -95,173 +94,179 @@ async function fetchJson(path, opts = {}) {
 
   let res;
   try {
-    res = await fetch(url, { ...opts, headers, signal });
+    res = await fetch(url, { ...opts, headers });
   } catch (err) {
-    // network-level error (DNS,  preflight, offline, etc.)
-    console.error("[API] network fetch failed:", url, err);
-    const msg = err?.message || "Network error";
-    showBackendWarning(msg);
+    console.error("[API] Network error:", url, err);
+    showBackendWarning(err?.message || "Network error");
     throw err;
   }
 
-  // 204 No Content => return null
   if (res.status === 204) return null;
 
-  // try parse JSON safely
-  let json = null;
+  const text = await res.text();
+
+  let json;
   try {
-    json = await res.json();
-  } catch (err) {
-    // server returned non-json (e.g. HTML). Attach status for caller to handle.
-    const parseErr = new Error(`Invalid JSON response (${res.status})`);
-    parseErr.status = res.status;
-    throw parseErr;
+    json = text ? JSON.parse(text) : null;
+  } catch {
+    console.error("[API] Non-JSON response:", url, text);
+    const err = new Error(`Invalid JSON response (${res.status})`);
+    err.status = res.status;
+    throw err;
   }
 
   if (res.ok) return json;
 
-  // Non-2xx — build Error with payload if present
-  const apiErr = new Error(json?.error || json?.message || `API error: ${res.status}`);
+  const apiErr = new Error(json?.error || json?.message || `API error ${res.status}`);
   apiErr.status = res.status;
   apiErr.payload = json;
   throw apiErr;
 }
 
-// Helper: GET list where 404 => []
+// Helper: GET list (404 → [])
 async function getList(path, opts = {}) {
   try {
     return await fetchJson(path, { method: "GET", ...opts });
   } catch (err) {
-    if (err && err.status === 404) return [];
+    if (err?.status === 404) return [];
     throw err;
   }
 }
 
 // ==========================================
-// 3. API EXPORTS
+// 5. PUBLIC API
 // ==========================================
 
-// Admin API calls
-export async function adminCreateHotel(payload) {
-  // payload: { name, description, price, rating, images: [], city_slug }
-  return fetchJson('/api/admin/hotels', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  });
-}
-
-export async function adminCreateSafari(payload) {
-  // payload: { title, description, price, duration, images: [], city_slug }
-  return fetchJson('/api/admin/safaris', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  });
-}
-
-// Public API functions
-
-// GET /api/cities
+// Cities
 export async function getCities(opts = {}) {
-  return getList("/api/cities", opts);
+  return getList("/cities", opts);
 }
 
-export async function deleteBooking(id) {
-  return fetchJson(`/api/bookings/${encodeURIComponent(id)}`, {
-    method: "DELETE"
-  });
+// Safaris
+export async function getAllSafaris(opts = {}) {
+  return getList("/safaris", opts);
 }
 
-// GET /api/hotels?city=slug
+export async function getSafaris(opts = {}) {
+  return getList("/safaris", opts);
+}
+
+export async function getSafarisByCity(slug, opts = {}) {
+  if (!slug) return getSafaris(opts);
+  return getList(`/safaris?city=${encodeURIComponent(slug)}`, opts);
+}
+
+export async function getSafariById(id, opts = {}) {
+  return fetchJson(`/safaris/${encodeURIComponent(id)}`, { method: "GET", ...opts });
+}
+
+// Hotels
 export async function getHotelsByCity(slug, opts = {}) {
   if (!slug) return [];
-  return getList(`/api/hotels?city=${encodeURIComponent(slug)}`, opts);
+  return getList(`/hotels?city=${encodeURIComponent(slug)}`, opts);
 }
 
-// GET /api/hotels/:id
 export async function getHotelById(id, opts = {}) {
-  return fetchJson(`/api/hotels/${encodeURIComponent(id)}`, { method: "GET", ...opts });
+  return fetchJson(`/hotels/${encodeURIComponent(id)}`, { method: "GET", ...opts });
 }
 
-// Fetch all safaris
-export async function getSafaris(opts = {}) {
-  // GET /api/safaris
-  return getList("/api/safaris", opts);
-}
-
-// Fetch safaris for a specific city
-export async function getSafarisByCity(slug, opts = {}) {
-  if (!slug) {
-    // If caller calls getSafarisByCity without slug, return all instead of []
-    return getSafaris(opts);
-  }
-  return getList(`/api/safaris?city=${encodeURIComponent(slug)}`, opts);
-}
-
-// GET /api/safaris/:id
-export async function getSafariById(id, opts = {}) {
-  return fetchJson(`/api/safaris/${encodeURIComponent(id)}`, { method: "GET", ...opts });
-}
-
-// GET /api/bookings
+// Bookings
 export async function listBookings(opts = {}) {
-  return getList("/api/bookings", opts);
+  return getList("/bookings", opts);
 }
 
-// POST /api/bookings
 export async function createBooking(data, opts = {}) {
-  return fetchJson("/api/bookings", {
+  return fetchJson("/bookings", {
     method: "POST",
     body: JSON.stringify(data),
     ...opts,
   });
 }
 
-// POST /api/auth/login
+export async function deleteBooking(id) {
+  return fetchJson(`/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
+
+// ==========================================
+// 6. AUTH
+// ==========================================
+
 export async function login(email, password) {
-  return fetchJson("/api/auth/login", {
+  return fetchJson("/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
-    skipAuth: true, 
+    skipAuth: true,
   });
 }
 
-// PATCH /api/bookings/:id/status (Admin)
+export async function signup(data) {
+  return fetchJson("/auth/signup", {
+    method: "POST",
+    body: JSON.stringify(data),
+    skipAuth: true,
+  });
+}
+
+// ==========================================
+// 7. ADMIN
+// ==========================================
+
+export async function adminCreateHotel(payload) {
+  return fetchJson("/admin/hotels", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function adminCreateSafari(payload) {
+  return fetchJson("/admin/safaris", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 export async function updateBookingStatus(id, status) {
-  return fetchJson(`/api/bookings/${encodeURIComponent(id)}/status`, {
+  return fetchJson(`/bookings/${encodeURIComponent(id)}/status`, {
     method: "PATCH",
     body: JSON.stringify({ status }),
   });
 }
 
+export async function deleteHotel(id) {
+  return fetchJson(`/admin/hotels/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
+
+export async function deleteSafari(id) {
+  return fetchJson(`/admin/safaris/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
+
+// ==========================================
+// 8. REVIEWS
+// ==========================================
+
 export async function getReviews(type, itemId) {
-  return fetchJson(`/api/reviews?type=${type}&itemId=${itemId}`);
+  return fetchJson(`/reviews?type=${type}&itemId=${itemId}`);
 }
 
 export async function createReview(data) {
-  return fetchJson("/api/reviews", {
+  return fetchJson("/reviews", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteHotel(id) {
-  return fetchJson(`/api/admin/hotels/${id}`, { method: "DELETE" });
-}
+// ==========================================
+// 9. IMAGE UPLOAD
+// ==========================================
 
-export async function deleteSafari(id) {
-  return fetchJson(`/api/admin/safaris/${id}`, { method: "DELETE" });
-}
-
-// Upload a single file
 export async function uploadImage(file) {
   const formData = new FormData();
   formData.append("photo", file);
 
-  // We use fetch directly because we need to send FormData, not JSON
   const token = getAuthToken();
-  const res = await fetch(`${BASE}/api/upload`, {
+  const res = await fetch(`${BASE}/upload`, {
     method: "POST",
-    headers: token ? { "Authorization": `Bearer ${token}` } : {}, // No 'Content-Type', fetch sets it automatically for FormData
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
     body: formData,
   });
 
@@ -271,14 +276,5 @@ export async function uploadImage(file) {
   }
 
   const data = await res.json();
-  return data.url; // Returns "/uploads/filename.jpg"
-}
-
-// POST /api/auth/signup
-export async function signup(userData) {
-  return fetchJson("/api/auth/signup", {
-    method: "POST",
-    body: JSON.stringify(userData),
-    skipAuth: true,
-  });
+  return data.url;
 }

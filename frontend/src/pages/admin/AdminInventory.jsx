@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // Fix: Merged imports and used the correct path (../../ matches your folder structure)
-import { deleteSafari, getSafaris, getAuthToken, API_BASE } from "../../lib/api";
+import { deleteSafari, getSafaris,deleteHotel, getAuthToken, API_BASE } from "../../lib/api";
 import SafeImage from "@/components/SafeImage"
 
 export default function AdminInventory() {
@@ -19,7 +19,7 @@ export default function AdminInventory() {
 
       // 1. FETCH HOTELS
       // We use the direct URL to ensure we get the raw list, bypassing any frontend filters
-      const hotelRes = await fetch(`${API_BASE}/api/hotels`);
+      const hotelRes = await fetch(`${API_BASE}/hotels`);
       if (hotelRes.ok) {
         const hotelData = await hotelRes.json();
         setHotels(hotelData || []);
@@ -40,22 +40,13 @@ export default function AdminInventory() {
   // --- DELETE HANDLERS ---
   async function handleDeleteHotel(id) {
     if (!window.confirm("⚠️ Are you sure? This will delete this hotel permanently.")) return;
+  
     try {
-      const token = getAuthToken();
-      const res = await fetch(`${API_BASE}/api/admin/hotels/${id}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      
-      if (res.ok) {
-        setHotels(prev => prev.filter(h => h.id !== id));
-        alert("Hotel deleted successfully.");
-      } else {
-        const err = await res.json();
-        alert("Failed to delete: " + (err.error || "Unknown error"));
-      }
+      await deleteHotel(id); // ✅ USE api.js (correct path, auth, base URL)
+      setHotels(prev => prev.filter(h => h.id !== id));
+      alert("Hotel deleted successfully.");
     } catch (err) {
-      alert("Error: " + err.message);
+      alert("Failed to delete hotel: " + err.message);
     }
   }
 

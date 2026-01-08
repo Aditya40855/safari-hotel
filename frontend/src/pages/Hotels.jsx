@@ -79,7 +79,7 @@ export default function Hotels() {
   async function loadData() {
     try {
       setLoading(true);
-      const hotelRes = await fetch(`${API_BASE}/api/hotels`);
+      const hotelRes = await fetch(`${API_BASE}/hotels`);
       if (!hotelRes.ok) throw new Error("Failed to load hotels");
       const hotelsData = await hotelRes.json();
       const citiesData = await getCities();
