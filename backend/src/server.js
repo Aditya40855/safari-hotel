@@ -63,6 +63,25 @@ function slugify(text = "") {
   return text.toString().toLowerCase().trim()
     .replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-"); 
 }
+async function generateUniqueSlug(table, title) {
+  const baseSlug = slugify(title);
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (true) {
+    const [rows] = await db.pool.execute(
+      `SELECT id FROM ${table} WHERE slug = ? LIMIT 1`,
+      [slug]
+    );
+
+    if (rows.length === 0) {
+      return slug;
+    }
+
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+}
 
 // --- DB MIGRATION CHECK (MYSQL COMPATIBLE) ---
 async function ensureSchema() {
@@ -366,6 +385,7 @@ app.post("/api/admin/hotels", requireAdmin, async (req, res) => {
     let imgs = JSON.stringify(Array.isArray(images) ? images : (images ? [images] : []));
     const q = `INSERT INTO hotels (name, slug, city_slug, description, price, rating, images, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`;
     const r = await db.query(q, [name, baseSlug, city_slug, description, price, rating, imgs]);
+   
     myCache.flushAll(); 
     res.json({ id: r.rows.insertId, ...req.body });
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -373,13 +393,47 @@ app.post("/api/admin/hotels", requireAdmin, async (req, res) => {
 
 app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
   try {
-   const { name, title, city_slug, price, duration, images, description } = req.body;
-   let imgs = JSON.stringify(Array.isArray(images) ? images : (images ? [images] : []));
-   const q = `INSERT INTO safaris (city_slug, name, duration, price, description, images, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())`;
-   const r = await db.query(q, [city_slug, name||title, duration, price, description, imgs]);
-   myCache.flushAll(); 
-   res.json({ id: r.rows.insertId, ...req.body });
-  } catch(err) { res.status(500).json({ error: err.message }); }
+    const { name, title, city_slug, price, duration, images, description } = req.body;
+
+    const finalTitle = name || title;
+    if (!finalTitle) {
+      return res.status(400).json({ error: "Safari title is required" });
+    }
+
+    // ✅ generate UNIQUE slug BEFORE insert
+    const slug = await generateUniqueSlug("safaris", finalTitle);
+
+    const imgs = JSON.stringify(
+      Array.isArray(images) ? images : (images ? [images] : [])
+    );
+
+    const q = `
+      INSERT INTO safaris
+      (slug, city_slug, name, duration, price, description, images, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+    `;
+
+    const r = await db.query(q, [
+      slug,
+      city_slug,
+      finalTitle,
+      duration,
+      price,
+      description,
+      imgs
+    ]);
+
+    myCache.flushAll();
+
+    res.status(201).json({
+      id: r.rows.insertId,
+      slug,
+      success: true
+    });
+  } catch (err) {
+    console.error("❌ Safari create failed:", err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.delete("/api/admin/hotels/:id", requireAdmin, async (req, res) => {
@@ -387,8 +441,13 @@ app.delete("/api/admin/hotels/:id", requireAdmin, async (req, res) => {
     await db.query("DELETE FROM bookings WHERE item_id = ? AND booking_type = 'hotel'", [req.params.id]);
     await db.query("DELETE FROM reviews WHERE item_id = ? AND item_type = 'hotel'", [req.params.id]);
     await db.query("DELETE FROM hotels WHERE id = ?", [req.params.id]);
+
+    myCache.flushAll(); // ✅ CRITICAL
+
     res.json({ success: true });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
@@ -396,6 +455,9 @@ app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
     await db.query("DELETE FROM bookings WHERE item_id = ? AND booking_type = 'safari'", [req.params.id]);
     await db.query("DELETE FROM reviews WHERE item_id = ? AND item_type = 'safari'", [req.params.id]);
     await db.query("DELETE FROM safaris WHERE id = ?", [req.params.id]);
+
+    myCache.flushAll();
+    
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
