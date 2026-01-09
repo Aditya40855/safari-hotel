@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { listBookings, getHotelById, getSafariById } from "../lib/api"; // Added fetchers
 import { useNavigate } from "react-router-dom";
 import SafeImage from "@/components/SafeImage";
+import { ASSET_BASE } from "@/lib/api";
 
 // Helper for dates
 function fmt(d) {
@@ -33,27 +34,22 @@ function fmtDateTime(d) {
 }
 
 function BookingCard({ b, onCancel }) {
-  // Logic to determine the image source
-  const imgSource = b.image || "/images/placeholder.jpg";
   
   return (
     <div className="bg-white rounded-lg shadow p-4 flex flex-col sm:flex-row gap-4">
       <div className="w-full sm:w-48 flex-none">
         <div className="h-32 bg-gray-100 rounded overflow-hidden relative">
           {b.image ? (
-            <SafeImage 
-              src={b.image} 
+            <SafeImage
+              src={b.image}
               alt={b.item_name}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = "/images/placeholder.jpg"; // Fallback if link is broken
-              }}
+              fallback="/images/placeholder.jpg"
             />
           ) : (
-             <div className="w-full h-full flex items-center justify-center text-gray-600 text-xs">
-               No Image
-             </div>
+            <div className="w-full h-full flex items-center justify-center text-gray-600 text-xs">
+              No Image
+            </div>
           )}
         </div>
       </div>

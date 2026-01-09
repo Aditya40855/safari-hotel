@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getReviews, createReview, getAuthToken } from "../lib/api";
 import ImageUploader from "./ImageUploader";
-import { API_BASE } from '../lib/api';
+import { ASSET_BASE } from "@/lib/api";
 import SafeImage from "@/components/SafeImage"
 
 function StarRating({ rating, setRating, editable = false }) {
@@ -114,7 +114,11 @@ export default function ReviewSection({ type, itemId }) {
              {imagesInput && (
                <div className="flex gap-2 mt-2 overflow-x-auto">
                  {imagesInput.split(',').map(s=>s.trim()).filter(Boolean).map((src, i) => (
-                    <SafeImage key={i} src={src.startsWith('/uploads') ? `${API_BASE}${src}` : src} className="h-12 w-12 object-cover rounded border" />
+                    <SafeImage
+                      key={i}
+                      src={src}
+                      className="h-12 w-12 object-cover rounded border"
+                    />
                  ))}
                </div>
              )}
@@ -154,10 +158,15 @@ export default function ReviewSection({ type, itemId }) {
                    {r.images.map((img, i) => (
                      <SafeImage 
                        key={i} 
-                       src={img.startsWith('/uploads') ? `${API_BASE}${img}` : img} 
+                       src={img}
                        alt="Review attachment"
                        className="h-20 w-20 object-cover rounded-lg border cursor-pointer hover:opacity-90"
-                       onClick={() => window.open(img.startsWith('/uploads') ? `${API_BASE}${img}` : img, '_blank')}
+                       onClick={() =>
+                         window.open(
+                           img.startsWith("/uploads") ? `${ASSET_BASE}${img}` : img,
+                           "_blank"
+                         )
+                       }
                      />
                    ))}
                 </div>

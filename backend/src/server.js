@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const sharp = require('sharp'); 
 const compression = require('compression');
 const NodeCache = require("node-cache");
-const myCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
+const myCache = new NodeCache({ stdTTL: 60, checkperiod: 30 });
 const { 
   sendNotification, 
   generateBookingEmail, 
@@ -33,6 +33,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(compression()); 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.options('*', (req, res) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -81,6 +82,24 @@ async function generateUniqueSlug(table, title) {
     slug = `${baseSlug}-${counter}`;
     counter++;
   }
+}
+function normalizeImages(row) {
+  if (!row) return row;
+
+  if (!row.images) {
+    row.images = [];
+    return row;
+  }
+
+  if (typeof row.images === "string") {
+    try {
+      row.images = JSON.parse(row.images);
+    } catch {
+      row.images = [];
+    }
+  }
+
+  return row;
 }
 
 // --- DB MIGRATION CHECK (MYSQL COMPATIBLE) ---
@@ -222,57 +241,119 @@ app.get("/api/cities", async (req, res) => {
 app.get("/api/hotels", async (req, res) => {
   try {
     const city = (req.query.city || "").toLowerCase();
-    const cacheKey = `hotels_${city || 'all'}`;
+    const cacheKey = `hotels_${city || "all"}`;
+
     const cachedData = myCache.get(cacheKey);
     if (cachedData) return res.json(cachedData);
 
-    let q = "SELECT * FROM hotels"; 
+    let q = "SELECT * FROM hotels";
     const params = [];
-    if (city) { q += " WHERE LOWER(city_slug) = ?"; params.push(city); }
-    q += " ORDER BY created_at DESC"; 
+
+    if (city) {
+      q += " WHERE LOWER(city_slug) = ?";
+      params.push(city);
+    }
+
+    q += " ORDER BY created_at DESC";
+
     const r = await db.query(q, params);
-    myCache.set(cacheKey, r.rows); 
-    res.json(r.rows);
-  } catch (err) { res.status(500).json({ error: "db error" }); }
+
+    const rows = r.rows.map(normalizeImages);
+
+    myCache.set(cacheKey, rows);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "db error" });
+  }
 });
 
 app.get("/api/hotels/:identifier", async (req, res) => {
   const { identifier } = req.params;
-  const q = isNaN(identifier) ? "SELECT * FROM hotels WHERE slug = ?" : "SELECT * FROM hotels WHERE id = ?";
+
+  const q = isNaN(identifier)
+    ? "SELECT * FROM hotels WHERE slug = ?"
+    : "SELECT * FROM hotels WHERE id = ?";
+
   try {
     const r = await db.query(q, [identifier]);
-    if (!r.rows.length) return res.status(404).json({ error: "Hotel not found" });
-    res.json(r.rows[0]);
-  } catch (err) { res.status(500).json({ error: "Server Error" }); }
+    if (!r.rows.length) {
+      return res.status(404).json({ error: "Hotel not found" });
+    }
+
+    const hotel = normalizeImages(r.rows[0]);
+    res.json(hotel);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
+  }
 });
 
 app.get("/api/safaris", async (req, res) => {
   try {
     const city = (req.query.city || "").toLowerCase();
-    const cacheKey = `safaris_${city || 'all'}`;
+    const cacheKey = `safaris_${city || "all"}`;
+
     const cachedData = myCache.get(cacheKey);
     if (cachedData) return res.json(cachedData);
 
     let q = "SELECT * FROM safaris";
     const params = [];
-    if (city) { q += " WHERE LOWER(city_slug) = ?"; params.push(city); }
+
+    if (city) {
+      q += " WHERE LOWER(city_slug) = ?";
+      params.push(city);
+    }
+
     q += " ORDER BY name";
+
     const r = await db.query(q, params);
-    myCache.set(cacheKey, r.rows); 
-    res.json(r.rows);
-  } catch (err) { res.status(500).json({ error: "db error" }); }
+
+    const rows = r.rows.map(normalizeImages);
+
+    myCache.set(cacheKey, rows);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "db error" });
+  }
 });
 
 app.get("/api/safaris/:identifier", async (req, res) => {
   const { identifier } = req.params;
-  const q = isNaN(identifier) ? "SELECT * FROM safaris WHERE slug = ?" : "SELECT * FROM safaris WHERE id = ?";
+
+  const q = isNaN(identifier)
+    ? "SELECT * FROM safaris WHERE slug = ?"
+    : "SELECT * FROM safaris WHERE id = ?";
+
   try {
     const r = await db.query(q, [identifier]);
-    if (!r.rows.length) return res.status(404).json({ error: "Safari not found" });
-    res.json(r.rows[0]);
-  } catch (err) { res.status(500).json({ error: "Server Error" }); }
-});
+    if (!r.rows.length) {
+      return res.status(404).json({ error: "Safari not found" });
+    }
 
+    const safari = normalizeImages(r.rows[0]);
+    res.json(safari);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+// ==========================================
+// CACHE INVALIDATION HELPERS (IMPORTANT)
+// ==========================================
+
+function clearHotelCache() {
+  myCache.keys().forEach((k) => {
+    if (k.startsWith("hotels_")) myCache.del(k);
+  });
+}
+
+function clearSafariCache() {
+  myCache.keys().forEach((k) => {
+    if (k.startsWith("safaris_")) myCache.del(k);
+  });
+}
 // --- BOOKINGS ---
 app.get("/api/bookings", authenticateToken, async (req, res) => {
   try {
@@ -361,20 +442,65 @@ app.delete("/api/bookings/:id", authenticateToken, async (req, res) => {
 app.get("/api/reviews", async (req, res) => {
   try {
     const { type, itemId } = req.query;
-    const q = `SELECT r.*, u.name as user_name FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.item_type = ? AND r.item_id = ? ORDER BY r.created_at DESC`;
+
+    const q = `
+      SELECT r.*, u.name as user_name
+      FROM reviews r
+      JOIN users u ON r.user_id = u.id
+      WHERE r.item_type = ? AND r.item_id = ?
+      ORDER BY r.created_at DESC
+    `;
+
     const r = await db.query(q, [type, itemId]);
-    res.json(r.rows);
-  } catch (err) { res.status(500).json({ error: "Server error" }); }
+
+    const rows = r.rows.map(normalizeImages);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Fetch reviews failed:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 app.post("/api/reviews", authenticateToken, async (req, res) => {
   try {
     const { item_type, item_id, rating, comment, images } = req.body;
-    let imgs = Array.isArray(images) ? JSON.stringify(images) : (images ? JSON.stringify([images]) : '[]');
-    const q = `INSERT INTO reviews (user_id, item_type, item_id, rating, comment, images, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())`;
-    const r = await db.query(q, [req.user.id, item_type, item_id, rating, comment, imgs]);
-    res.status(201).json({ id: r.rows.insertId, ...req.body });
-  } catch (err) { res.status(500).json({ error: "Server error" }); }
+
+    const imgs = Array.isArray(images)
+      ? JSON.stringify(images)
+      : (images ? JSON.stringify([images]) : "[]");
+
+    const q = `
+      INSERT INTO reviews
+      (user_id, item_type, item_id, rating, comment, images, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, NOW())
+    `;
+
+    const r = await db.query(q, [
+      req.user.id,
+      item_type,
+      item_id,
+      rating,
+      comment,
+      imgs
+    ]);
+
+    // ✅ Return normalized response
+    res.status(201).json({
+      id: r.rows.insertId,
+      user_id: req.user.id,
+      item_type,
+      item_id,
+      rating,
+      comment,
+      images: JSON.parse(imgs),
+      created_at: new Date()
+    });
+
+  } catch (err) {
+    console.error("❌ Create review failed:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // --- ADMIN ---
@@ -387,7 +513,11 @@ app.post("/api/admin/hotels", requireAdmin, async (req, res) => {
     const r = await db.query(q, [name, baseSlug, city_slug, description, price, rating, imgs]);
    
     myCache.flushAll(); 
-    res.json({ id: r.rows.insertId, ...req.body });
+    res.json({
+      id: r.rows.insertId,
+      images: JSON.parse(imgs),
+      ...req.body
+    });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -395,12 +525,12 @@ app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
   try {
     const { name, title, city_slug, price, duration, images, description } = req.body;
 
-    const finalTitle = name || title;
+    const finalTitle = title || name;
     if (!finalTitle) {
       return res.status(400).json({ error: "Safari title is required" });
     }
 
-    // ✅ generate UNIQUE slug BEFORE insert
+    // ✅ generate slug BEFORE insert
     const slug = await generateUniqueSlug("safaris", finalTitle);
 
     const imgs = JSON.stringify(
@@ -409,29 +539,29 @@ app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
 
     const q = `
       INSERT INTO safaris
-      (slug, city_slug, name, duration, price, description, images, created_at)
+      (city_slug, name, slug, duration, price, description, images, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
     `;
 
     const r = await db.query(q, [
-      slug,
       city_slug,
       finalTitle,
+      slug,
       duration,
       price,
       description,
       imgs
     ]);
 
-    myCache.flushAll();
-
-    res.status(201).json({
+    res.json({
       id: r.rows.insertId,
       slug,
       success: true
     });
+    myCache.flushAll();
+
   } catch (err) {
-    console.error("❌ Safari create failed:", err.message);
+    console.error("❌ Create safari failed:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -457,12 +587,18 @@ app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
     await db.query("DELETE FROM safaris WHERE id = ?", [req.params.id]);
 
     myCache.flushAll();
-    
+
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.use("/uploads", express.static(UPLOAD_DIR));
+app.use(
+  "/uploads",
+  express.static(UPLOAD_DIR, {
+    maxAge: "1h",
+    etag: true
+  })
+);
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
 app.use((err, req, res, next) => {
   console.error("❌ INTERNAL SERVER ERROR:", err.stack);

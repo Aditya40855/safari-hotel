@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // Fix: Merged imports and used the correct path (../../ matches your folder structure)
 import { deleteSafari, getSafaris,deleteHotel, getAuthToken, API_BASE } from "../../lib/api";
-import SafeImage from "@/components/SafeImage"
 
 export default function AdminInventory() {
   const [hotels, setHotels] = useState([]);
@@ -90,7 +89,6 @@ export default function AdminInventory() {
           <table className="w-full text-left">
             <thead className="bg-gray-100 text-gray-500 text-xs uppercase font-semibold tracking-wider">
               <tr>
-                <th className="p-4">Image</th>
                 <th className="p-4">Name</th>
                 <th className="p-4">Price</th>
                 <th className="p-4 text-right">Actions</th>
@@ -98,22 +96,11 @@ export default function AdminInventory() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {hotels.length === 0 ? (
-                <tr><td colSpan="4" className="p-8 text-center text-gray-400 italic">No hotels found.</td></tr>
+                <tr><td colSpan="3" className="p-8 text-center text-gray-400 italic">No hotels found.</td></tr>
               ) : (
                 hotels.map(h => {
-                  let img = (h.images && h.images[0]) || "/images/hotel-placeholder.jpg";
-                  // Fix for local images
-                  if (typeof img === 'string' && img.startsWith('/uploads')) {
-                      img = `${API_BASE}${img}`;
-                  }
-
                   return (
                     <tr key={h.id} className="hover:bg-gray-50 transition duration-150">
-                      <td className="p-4 w-24">
-                        <div className="h-12 w-12 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
-                          <SafeImage src={img} className="w-full h-full object-cover" alt="hotel" />
-                        </div>
-                      </td>
                       <td className="p-4">
                         <div className="font-bold text-gray-900">{h.name}</div>
                         <div className="text-xs text-gray-500 capitalize">{h.city_slug || "Jawai"}</div>
@@ -149,7 +136,6 @@ export default function AdminInventory() {
           <table className="w-full text-left">
             <thead className="bg-gray-100 text-gray-500 text-xs uppercase font-semibold tracking-wider">
               <tr>
-                <th className="p-4">Image</th>
                 <th className="p-4">Name</th>
                 <th className="p-4">Price</th>
                 <th className="p-4 text-right">Actions</th>
@@ -157,21 +143,11 @@ export default function AdminInventory() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {safaris.length === 0 ? (
-                <tr><td colSpan="4" className="p-8 text-center text-gray-400 italic">No safaris found.</td></tr>
+                <tr><td colSpan="3" className="p-8 text-center text-gray-400 italic">No safaris found.</td></tr>
               ) : (
                 safaris.map(s => {
-                   let img = (s.images && s.images[0]) || "/images/safari-placeholder.jpg";
-                   if (typeof img === 'string' && img.startsWith('/uploads')) {
-                      img = `${API_BASE}${img}`;
-                   }
-
                    return (
                     <tr key={s.id} className="hover:bg-gray-50 transition duration-150">
-                      <td className="p-4 w-24">
-                         <div className="h-12 w-12 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
-                           <SafeImage src={img} className="w-full h-full object-cover" alt="safari" />
-                         </div>
-                      </td>
                       <td className="p-4">
                         <div className="font-bold text-gray-900">{s.name || s.title}</div>
                         <div className="text-xs text-gray-500">{s.duration || "N/A"}</div>

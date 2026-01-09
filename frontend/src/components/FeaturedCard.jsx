@@ -1,15 +1,29 @@
 // src/components/FeaturedCard.jsx
 import React from "react";
-import SafeImage from "@/components/SafeImage"
+import SafeImage from "@/components/SafeImage";
+import { ASSET_BASE } from "@/lib/api";
 
 export default function FeaturedCard({ title, subtitle, price, img, ctaText = "Book now" }) {
+  let imageSrc = img;
+
+  // Normalize backend-uploaded images
+  if (typeof imageSrc === "string" && imageSrc.startsWith("/uploads")) {
+    imageSrc = `${ASSET_BASE}${imageSrc}`;
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden max-w-sm">
       <div className="h-40 bg-gray-100">
-        {img ? (
-          <SafeImage src={img} alt={title} className="w-full h-40 object-cover" />
+        {imageSrc ? (
+          <SafeImage
+            src={imageSrc}
+            alt={title}
+            className="w-full h-40 object-cover"
+          />
         ) : (
-          <div className="w-full h-40 flex items-center justify-center text-gray-400">No image</div>
+          <div className="w-full h-40 flex items-center justify-center text-gray-400">
+            No image
+          </div>
         )}
       </div>
 

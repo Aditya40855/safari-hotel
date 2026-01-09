@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { getCities, getAuthToken } from "../lib/api";
-import { API_BASE } from '../lib/api';
+import { getCities, getAuthToken, API_BASE } from "../lib/api";
 import SafeImage from "@/components/SafeImage";
-
+const IMAGE_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:4000"
+    : "";
 // --- REUSABLE HOTEL CARD (Styled exactly like SafariCard) ---
 function HotelCard({ hotel }) {
-  let img = "/images/hotel-placeholder.jpg";
-  if (hotel.images && hotel.images.length > 0) {
-    const firstImg = Array.isArray(hotel.images) ? hotel.images[0] : hotel.images;
-    if (firstImg && typeof firstImg === 'string') {
-      if (firstImg.startsWith('/uploads')) img = `${API_BASE}${firstImg}`;
-      else img = firstImg;
-    }
-  }
-
   return (
     <div className="bg-white rounded-xl shadow p-4 flex flex-col border">
       <div className="w-full h-52 bg-gray-100 rounded overflow-hidden relative border-b">
         <SafeImage
-          src={img}
+          src={hotel.images && hotel.images[0]}
           alt={hotel.name}
+          fallback="/images/hotel-placeholder.jpg"
           className="object-cover w-full h-full hover:scale-105 transition duration-500"
         />
         <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
