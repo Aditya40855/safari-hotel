@@ -5,7 +5,6 @@ import BookingWidget from "../components/BookingWidget";
 import Modal from "../components/Modal";
 import ReviewSection from "../components/ReviewSection";
 import SEO from "../components/SEO"; 
-import { API_BASE } from '../lib/api';
 import SafeImage from "@/components/SafeImage";
 
 
@@ -38,12 +37,7 @@ export default function HotelDetail() {
   if (!hotel) return <div className="p-6">Not found</div>;
 
   // --- SMART IMAGE URL FIX ---
-  let mainImg = (hotel.images && hotel.images[0]) || "/images/hotel-placeholder.jpg";
- 
-  
-  if (mainImg.startsWith("/uploads")) {
-    mainImg = `${API_BASE}${mainImg}`;
-  }
+  let mainImg = hotel.images && hotel.images[0];
   // ---------------------------
 
   // --- 2. SEO SCHEMA (Google Rich Snippets) ---
@@ -85,16 +79,13 @@ export default function HotelDetail() {
       <div>
         <div className="w-full h-80 bg-gray-100 rounded overflow-hidden mb-4 border relative">
           <SafeImage 
-            src={mainImg} 
-            alt={hotel.name} 
+            src={mainImg}
+            alt={hotel.name}
             className="object-cover w-full h-full"
             // SEO: Eager load main image for LCP score
             loading="eager"
             fetchPriority="high"
-            onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = "/images/hotel-placeholder.jpg"; 
-            }} 
+            fallback="/images/hotel-placeholder.jpg"
           />
         </div>
 

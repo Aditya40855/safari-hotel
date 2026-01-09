@@ -36,10 +36,19 @@ export default function SafariDetail() {
   if (error) return <div className="max-w-3xl mx-auto p-6 text-red-600">{error}</div>;
   if (!safari) return <div className="max-w-3xl mx-auto p-6">Safari not found</div>;
 
-  // Smart Image Fix
-  let mainImg = (safari.images && safari.images.length && safari.images[0]) || "/images/safari-placeholder.jpg";
-  if (mainImg.startsWith("/uploads")) {
-    mainImg = `${API_BASE}${mainImg}`;
+  // --- IMAGE RESOLUTION (SAFE & CONSISTENT) ---
+  const ASSET_BASE =
+    window.location.hostname === "localhost"
+      ? "http://localhost:4000"
+      : "";
+
+  let mainImg =
+    Array.isArray(safari?.images) && safari.images.length > 0
+      ? safari.images[0]
+      : "/images/safari-placeholder.jpg";
+
+  if (typeof mainImg === "string" && mainImg.startsWith("/uploads")) {
+    mainImg = `${ASSET_BASE}${mainImg}`;
   }
 
   return (
@@ -50,9 +59,12 @@ export default function SafariDetail() {
         <div className="w-full h-80 sm:h-96 bg-gray-100 rounded-xl overflow-hidden shadow-sm border mb-6">
           <img
             src={mainImg}
-            alt={safari.name || safari.title}
+            alt={safari.name || safari.title || "Safari"}
             className="w-full h-full object-cover"
-            onError={(e) => { e.target.src = "/images/safari-placeholder.jpg"; }}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/images/safari-placeholder.jpg";
+            }}
           />
         </div>
 
@@ -75,7 +87,7 @@ export default function SafariDetail() {
         <div className="sticky top-24 bg-white border rounded-xl p-6 shadow-lg">
           <div className="flex justify-between items-end mb-6 border-b pb-4">
              <div>
-                <span className="text-gray-500 text-sm">Price per person</span>
+                <span className="text-gray-500 text-sm">Price per Safari</span>
                 <div className="text-3xl font-bold text-gray-900">₹{safari.price}</div>
              </div>
              <div className="text-green-600 text-sm font-medium bg-green-50 px-2 py-1 rounded">

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getSafaris, getHotelsByCity, getCities } from "../lib/api";
+import { getSafaris, getHotels, getCities } from "../lib/api";
 import SEO from "../components/SEO"; // <--- 1. Import SEO Component
-import { API_BASE } from '../lib/api';
 import SafeImage from "@/components/SafeImage";
 import { Zap, Eye, X, Clock, ArrowRight, ChevronRight } from "lucide-react";
 
@@ -188,10 +187,6 @@ function HeroSearch({ cities }) {
 
 // --- COMPONENT: STABLE CARD ---
 function StableCard({ item, type }) {
-  let img = (item.images && item.images[0]) || (type === 'hotel' ? "/images/hotel-placeholder.jpg" : "/images/safari-placeholder.jpg");
-  if (typeof img === 'string' && img.startsWith('/uploads')) {
-      img = `${API_BASE}${img}`;
-  }
 
   return (
     <Link 
@@ -199,12 +194,11 @@ function StableCard({ item, type }) {
       className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full min-w-[280px] md:min-w-0 snap-center"
     >
       <div className="relative aspect-[4/3] w-full bg-gray-200 overflow-hidden">
-        <SafeImage 
-          src={img} 
+        <SafeImage
+          src={item.images && item.images[0]}
           alt={`Luxury stay at ${item.name} in ${item.city_slug} Rajasthan`}
-          loading="lazy" 
+          fallback={type === "hotel" ? "/images/hotel-placeholder.jpg" : "/images/safari-placeholder.jpg"}
           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700"
-          onError={(e) => e.target.src = "/images/placeholder.jpg"}
         />
         <div className={`absolute top-3 left-3 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider shadow-sm text-white ${
             type === 'safari' ? 'bg-green-600' : 'bg-blue-600'
@@ -265,7 +259,7 @@ export default function Home() {
         const [c, s, h] = await Promise.all([
           getCities(),
           getSafaris(),
-          getHotelsByCity("")
+          getHotels()
         ]);
         setCities(c || []);
         setSafaris((s || []).slice(0, 4));

@@ -2,6 +2,10 @@ export const API_BASE =
   import.meta.env.DEV
     ? "http://localhost:4000/api"
     : "/api";
+    export const ASSET_BASE =
+    (typeof window !== "undefined" && window.location.hostname === "localhost"
+      ? "http://localhost:4000"
+      : "");
 
 export const BASE = API_BASE;
 
@@ -182,6 +186,11 @@ export async function createBooking(data, opts = {}) {
 
 export async function deleteBooking(id) {
   return fetchJson(`/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
+export async function getHotels() {
+  const res = await fetch(`${API_BASE}/hotels`);
+  if (!res.ok) throw new Error("Failed to fetch hotels");
+  return res.json();
 }
 
 // ==========================================

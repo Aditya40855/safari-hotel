@@ -1,30 +1,55 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { ASSET_BASE } from "../lib/api";
 
-const SafeImage = ({ src, alt, className, ...rest }) => {
-  const fallbackSrc = "/images/hotel-placeholder.jpg"; // Your fallback path
-  const [imgSrc, setImgSrc] = useState(src);
+/**
+ * SafeImage
+ * ----------
+ * Centralized image handling for the entire app.
+ * - Works in localhost & production
+ * - Resolves backend `/uploads` paths
+ * - Provides safe fallbacks
+ * - Prevents infinite error loops
+ */
+const SafeImage = ({
+  src,
+  alt = "Image",
+  className = "",
+  fallback = "/images/safari-placeholder.jpg",
+  ...rest
+}) => {
+  const [currentSrc, setCurrentSrc] = useState(fallback);
   const [hasError, setHasError] = useState(false);
 
-  // Sync state if the "src" prop changes (important for dynamic lists)
   useEffect(() => {
-    setImgSrc(src);
+    let resolvedSrc = fallback;
+
+    if (typeof src === "string" && src.length > 0) {
+      if (src.startsWith("/uploads")) {
+        resolvedSrc = ASSET_BASE ? `${ASSET_BASE}${src}` : src;
+      } else {
+        resolvedSrc = src;
+      }
+    }
+
+    setCurrentSrc(resolvedSrc);
     setHasError(false);
-  }, [src]);
+  }, [src, fallback]);
 
   const handleError = () => {
     if (!hasError) {
-      setHasError(true); // Flag to stop the infinite loop
-      setImgSrc(fallbackSrc);
+      setHasError(true);
+      setCurrentSrc(fallback);
     }
   };
 
   return (
     <img
-      {...rest}
-      src={imgSrc || fallbackSrc}
-      alt={alt || "Hotel image"}
+      src={currentSrc}
+      alt={alt}
       className={className}
+      loading="lazy"
       onError={handleError}
+      {...rest}
     />
   );
 };
