@@ -96,7 +96,7 @@ export default function AdminInventory() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {hotels.length === 0 ? (
-                <tr><td colSpan="3" className="p-8 text-center text-gray-400 italic">No hotels found.</td></tr>
+                <tr><td colSpan="3" className="p-8 text-center text-gray-400 italic">No hotels found hahahaha.</td></tr>
               ) : (
                 hotels.map(h => {
                   return (
