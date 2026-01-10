@@ -13,24 +13,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy backend via FTP
+      - name: Upload backend via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-
-          # 🔴 EXACT backend target
+          port: ${{ secrets.FTP_PORT }}
+          local-dir: backend/
           server-dir: /home/jawaiunf/backend/
-
-          dangerous-clean-slate: false
-
-          exclude: |
-            **/.git*
-            **/.github/**
-            frontend/**
-            **/node_modules/**
-            **/.env
-            **/.DS_Store
-            **/*.log
+          dangerous-clean-slate: true
