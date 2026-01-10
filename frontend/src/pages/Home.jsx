@@ -187,6 +187,10 @@ function HeroSearch({ cities }) {
 
 // --- COMPONENT: STABLE CARD ---
 function StableCard({ item, type }) {
+  const images =
+    typeof item.images === "string"
+      ? JSON.parse(item.images || "[]")
+      : item.images || [];
 
   return (
     <Link 
@@ -195,7 +199,7 @@ function StableCard({ item, type }) {
     >
       <div className="relative aspect-[4/3] w-full bg-gray-200 overflow-hidden">
         <SafeImage
-          src={item.images && item.images[0]}
+          src={images[0]}
           alt={`Luxury stay at ${item.name} in ${item.city_slug} Rajasthan`}
           fallback={type === "hotel" ? "/images/hotel-placeholder.jpg" : "/images/safari-placeholder.jpg"}
           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700"
@@ -328,8 +332,6 @@ export default function Home() {
         <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:grid-cols-2 lg:grid-cols-4 snap-x scrollbar-hide">
           {loading ? (
              [1,2,3,4].map(i => <div key={i} className="min-w-[280px] h-80 bg-gray-200 rounded-2xl animate-pulse"></div>)
-          ) : hotels.length === 0 ? (
-             <div className="w-full col-span-4 p-6 text-center text-gray-400 italic border border-dashed rounded-xl">No hotels found.</div>
           ) : (
              hotels.map(h => <StableCard key={h.id} item={h} type="hotel" />)
           )}
