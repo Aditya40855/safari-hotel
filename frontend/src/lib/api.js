@@ -2,10 +2,10 @@ export const API_BASE =
   import.meta.env.DEV
     ? "http://localhost:4000/api"
     : "/api";
-export const ASSET_BASE =
-  import.meta.env.DEV
-    ? "http://localhost:4000"
-    : window.location.origin;
+    export const ASSET_BASE =
+    (typeof window !== "undefined" && window.location.hostname === "localhost"
+      ? "http://localhost:4000"
+      : "");
 
 export const BASE = API_BASE;
 

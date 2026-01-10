@@ -1,11 +1,6 @@
-/* ================= ENV ================= */
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
-process.env.UNDICI_NO_WASM = "1";
-
-/* ================= IMPORTS ================= */
+require('dotenv').config();
+process.env.UNDICI_NO_WASM = '1'; // Memory optimization for shared hosting
+//Aditya Singh Ranawat
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -13,27 +8,9 @@ const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const sharp = require("sharp");
-const compression = require("compression");
+const sharp = require('sharp'); 
+const compression = require('compression');
 const NodeCache = require("node-cache");
-
-/* ================= APP ================= */
-const app = express();   // ✅ ONLY ONCE — THIS IS IT
-
-/* ================= UPLOAD DIR ================= */
-const UPLOAD_DIR =
-  process.env.NODE_ENV === "production"
-    ? path.join(process.env.HOME, "public_html", "api", "uploads")
-    : path.join(__dirname, "..", "uploads");
-
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
-/* ================= MIDDLEWARE ================= */
-app.use("/uploads", express.static(UPLOAD_DIR));
-app.use(express.json());
-app.use(compression());
 const myCache = new NodeCache({ stdTTL: 60, checkperiod: 30 });
 const { 
   sendNotification, 
@@ -44,6 +21,7 @@ const {
 
 const db = require("./db"); 
 
+const app = express();
 app.use(cors({
   origin: [
     'https://jawaiunfiltered.com', 
@@ -54,8 +32,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-
-
+app.use(compression()); 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.options('*', (req, res) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -70,6 +48,7 @@ app.use(express.json());
 app.use(require('./routes/sitemap'));
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "..", "uploads");
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const storage = multer.diskStorage({
@@ -613,7 +592,13 @@ app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-
+app.use(
+  "/uploads",
+  express.static(UPLOAD_DIR, {
+    maxAge: "1h",
+    etag: true
+  })
+);
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
 app.use((err, req, res, next) => {
   console.error("❌ INTERNAL SERVER ERROR:", err.stack);

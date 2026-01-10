@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import SafeImage from "@/components/SafeImage";
 import { ASSET_BASE } from "@/lib/api";
 
-
 export default function HotelCard({ hotel }) {
   if (!hotel) return null;
 
