@@ -1,4 +1,4 @@
-name: Deploy Backend to cPanel via FTP
+name: Deploy Backend to cPanel (FTP)
 
 on:
   push:
@@ -10,28 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout latest code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Upload backend files to cPanel
-      - name: FTP Deploy Backend
+      - name: Upload backend only
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-
-          # IMPORTANT: deploy ONLY backend folder contents
           local-dir: backend/
-          server-dir: ${{ secrets.FTP_TARGET }}/
-
-          # SAFE SETTINGS
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.github*
-            **/node_modules/**
-            **/frontend/**
-            **/.env
+          server-dir: /home/jawaiunf/backend/
+          dangerous-clean-slate: true
