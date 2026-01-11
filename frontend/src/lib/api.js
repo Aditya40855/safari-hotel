@@ -162,9 +162,9 @@ export async function getSafariById(id, opts = {}) {
 }
 
 // Hotels
-export async function getHotelsByCity(slug, opts = {}) {
-  if (!slug) return [];
-  return getList(`/hotels?city=${encodeURIComponent(slug)}`, opts);
+// Hotels (FINAL – keep this)
+export async function getHotels(opts = {}) {
+  return getList("/hotels", opts);
 }
 
 export async function getHotelById(id, opts = {}) {
@@ -187,10 +187,9 @@ export async function createBooking(data, opts = {}) {
 export async function deleteBooking(id) {
   return fetchJson(`/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
 }
-export async function getHotels() {
-  const res = await fetch(`${API_BASE}/hotels`);
-  if (!res.ok) throw new Error("Failed to fetch hotels");
-  return res.json();
+export async function getHotelsByCity(slug, opts = {}) {
+  if (!slug) return getHotels(opts); // ✅ SAME AS SAFARIS
+  return getList(`/hotels?city=${encodeURIComponent(slug)}`, opts);
 }
 
 // ==========================================
