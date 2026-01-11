@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getSafaris } from "../lib/api";
 import SafeImage from "../components/SafeImage";
+import Price from "../components/Price";
 
 // ASSET BASE
 // Local  → http://localhost:4000
@@ -65,9 +66,12 @@ function SafariCard({ s }) {
         <p className="text-sm text-gray-600 mt-1">
           City:{" "}
           <span className="capitalize">{s.city_slug}</span> •{" "}
-          <span className="font-bold text-orange-600">
-            ₹{s.price || "—"}
-          </span>
+          <div className="mt-1">
+            <Price
+              price={Number(s.price)}
+              discount={s.discount_percent || 0}
+            />
+          </div>
         </p>
 
         <p className="text-sm text-gray-500 mt-2 line-clamp-2">

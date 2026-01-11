@@ -191,6 +191,45 @@ export async function getHotelsByCity(slug, opts = {}) {
   if (!slug) return getHotels(opts); // ✅ SAME AS SAFARIS
   return getList(`/hotels?city=${encodeURIComponent(slug)}`, opts);
 }
+// UPDATE HOTEL DISCOUNT
+export async function updateHotelDiscount(id, discount_percent) {
+  const token = getAuthToken();
+
+  const res = await fetch(`${API_BASE}/hotels/${id}/discount`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ discount_percent }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update hotel discount");
+  }
+
+  return res.json();
+}
+
+// UPDATE SAFARI DISCOUNT
+export async function updateSafariDiscount(id, discount_percent) {
+  const token = getAuthToken();
+
+  const res = await fetch(`${API_BASE}/safaris/${id}/discount`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ discount_percent }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update safari discount");
+  }
+
+  return res.json();
+}
 
 // ==========================================
 // 6. AUTH

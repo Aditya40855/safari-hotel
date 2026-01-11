@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getCities, getAuthToken, API_BASE } from "../lib/api";
 import SafeImage from "@/components/SafeImage";
+import Price from "@/components/Price";
 const IMAGE_BASE =
   window.location.hostname === "localhost"
     ? "http://localhost:4000"
@@ -25,7 +26,10 @@ function HotelCard({ hotel }) {
       <div className="mt-3 flex-1">
         <h3 className="font-semibold text-lg">{hotel.name}</h3>
         <p className="text-sm text-gray-600 mt-1">
-          City: <span className="capitalize">{hotel.city_slug}</span> • <span className="font-bold text-orange-600">₹{hotel.price?.toLocaleString() || "—"}</span>
+          City: <span className="capitalize">{hotel.city_slug}</span> • <Price
+            price={Number(hotel.price)}
+            discount={hotel.discount_percent || 0}
+          />
         </p>
         <p className="text-sm text-gray-500 mt-2 line-clamp-2">{hotel.description}</p>
       </div>

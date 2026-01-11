@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getSafaris, getHotels, getCities } from "../lib/api";
 import SEO from "../components/SEO"; // <--- 1. Import SEO Component
 import SafeImage from "@/components/SafeImage";
+import Price from "@/components/Price";
 import { Zap, Eye, X, Clock, ArrowRight, ChevronRight } from "lucide-react";
 
 // --- COMPONENT: ADMIN-ONLY VISITOR COUNTER ---
@@ -195,7 +196,7 @@ function StableCard({ item, type }) {
   return (
     <Link 
       to={`/${type}s/${item.slug || item.id}`}
-      className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full min-w-[280px] md:min-w-0 snap-center"
+      className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full min-w-[280px] md:min-w-0 snap-center hover:-translate-y-1 hover:scale-[1.01] transition-transform duration-300"
     >
       <div className="relative aspect-[4/3] w-full bg-gray-200 overflow-hidden">
         <SafeImage
@@ -221,10 +222,13 @@ function StableCard({ item, type }) {
         <p className="text-gray-500 text-sm line-clamp-2 mb-4 flex-1">
           {item.description || "View details for more info."}
         </p>
-        <div className="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+        <div className="pt-3 border-t border-gray-200/60 flex items-center justify-between mt-auto">
            <div>
              <span className="text-[10px] text-gray-400 font-bold uppercase block">Price</span>
-             <span className="font-bold text-lg text-gray-900">₹{item.price.toLocaleString()}</span>
+             <Price
+               price={Number(item.price)}
+               discount={item.discount_percent || 0}
+             />
            </div>
            <span className="text-sm font-bold text-orange-600 bg-orange-50 px-3 py-1.5 rounded-lg group-hover:bg-orange-600 group-hover:text-white transition-colors">
              View
@@ -285,15 +289,15 @@ export default function Home() {
         schema={homeSchema}
       />
       
-      <section className="bg-slate-900 py-16 px-4 md:px-6 rounded-b-[2rem] shadow-lg mb-12">
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-black py-14 md:py-20 px-4 md:px-6 rounded-b-[2.5rem] shadow-2xl mb-12 md:mb-16 transition-all">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-orange-400 font-bold text-xs uppercase tracking-widest mb-4 block">
             Welcome to Rajasthan
           </span>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700">
             Jawai <span className="text-orange-500">Unfiltered.</span>
           </h1>
-          <p className="text-gray-400 text-base md:text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-gray-300 text-base md:text-lg mb-10 max-w-2xl mx-auto animate-in fade-in duration-1000">
             Book authentic leopard safaris and premium heritage stays instantly.
           </p>
           <HeroSearch cities={cities} />
@@ -303,7 +307,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16">
         <div className="flex justify-between items-end mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Trending Safaris</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 relative inline-block after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-10 after:bg-orange-500 after:rounded-full">Trending Safaris</h2>
             <p className="text-gray-500 text-sm mt-1">Explore the wild with experts.</p>
           </div>
           <Link to="/safaris" className="text-orange-600 font-bold text-sm hover:underline">
@@ -322,7 +326,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16">
         <div className="flex justify-between items-end mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Premium Stays</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 relative inline-block after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-10 after:bg-orange-500 after:rounded-full">Premium Stays</h2>
             <p className="text-gray-500 text-sm mt-1">Relax in heritage luxury.</p>
           </div>
           <Link to="/hotels" className="text-blue-600 font-bold text-sm hover:underline">
@@ -339,24 +343,56 @@ export default function Home() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16">
-        <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm grid md:grid-cols-3 gap-8 text-center">
-           <div>
-             <div className="text-3xl mb-3">🛡️</div>
-             <h3 className="font-bold text-gray-900">Verified Listings</h3>
-             <p className="text-gray-500 text-sm mt-1">Every property checked personally.</p>
-           </div>
-           <div>
-             <div className="text-3xl mb-3">💬</div>
-             <h3 className="font-bold text-gray-900">Local Support</h3>
-             <p className="text-gray-500 text-sm mt-1">We are based in Rajasthan.</p>
-           </div>
-           <div>
-             <div className="text-3xl mb-3">⚡</div>
-             <h3 className="font-bold text-gray-900">Instant Booking</h3>
-             <p className="text-gray-500 text-sm mt-1">Secure your spot instantly.</p>
-           </div>
+  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-black p-6 md:p-10 shadow-2xl">
+    
+    {/* subtle glow */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.25),_transparent_60%)] pointer-events-none" />
+
+    <div className="relative z-10">
+      <h2 className="text-center text-white text-xl md:text-2xl font-black mb-8 tracking-tight">
+        Why travelers trust <span className="text-orange-500">Jawai Unfiltered</span>
+      </h2>
+
+      {/* Mobile: horizontal swipe | Desktop: grid */}
+      <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 scrollbar-hide">
+        
+        {/* Card 1 */}
+        <div className="min-w-[260px] snap-center bg-white/95 backdrop-blur rounded-2xl p-6 text-center shadow-lg hover:scale-[1.03] transition-transform">
+          <div className="h-12 w-12 mx-auto mb-4 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-2xl">
+            🛡️
+          </div>
+          <h3 className="font-bold text-gray-900 mb-1">Verified Listings</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            Every safari & stay is personally checked by our local team.
+          </p>
         </div>
-      </section>
+
+        {/* Card 2 */}
+        <div className="min-w-[260px] snap-center bg-white/95 backdrop-blur rounded-2xl p-6 text-center shadow-lg hover:scale-[1.03] transition-transform">
+          <div className="h-12 w-12 mx-auto mb-4 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-2xl">
+            💬
+          </div>
+          <h3 className="font-bold text-gray-900 mb-1">Local Support</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            We are based in Rajasthan — real people, real help.
+          </p>
+        </div>
+
+        {/* Card 3 */}
+        <div className="min-w-[260px] snap-center bg-white/95 backdrop-blur rounded-2xl p-6 text-center shadow-lg hover:scale-[1.03] transition-transform">
+          <div className="h-12 w-12 mx-auto mb-4 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-2xl">
+            ⚡
+          </div>
+          <h3 className="font-bold text-gray-900 mb-1">Instant Booking</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            Lock your safari or stay instantly. No long calls.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* RENDER NEW INTERACTIVE ELEMENTS */}
       <LiveIncentive />
