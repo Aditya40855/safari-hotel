@@ -5,7 +5,7 @@ import BookingWidgetSafariSingleDay from "../components/BookingWidgetSafariSingl
 import ReviewSection from "../components/ReviewSection"; // Import Reviews
 import { API_BASE } from '../lib/api';
 import { useAuth } from "../context/AuthContext";
-import Price from "../components/price";
+import Price from "../components/Price";
 
 
 export default function SafariDetail() {
