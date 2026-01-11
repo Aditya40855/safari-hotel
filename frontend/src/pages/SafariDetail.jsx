@@ -5,6 +5,7 @@ import BookingWidgetSafariSingleDay from "../components/BookingWidgetSafariSingl
 import ReviewSection from "../components/ReviewSection"; // Import Reviews
 import { API_BASE } from '../lib/api';
 import { useAuth } from "../context/AuthContext";
+import Price from "../components/price";
 
 
 export default function SafariDetail() {
@@ -35,6 +36,12 @@ export default function SafariDetail() {
   if (loading) return <div className="p-12 text-center text-gray-500">Loading safari details…</div>;
   if (error) return <div className="max-w-3xl mx-auto p-6 text-red-600">{error}</div>;
   if (!safari) return <div className="max-w-3xl mx-auto p-6">Safari not found</div>;
+
+  const discount = Number(safari.discount_percent || safari.discount || 0);
+  const finalPrice =
+    discount > 0
+      ? Math.round(safari.price - (safari.price * discount) / 100)
+      : safari.price;
 
   // --- IMAGE RESOLUTION (SAFE & CONSISTENT) ---
   const ASSET_BASE =
@@ -88,7 +95,7 @@ export default function SafariDetail() {
           <div className="flex justify-between items-end mb-6 border-b pb-4">
              <div>
                 <span className="text-gray-500 text-sm">Price per Safari</span>
-                <div className="text-3xl font-bold text-gray-900">₹{safari.price}</div>
+                <Price price={safari.price} discount={discount} />
              </div>
              <div className="text-green-600 text-sm font-medium bg-green-50 px-2 py-1 rounded">
                 Available
@@ -101,7 +108,7 @@ export default function SafariDetail() {
       // THE FIX: The key ensures the form resets on login/logout
       key={user ? user.id : "guest-safari"} 
       itemId={safari.id}
-      price={safari.price}
+      price={finalPrice}
       onBooked={() => navigate("/bookings")}
     />
           

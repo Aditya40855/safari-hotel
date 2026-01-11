@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import ReviewSection from "../components/ReviewSection";
 import SEO from "../components/SEO"; 
 import SafeImage from "@/components/SafeImage";
+import Price from "../components/Price";
 
 
 export default function HotelDetail() {
@@ -98,7 +99,10 @@ export default function HotelDetail() {
         <div className="bg-white rounded-lg shadow p-4 border sticky top-24">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-2xl font-semibold">₹{hotel.price.toLocaleString()}</div>
+              <Price
+                price={Number(hotel.price)}
+                discount={hotel.discount_percent || 0}
+              />
               <div className="text-sm text-gray-600">
                  Rating: <span className="font-bold text-orange-600">{hotel.rating || "New"}</span>
               </div>
@@ -115,7 +119,11 @@ export default function HotelDetail() {
                🔒 Secure Booking
             </h3>
             {/* Inline Widget */}
-            <BookingWidget itemId={hotel.id} type="hotel" pricePerNight={hotel.price} />
+            <BookingWidget itemId={hotel.id} type="hotel" pricePerNight={
+              hotel.discount_percent
+                ? Math.round(hotel.price - (hotel.price * hotel.discount_percent) / 100)
+                : hotel.price
+            } />
           </div>
         </div>
       </div>
@@ -125,7 +133,11 @@ export default function HotelDetail() {
         <BookingWidget
           itemId={hotel.id}
           type="hotel"
-          pricePerNight={hotel.price}
+          pricePerNight={
+            hotel.discount_percent
+              ? Math.round(hotel.price - (hotel.price * hotel.discount_percent) / 100)
+              : hotel.price
+          }
           onBooked={() => setBookOpen(false)}
         />
       </Modal>

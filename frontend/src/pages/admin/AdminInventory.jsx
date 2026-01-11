@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // Fix: Merged imports and used the correct path (../../ matches your folder structure)
-import { deleteSafari, getSafaris,deleteHotel, getAuthToken, API_BASE } from "../../lib/api";
+import { deleteSafari, getSafaris,deleteHotel, getAuthToken, API_BASE, updateHotelDiscount, updateSafariDiscount } from "../../lib/api";
 
 export default function AdminInventory() {
   const [hotels, setHotels] = useState([]);
@@ -60,6 +60,27 @@ export default function AdminInventory() {
     }
   }
 
+  // --- DISCOUNT HANDLERS ---
+  async function handleHotelDiscountBlur(id, value) {
+    const discount = Math.min(100, Math.max(0, Number(value) || 0));
+    try {
+      await updateHotelDiscount(id, discount);
+      setHotels(prev => prev.map(h => h.id === id ? { ...h, discount_percent: discount } : h));
+    } catch (err) {
+      alert("Failed to update hotel discount: " + err.message);
+    }
+  }
+
+  async function handleSafariDiscountBlur(id, value) {
+    const discount = Math.min(100, Math.max(0, Number(value) || 0));
+    try {
+      await updateSafariDiscount(id, discount);
+      setSafaris(prev => prev.map(s => s.id === id ? { ...s, discount_percent: discount } : s));
+    } catch (err) {
+      alert("Failed to update safari discount: " + err.message);
+    }
+  }
+
   if (loading) return <div className="p-10 text-center text-gray-500">Loading inventory...</div>;
 
   return (
@@ -91,12 +112,13 @@ export default function AdminInventory() {
               <tr>
                 <th className="p-4">Name</th>
                 <th className="p-4">Price</th>
+                <th className="p-4">Discount (%)</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {hotels.length === 0 ? (
-                <tr><td colSpan="3" className="p-8 text-center text-gray-400 italic">No hotels found.</td></tr>
+                <tr><td colSpan="4" className="p-8 text-center text-gray-400 italic">No hotels found.</td></tr>
               ) : (
                 hotels.map(h => {
                   return (
@@ -106,6 +128,16 @@ export default function AdminInventory() {
                         <div className="text-xs text-gray-500 capitalize">{h.city_slug || "Jawai"}</div>
                       </td>
                       <td className="p-4 font-medium text-gray-700">₹{h.price.toLocaleString()}</td>
+                      <td className="p-4">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          defaultValue={h.discount_percent ?? 0}
+                          onBlur={(e) => handleHotelDiscountBlur(h.id, e.target.value)}
+                          className="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
+                        />
+                      </td>
                       <td className="p-4 text-right">
                         <button 
                           onClick={() => handleDeleteHotel(h.id)} 
@@ -138,12 +170,13 @@ export default function AdminInventory() {
               <tr>
                 <th className="p-4">Name</th>
                 <th className="p-4">Price</th>
+                <th className="p-4">Discount (%)</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {safaris.length === 0 ? (
-                <tr><td colSpan="3" className="p-8 text-center text-gray-400 italic">No safaris found.</td></tr>
+                <tr><td colSpan="4" className="p-8 text-center text-gray-400 italic">No safaris found.</td></tr>
               ) : (
                 safaris.map(s => {
                    return (
@@ -153,6 +186,16 @@ export default function AdminInventory() {
                         <div className="text-xs text-gray-500">{s.duration || "N/A"}</div>
                       </td>
                       <td className="p-4 font-medium text-gray-700">₹{s.price.toLocaleString()}</td>
+                      <td className="p-4">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          defaultValue={s.discount_percent ?? 0}
+                          onBlur={(e) => handleSafariDiscountBlur(s.id, e.target.value)}
+                          className="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
+                        />
+                      </td>
                       <td className="p-4 text-right">
                         <button 
                           onClick={() => handleDeleteSafari(s.id)} 

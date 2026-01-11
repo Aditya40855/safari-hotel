@@ -112,7 +112,8 @@ async function ensureSchema() {
       { name: "name", type: "TEXT" }, 
       { name: "email", type: "TEXT" },
       { name: "status", type: "VARCHAR(50) DEFAULT 'pending'" },
-      { name: "time_slot", type: "TEXT" }
+      { name: "time_slot", type: "TEXT" },
+      { name: "amount", type: "INT" }
     ];
     for (const col of bookingCols) {
       const res = await db.query(`
@@ -246,7 +247,7 @@ app.get("/api/hotels", async (req, res) => {
     const cachedData = myCache.get(cacheKey);
     if (cachedData) return res.json(cachedData);
 
-    let q = "SELECT * FROM hotels";
+    let q = "SELECT id, name, slug, city_slug, description, price, discount_percent, rating, images, created_at FROM hotels";
     const params = [];
 
     if (city) {
@@ -272,8 +273,8 @@ app.get("/api/hotels/:identifier", async (req, res) => {
   const { identifier } = req.params;
 
   const q = isNaN(identifier)
-    ? "SELECT * FROM hotels WHERE slug = ?"
-    : "SELECT * FROM hotels WHERE id = ?";
+    ? "SELECT id, name, slug, city_slug, description, price, discount_percent, rating, images, created_at FROM hotels WHERE slug = ?"
+    : "SELECT id, name, slug, city_slug, description, price, discount_percent, rating, images, created_at FROM hotels WHERE id = ?";
 
   try {
     const r = await db.query(q, [identifier]);
@@ -297,7 +298,7 @@ app.get("/api/safaris", async (req, res) => {
     const cachedData = myCache.get(cacheKey);
     if (cachedData) return res.json(cachedData);
 
-    let q = "SELECT * FROM safaris";
+    let q = "SELECT id, name, slug, city_slug, duration, description, price, discount_percent, images, created_at FROM safaris";
     const params = [];
 
     if (city) {
@@ -323,8 +324,8 @@ app.get("/api/safaris/:identifier", async (req, res) => {
   const { identifier } = req.params;
 
   const q = isNaN(identifier)
-    ? "SELECT * FROM safaris WHERE slug = ?"
-    : "SELECT * FROM safaris WHERE id = ?";
+    ? "SELECT id, name, slug, city_slug, duration, description, price, discount_percent, images, created_at FROM safaris WHERE slug = ?"
+    : "SELECT id, name, slug, city_slug, duration, description, price, discount_percent, images, created_at FROM safaris WHERE id = ?";
 
   try {
     const r = await db.query(q, [identifier]);
@@ -354,6 +355,59 @@ function clearSafariCache() {
     if (k.startsWith("safaris_")) myCache.del(k);
   });
 }
+
+// --- DISCOUNT UPDATE (ADMIN) ---
+app.patch("/api/hotels/:id/discount", requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { discount_percent } = req.body;
+
+  if (discount_percent === undefined) {
+    return res.status(400).json({ error: "discount_percent is required" });
+  }
+
+  try {
+    const r = await db.query(
+      "UPDATE hotels SET discount_percent = ? WHERE id = ?",
+      [discount_percent, id]
+    );
+
+    if (r.rows.affectedRows === 0) {
+      return res.status(404).json({ error: "Hotel not found" });
+    }
+
+    clearHotelCache();
+    res.json({ success: true });
+  } catch (err) {
+    console.error("❌ Update hotel discount failed:", err);
+    res.status(500).json({ error: "Failed to update hotel discount" });
+  }
+});
+
+app.patch("/api/safaris/:id/discount", requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { discount_percent } = req.body;
+
+  if (discount_percent === undefined) {
+    return res.status(400).json({ error: "discount_percent is required" });
+  }
+
+  try {
+    const r = await db.query(
+      "UPDATE safaris SET discount_percent = ? WHERE id = ?",
+      [discount_percent, id]
+    );
+
+    if (r.rows.affectedRows === 0) {
+      return res.status(404).json({ error: "Safari not found" });
+    }
+
+    clearSafariCache();
+    res.json({ success: true });
+  } catch (err) {
+    console.error("❌ Update safari discount failed:", err);
+    res.status(500).json({ error: "Failed to update safari discount" });
+  }
+});
 // --- BOOKINGS ---
 app.get("/api/bookings", authenticateToken, async (req, res) => {
   try {
@@ -382,18 +436,63 @@ app.post("/api/bookings", async (req, res) => {
             }
         } catch (e) {}
     }
+    // Remove amount from destructuring; do not accept from frontend
     const { booking_type, item_id, start_date, end_date, guests, contact, name, email, time_slot } = req.body;
     const finalEmail = email || userEmail;
     const finalName = name || userName;
     if (!booking_type || !item_id || !start_date || !finalEmail) return res.status(400).json({ error: "Missing required fields" });
-    
+
+    // 🔐 Calculate final payable amount on server
+    let finalAmount = null;
+
+    if (booking_type === "hotel") {
+      const r = await db.query(
+        "SELECT price, discount_percent FROM hotels WHERE id = ?",
+        [item_id]
+      );
+      if (!r.rows.length) {
+        return res.status(400).json({ error: "Invalid hotel selected" });
+      }
+      const { price, discount_percent = 0 } = r.rows[0];
+      finalAmount = Math.round(
+        price - (price * discount_percent) / 100
+      );
+    }
+
+    if (booking_type === "safari") {
+      const r = await db.query(
+        "SELECT price, discount_percent FROM safaris WHERE id = ?",
+        [item_id]
+      );
+      if (!r.rows.length) {
+        return res.status(400).json({ error: "Invalid safari selected" });
+      }
+      const { price, discount_percent = 0 } = r.rows[0];
+      finalAmount = Math.round(
+        price - (price * discount_percent) / 100
+      );
+    }
+
     const userType = userId ? 'member' : 'guest';
     const q = `
       INSERT INTO bookings 
-      (booking_type, item_id, start_date, end_date, guests, contact, name, email, status, user_id, time_slot, created_at, user_type)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, NOW(), ?)
+      (booking_type, item_id, start_date, end_date, guests, contact, name, email, status, user_id, time_slot, amount, created_at, user_type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, NOW(), ?)
     `;
-    const values = [booking_type, item_id, start_date, end_date, guests || 1, contact, finalName, finalEmail, userId, time_slot || null, userType];
+    const values = [
+      booking_type,
+      item_id,
+      start_date,
+      end_date,
+      guests || 1,
+      contact,
+      finalName,
+      finalEmail,
+      userId,
+      time_slot || null,
+      finalAmount,
+      userType
+    ];
     const r = await db.query(q, values);
     const bookingId = r.rows.insertId;
 
@@ -506,11 +605,12 @@ app.post("/api/reviews", authenticateToken, async (req, res) => {
 // --- ADMIN ---
 app.post("/api/admin/hotels", requireAdmin, async (req, res) => {
   try {
-    const { name, city_slug, price, rating, images, description, slug } = req.body;
+    const { name, city_slug, price, discount_percent = 0, rating, images, description, slug } = req.body;
     let baseSlug = slug || slugify(name || "hotel") + "-" + Date.now();
     let imgs = JSON.stringify(Array.isArray(images) ? images : (images ? [images] : []));
-    const q = `INSERT INTO hotels (name, slug, city_slug, description, price, rating, images, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`;
-    const r = await db.query(q, [name, baseSlug, city_slug, description, price, rating, imgs]);
+    const q = `INSERT INTO hotels (name, slug, city_slug, description, price, discount_percent, rating, images, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+    const r = await db.query(q, [name, baseSlug, city_slug, description, price, discount_percent, rating, imgs]);
    
     myCache.flushAll(); 
     res.json({
@@ -523,7 +623,7 @@ app.post("/api/admin/hotels", requireAdmin, async (req, res) => {
 
 app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
   try {
-    const { name, title, city_slug, price, duration, images, description } = req.body;
+    const { name, title, city_slug, price, discount_percent = 0, duration, images, description } = req.body;
 
     const finalTitle = title || name;
     if (!finalTitle) {
@@ -539,8 +639,8 @@ app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
 
     const q = `
       INSERT INTO safaris
-      (city_slug, name, slug, duration, price, description, images, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+      (city_slug, name, slug, duration, price, discount_percent, description, images, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
 
     const r = await db.query(q, [
@@ -549,6 +649,7 @@ app.post("/api/admin/safaris", requireAdmin, async (req, res) => {
       slug,
       duration,
       price,
+      discount_percent,
       description,
       imgs
     ]);

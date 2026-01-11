@@ -23,27 +23,17 @@ export default function AdminBookings() {
     }
   }
   async function handleStatus(id, newStatus) {
-    let amount = 0;
-    if (newStatus === 'confirmed') {
-      amount = window.prompt("Enter the total booking amount (₹):", "0");
-      if (amount === null) return; // Cancel if no amount entered
-    }
-  
     if (!window.confirm(`Mark booking #${id} as ${newStatus}?`)) return;
   
-    try {
-      await updateBookingStatus(id, newStatus, amount); // Send amount to backend
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
-    } catch (err) {
-      alert("Failed to update status");
-    }
-  }
- 
-  async function handleStatus(id, newStatus) {
-    if (!window.confirm(`Mark booking #${id} as ${newStatus}?`)) return;
     try {
       await updateBookingStatus(id, newStatus);
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
+      setBookings(prev =>
+        prev.map(b =>
+          b.id === id
+            ? { ...b, status: newStatus }
+            : b
+        )
+      );
     } catch (err) {
       alert("Failed to update status");
     }
@@ -93,13 +83,14 @@ export default function AdminBookings() {
                 <th className="px-6 py-4">Item</th>
                 <th className="px-6 py-4">Dates</th>
                 <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4 text-right">Amount (₹)</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {bookings.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="p-8 text-center text-gray-400">
+                  <td colSpan="7" className="p-8 text-center text-gray-400">
                     No bookings found.
                   </td>
                 </tr>
@@ -139,7 +130,9 @@ export default function AdminBookings() {
                         {b.status}
                       </span>
                     </td>
-                    
+                    <td className="px-6 py-4 text-right font-semibold text-gray-900">
+                      {b.amount ? `₹${Number(b.amount).toLocaleString()}` : "-"}
+                    </td>
                     <td className="px-6 py-4 text-right space-x-2">
                       {b.status === 'pending' && (
                         <>
