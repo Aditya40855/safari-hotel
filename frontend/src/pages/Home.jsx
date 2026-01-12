@@ -374,7 +374,7 @@ export default function Home() {
           </div>
           <h3 className="font-bold text-gray-900 mb-1">Local Support</h3>
           <p className="text-gray-500 text-sm leading-relaxed">
-            We are based in Rajasthan — real people, real help.
+            We are based in Rajasthan — real people, real help,testing.
           </p>
         </div>
 
