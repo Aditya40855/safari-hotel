@@ -7,12 +7,12 @@ export const API_BASE =
     : "https://api.jawaiunfiltered.com/api";
 
 // ===============================
-// ASSET BASE (images, uploads)
+// ASSET BASE (IMAGES)
 // ===============================
 export const ASSET_BASE =
   import.meta.env.DEV
     ? "http://localhost:4000"
-    : "https://api.jawaiunfiltered.com";
+    : "https://jawaiunfiltered.com";
 
 // Optional alias (safe to keep)
 export const BASE = API_BASE;
