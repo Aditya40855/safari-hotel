@@ -127,7 +127,7 @@ export default function AdminInventory() {
                         <div className="font-bold text-gray-900">{h.name}</div>
                         <div className="text-xs text-gray-500 capitalize">{h.city_slug || "Jawai"}</div>
                       </td>
-                      <td className="p-4 font-medium text-gray-700">₹{h.price.toLocaleString()}</td>
+                      <td className="p-4 font-medium text-gray-700">₹{Number(h.price || 0).toLocaleString()}</td>
                       <td className="p-4">
                         <input
                           type="number"
@@ -185,7 +185,7 @@ export default function AdminInventory() {
                         <div className="font-bold text-gray-900">{s.name || s.title}</div>
                         <div className="text-xs text-gray-500">{s.duration || "N/A"}</div>
                       </td>
-                      <td className="p-4 font-medium text-gray-700">₹{s.price.toLocaleString()}</td>
+                      <td className="p-4 font-medium text-gray-700">₹{Number(s.price || 0).toLocaleString()}</td>
                       <td className="p-4">
                         <input
                           type="number"

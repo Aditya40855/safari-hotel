@@ -1,18 +1,25 @@
+// ===============================
+// API BASE
+// ===============================
 export const API_BASE =
   import.meta.env.DEV
     ? "http://localhost:4000/api"
-    : "/api";
-    export const ASSET_BASE =
-    (typeof window !== "undefined" && window.location.hostname === "localhost"
-      ? "http://localhost:4000"
-      : "");
+    : "https://jawaiunfiltered.com/api";
 
+// ===============================
+// ASSET BASE (images, uploads)
+// ===============================
+export const ASSET_BASE =
+  import.meta.env.DEV
+    ? "http://localhost:4000"
+    : "https://jawaiunfiltered.com";
+
+// Optional alias (safe to keep)
 export const BASE = API_BASE;
 
-console.info("[API] BASE =", BASE);
-
 if (typeof console !== "undefined") {
-  console.info("[API] BASE =", BASE);
+  console.info("[API] BASE =", API_BASE);
+  console.info("[ASSET] BASE =", ASSET_BASE);
 }
 
 // ==========================================
