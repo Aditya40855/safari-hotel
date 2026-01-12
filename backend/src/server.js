@@ -48,9 +48,17 @@ app.use(express.json());
 app.use(require('./routes/sitemap'));
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this";
-const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "..", "uploads");
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+const UPLOAD_DIR = path.join(
+  process.env.HOME || "/home/jawaiunf",
+  "public_html",
+  "uploads"
+);
 
+// Ensure uploads folder exists
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  console.log("📁 Created uploads directory:", UPLOAD_DIR);
+}
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
   filename: (req, file, cb) => {
@@ -696,8 +704,9 @@ app.delete("/api/admin/safaris/:id", requireAdmin, async (req, res) => {
 app.use(
   "/uploads",
   express.static(UPLOAD_DIR, {
-    maxAge: "1h",
-    etag: true
+    maxAge: "7d",
+    etag: true,
+    immutable: true
   })
 );
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
