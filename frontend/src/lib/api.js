@@ -327,5 +327,5 @@ export async function uploadImage(file) {
   }
 
   const data = await res.json();
-  return `${ASSET_BASE}${data.url}`;
+  return `${ASSET_BASE}/${data.filename}`;
 }
