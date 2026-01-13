@@ -12,7 +12,7 @@ export const API_BASE =
 export const ASSET_BASE =
   import.meta.env.DEV
     ? "http://localhost:4000"
-    : "https://api.jawaiunfiltered.com";
+    : "https://www.jawaiunfiltered.com";
 
 // Optional alias (safe to keep)
 export const BASE = API_BASE;
@@ -327,5 +327,5 @@ export async function uploadImage(file) {
   }
 
   const data = await res.json();
-  return data.url;
+  return `${ASSET_BASE}${data.url}`;
 }
