@@ -194,7 +194,9 @@ app.post("/api/upload", upload.single("photo"), async (req, res) => {
       .webp({ quality: 80 }) 
       .toFile(outputPath);
     if (fs.existsSync(originalPath)) fs.unlinkSync(originalPath);
-    res.json({ url: `/uploads/${webpFilename}` });
+    res.json({
+      url: `https://assets.jawaiunfiltered.com/${webpFilename}`
+    });
   } catch (err) {
     console.error("❌ Image optimization failed:", err);
     res.status(500).json({ error: "Failed to process image" });
