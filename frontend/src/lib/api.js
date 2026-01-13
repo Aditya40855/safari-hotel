@@ -12,7 +12,7 @@ export const API_BASE =
 export const ASSET_BASE =
   import.meta.env.DEV
     ? "http://localhost:4000"
-    : "https://jawaiunfiltered.com";
+    : "https://api.jawaiunfiltered.com";
 
 // Optional alias (safe to keep)
 export const BASE = API_BASE;
@@ -315,7 +315,7 @@ export async function uploadImage(file) {
   formData.append("photo", file);
 
   const token = getAuthToken();
-  const res = await fetch(`${BASE}/upload`, {
+  const res = await fetch(`${API_BASE.replace('/api', '')}/upload`, {
     method: "POST",
     headers: token ? { Authorization: `Bearer ${token}` } : {},
     body: formData,
