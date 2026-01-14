@@ -1,0 +1,36 @@
+User-agent: *
+Allow: /
+
+# Public pages
+Allow: /hotels/
+Allow: /safaris/
+Allow: /celebrate
+Allow: /legal
+
+# Security: block private areas
+Disallow: /admin/
+Disallow: /login
+Disallow: /signup
+Disallow: /bookings
+Disallow: /account
+
+# Technical routes
+Disallow: /api/
+Disallow: /static/
+Disallow: /node_modules/
+
+# Prevent duplicate URLs (query params)
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*?_limit=
+
+# Allow AI discovery
+User-agent: GPTBot
+Allow: /celebrate
+Allow: /safaris
+Allow: /FAQ/
+
+
+# Sitemap
+Sitemap: https://www.jawaiunfiltered.com/sitemap.xml

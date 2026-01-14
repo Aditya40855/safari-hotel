@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getHotelsByCity, getCities } from "../lib/api";
 import SafeImage from "@/components/SafeImage"
+import { Helmet } from "react-helmet-async";
 
 export default function Search() {
   const [allHotels, setAllHotels] = useState([]);
@@ -36,6 +37,20 @@ export default function Search() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
+      <Helmet>
+        <title>Search Hotels in Jawai | Jawai Unfiltered Stays</title>
+        <meta name="description" content="Search hotels in Jawai with filters for city and price to find your perfect stay." />
+        <link rel="canonical" href="https://jawaiunfiltered.com/search" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SearchAction",
+          "target": "https://jawaiunfiltered.com/search?city={city}&maxPrice={price}",
+          "query-input": [
+            "required name=city",
+            "required name=price"
+          ]
+        })}</script>
+      </Helmet>
       <h1 className="text-3xl font-bold mb-6">Find your stay</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

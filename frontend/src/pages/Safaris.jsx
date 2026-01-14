@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getSafaris } from "../lib/api";
 import SafeImage from "../components/SafeImage";
 import Price from "../components/Price";
+import { Helmet } from "react-helmet-async";
 
 // ASSET BASE
 // Local  → http://localhost:4000
@@ -129,8 +130,146 @@ export default function Safaris() {
     };
   }, []);
 
+  const canonicalUrl = typeof window !== "undefined" ? window.location.href : "https://www.example.com/safaris";
+
+  // JSON-LD structured data
+  const jsonLdCollectionPage = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Safari Adventures",
+    "description": "Explore the wild with our expert-guided tours.",
+    "url": canonicalUrl
+  };
+
+  const jsonLdItemList = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Safari Adventures List",
+    "url": canonicalUrl,
+    "itemListElement": safaris.map((s, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": `${canonicalUrl}/${s.id}`,
+      "name": s.name || s.title || `Safari ${s.id}`
+    }))
+  };
+
+  const jsonLdBreadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Safaris",
+        "item": canonicalUrl
+      }
+    ]
+  };
+
+  // FAQPage schema
+  const jsonLdFAQPage = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How can I book a safari tour?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can book a safari tour directly through our website by selecting your preferred safari and following the booking process."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are the safari tours safe?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, all our safari tours are guided by experienced professionals who prioritize your safety and well-being throughout the trip."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best time to go on a safari?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The best time for a safari depends on the region, but generally the dry season offers the best wildlife viewing opportunities."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is included in the safari packages?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our safari packages typically include accommodation, guided tours, meals, and transportation within the safari area."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I customize my safari itinerary?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we offer customizable safari itineraries to suit your preferences and interests."
+        }
+      }
+    ]
+  };
+
+  // SearchAction schema
+  const jsonLdSearchAction = {
+    "@context": "https://schema.org",
+    "@type": "SearchAction",
+    "target": `${canonicalUrl}?search={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pt-8 pb-12">
+      <Helmet>
+        <title>Safari Adventures | Safari Tours, Wildlife Safaris & Jawai Experiences</title>
+        <meta name="description" content="Discover amazing safari tours, wildlife safaris, and Jawai adventures with expert guides. Book your wild tour today and explore nature like never before." />
+        <link rel="canonical" href={canonicalUrl} />
+        {/* Open Graph tags */}
+        <meta property="og:title" content="Safari Adventures | Safari Tours, Wildlife Safaris & Jawai Experiences" />
+        <meta property="og:description" content="Discover amazing safari tours, wildlife safaris, and Jawai adventures with expert guides. Book your wild tour today and explore nature like never before." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={`${ASSET_BASE}/images/safari-placeholder.jpg`} />
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Safari Adventures | Safari Tours, Wildlife Safaris & Jawai Experiences" />
+        <meta name="twitter:description" content="Discover amazing safari tours, wildlife safaris, and Jawai adventures with expert guides. Book your wild tour today and explore nature like never before." />
+        <meta name="twitter:image" content={`${ASSET_BASE}/images/safari-placeholder.jpg`} />
+        {/* JSON-LD structured data */}
+        <script type="application/ld+json">{JSON.stringify(jsonLdCollectionPage)}</script>
+        <script type="application/ld+json">{JSON.stringify(jsonLdItemList)}</script>
+        <script type="application/ld+json">{JSON.stringify(jsonLdBreadcrumbList)}</script>
+        <script type="application/ld+json">{JSON.stringify(jsonLdFAQPage)}</script>
+        <script type="application/ld+json">{JSON.stringify(jsonLdSearchAction)}</script>
+      </Helmet>
+
+      {/* Invisible semantic SEO section for rich keywords */}
+      <section aria-hidden="true" className="sr-only">
+        <h2>Safari Adventures Keywords</h2>
+        <p>
+          Safari, wildlife tours, guided safaris, African safaris, nature exploration, adventure travel, eco-tourism, safari booking, wild tours, safari destinations, safari packages, safari holidays, safari experiences, safari vacations, safari tours, safari wildlife, safari lodges, safari guides, safari trips, safari expeditions.
+        </p>
+      </section>
+
+      {/* Additional hidden semantic SEO section with internal-link-style keyword phrases */}
+      <section aria-hidden="true" className="sr-only">
+        <h2>Internal Link Keywords</h2>
+        <p>
+          Safari Tours in Jawai, Book Wildlife Safaris, Best Safari Packages, Guided Safari Trips, Affordable Safari Holidays, Luxury Safari Lodges, Safari Tour Deals, Family Safari Adventures, Eco-Friendly Safari Tours, Safari Vacation Planning.
+        </p>
+      </section>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-bold mb-2">
           Safari Adventures

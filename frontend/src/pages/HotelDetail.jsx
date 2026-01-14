@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getHotelById } from "../lib/api";
 import BookingWidget from "../components/BookingWidget";
 import Modal from "../components/Modal";
@@ -52,8 +52,27 @@ export default function HotelDetail() {
     "address": {
       "@type": "PostalAddress",
       "addressLocality": hotel.city_slug,
+      "addressRegion": "Rajasthan",
       "addressCountry": "IN"
     },
+    "url": `https://jawaiunfiltered.com/hotels/${hotel.slug}`,
+    "amenityFeature": [
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Free Parking",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Breakfast Included",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Free WiFi",
+        "value": true
+      }
+    ],
     // Only add rating schema if a rating exists
     ...(hotel.rating && {
       "aggregateRating": {
@@ -70,8 +89,8 @@ export default function HotelDetail() {
       {/* 3. Inject SEO Tags */}
       {/* DELETE the two separate SEO components and replace with this ONE */}
 <SEO 
-  title={`${hotel.name} - Luxury Stays & Heritage Hotels in ${hotel.city_slug}`}
-  description={`Book your stay at ${hotel.name} in ${hotel.city_slug}. Luxury heritage experience starting from ₹${hotel.price}. View photos and book instantly.`}
+  title={`${hotel.name} - Leopard Safari Stay & Luxury Heritage Hotel in Jawai Bandh, Rajasthan`}
+  description={`Book your stay at ${hotel.name}, a luxury hotel and heritage stay in Jawai Bandh, Rajasthan. Experience the best leopard safari stay with comfort and elegance.`}
   url={`https://jawaiunfiltered.com/hotels/${hotel.slug}`} // Use the dynamic hotel slug
   image={mainImg}
   schema={hotelSchema}
@@ -81,18 +100,24 @@ export default function HotelDetail() {
         <div className="w-full h-80 bg-gray-100 rounded overflow-hidden mb-4 border relative">
           <SafeImage 
             src={mainImg}
-            alt={hotel.name}
+            alt={`${hotel.name} luxury hotel in Jawai Rajasthan`}
             className="object-cover w-full h-full"
             // SEO: Eager load main image for LCP score
             loading="eager"
             fetchPriority="high"
             fallback="/images/hotel-placeholder.jpg"
+            itemProp="image"
           />
         </div>
 
-        <h1 className="text-2xl font-bold">{hotel.name}</h1>
-        <div className="mt-2 text-gray-600 capitalize">City: {hotel.city_slug}</div>
-        <div className="mt-4 text-gray-800 leading-relaxed">{hotel.description}</div>
+        <section itemScope itemType="https://schema.org/Hotel">
+          <h1 className="text-2xl font-bold" itemProp="name">{hotel.name}</h1>
+          <div className="mt-2 text-gray-600 capitalize">City: {hotel.city_slug}</div>
+          <div className="mt-4 text-gray-800 leading-relaxed" itemProp="description">{hotel.description}</div>
+          <p className="mt-4 text-sm text-gray-700">
+            Explore nearby <Link to="/safaris" className="underline text-blue-600 hover:text-blue-800">Jawai Leopard Safari</Link> or browse other <Link to="/hotels" className="underline text-blue-600 hover:text-blue-800">Luxury Hotels in Jawai</Link>.
+          </p>
+        </section>
       </div>
 
       <div>
