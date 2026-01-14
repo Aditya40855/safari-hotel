@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { 
   PartyPopper, Sparkles, Camera, Music, Utensils, 
   MapPin, Users, Calendar, MessageSquare, ChevronRight, 
@@ -44,6 +45,89 @@ const CelebrationConcierge = () => {
 
   return (
     <div className="max-w-5xl mx-auto my-12 px-4 font-sans">
+      <Helmet>
+        <title>Celebrate in Jawai: Birthday, Anniversary, Corporate & Proposal Concierge</title>
+        <meta name="description" content="Plan your perfect celebration in Jawai with our expert concierge services. From birthdays to corporate events, we tailor every detail to your vision." />
+        <meta name="keywords" content="Jawai celebrations, birthday party Jawai, anniversary events Jawai, corporate events Jawai, proposal planning Jawai, celebration concierge Rajasthan" />
+        <link rel="canonical" href="https://www.yourdomain.com/celebrations" />
+        <meta property="og:title" content="Celebrate in Jawai: Birthday, Anniversary, Corporate & Proposal Concierge" />
+        <meta property="og:description" content="Plan your perfect celebration in Jawai with our expert concierge services. From birthdays to corporate events, we tailor every detail to your vision." />
+        <meta property="og:url" content="https://www.yourdomain.com/celebrations" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "serviceType": "Celebration Concierge",
+              "provider": {
+                "@type": "Organization",
+                "name": "Jawai Unfiltered",
+                "url": "https://www.yourdomain.com",
+                "logo": "https://www.yourdomain.com/logo.png",
+                "sameAs": [
+                  "https://www.facebook.com/jawaiunfiltered",
+                  "https://www.instagram.com/jawaiunfiltered"
+                ]
+              },
+              "areaServed": {
+                "@type": "Place",
+                "name": "Jawai, Rajasthan"
+              },
+              "description": "Expert celebration concierge services for birthdays, anniversaries, corporate events, and proposals in Jawai, Rajasthan."
+            }
+          `}
+        </script>
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Event",
+              "name": "Celebration Planning Services",
+              "startDate": "2024-01-01",
+              "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+              "eventStatus": "https://schema.org/EventScheduled",
+              "location": {
+                "@type": "Place",
+                "name": "Jawai, Rajasthan",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Jawai",
+                  "addressRegion": "Rajasthan",
+                  "addressCountry": "IN"
+                }
+              },
+              "organizer": {
+                "@type": "Organization",
+                "name": "Jawai Unfiltered",
+                "url": "https://www.yourdomain.com"
+              }
+            }
+          `}
+        </script>
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Jawai Unfiltered",
+              "url": "https://www.yourdomain.com",
+              "logo": "https://www.yourdomain.com/logo.png",
+              "sameAs": [
+                "https://www.facebook.com/jawaiunfiltered",
+                "https://www.instagram.com/jawaiunfiltered"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+919351411559",
+                "contactType": "customer service",
+                "areaServed": "IN"
+              }
+            }
+          `}
+        </script>
+      </Helmet>
+      <h1 className="sr-only">Celebrate your special occasions in Jawai with expert concierge services for birthdays, anniversaries, corporate events, and proposals</h1>
       <div className="bg-slate-950 rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5 relative">
         
         {/* PROGRESS BAR */}

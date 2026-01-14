@@ -9,41 +9,95 @@ const LegalPages = () => {
       title: "Terms & Conditions",
       icon: <FileText size={20} />,
       content: `
-        Welcome to Jawai Unfiltered. By booking with us, you agree to:
-        1. Wildlife Sightings: While we use expert trackers, leopard sightings are natural events and cannot be 100% guaranteed.
-        2. Conduct: Guests must follow all forest department guidelines. Off-roading or disturbing wildlife is strictly prohibited.
-        3. Identity: All guests must carry valid government ID (Aadhar/Passport) for park entry.
-        4. Liability: Jawai Unfiltered is not liable for personal injury or loss of property due to natural factors or third-party transport.
+Welcome to Jawai Unfiltered, a Rajasthan-based experiential travel brand offering ethical wildlife safaris, nature stays, and curated desert experiences around Jawai Bandh.
+
+By booking with us, you agree to the following terms:
+
+1. Wildlife Sightings:
+   Jawai Unfiltered works with experienced local trackers and forest-authorized guides. However, wildlife sightings (including leopards) are natural occurrences and cannot be guaranteed.
+
+2. Responsible Conduct:
+   All guests must strictly follow Forest Department regulations. Any off-roading, loud disturbances, feeding wildlife, or unsafe behavior may result in immediate termination of the safari without refund.
+
+3. Identity Verification:
+   Valid government-issued identification (Aadhar Card, Passport, or equivalent) is mandatory for safari permits and hotel check-ins.
+
+4. Liability Disclaimer:
+   Jawai Unfiltered is not responsible for personal injury, loss, or damage caused by natural events, wildlife behavior, weather conditions, or third-party transport services.
+
+5. Certifications & Ethics:
+   Jawai Unfiltered operates under responsible tourism principles and holds MSCE certification, reflecting our commitment to ethical tourism practices, sustainability, and guest safety.
+
+6. Governing Law:
+   These terms are governed by and construed in accordance with the laws of India.
       `
     },
     privacy: {
       title: "Privacy Policy",
       icon: <ShieldCheck size={20} />,
       content: `
-        Your privacy is our priority. We collect:
-        1. Booking Data: Name, contact, and ID details required for safari permits.
-        2. Payment Info: We use Razorpay; your card details are never stored on our servers.
-        3. Usage: Data is shared only with necessary partners like the Forest Department or hotels for your stay.
+At Jawai Unfiltered, your privacy and data security are taken seriously.
+
+We collect and process the following information:
+
+1. Booking Information:
+   Name, contact number, email address, and government ID details are collected solely for safari permits, hotel reservations, and regulatory compliance.
+
+2. Payment Information:
+   All payments are processed securely via Razorpay. Jawai Unfiltered does not store or process your card or banking details.
+
+3. Data Usage & Sharing:
+   Your information is shared only with essential partners such as forest authorities, hotels, or service providers required to fulfill your booking.
+
+4. Data Retention:
+   Personal data is retained only for as long as necessary to fulfill booking obligations and comply with legal requirements.
+
+5. Your Rights:
+   You may request access, correction, or deletion of your personal data by contacting us at info@jawaiunfiltered.com.
+
+Last updated: January 2026
       `
     },
     refund: {
       title: "Cancellation & Refund",
       icon: <RefreshCcw size={20} />,
       content: `
-        Our safari cancellation policy is tiered:
-        1. 30+ Days Before: 90% refund (10% administrative fee).
-        2. 15-29 Days Before: 50% refund.
-        3. 7-14 Days Before: 25% refund.
-        4. Less than 7 Days: No refund.
-        Note: Government permit fees are non-refundable in all cases. Refunds are processed within 7-10 business days.
+Our cancellation and refund policy is designed to be fair and transparent:
+
+1. 30+ Days Before Travel:
+   90% refund (10% administrative and processing fee).
+
+2. 15–29 Days Before Travel:
+   50% refund.
+
+3. 7–14 Days Before Travel:
+   25% refund.
+
+4. Less Than 7 Days:
+   No refund applicable.
+
+Important Notes:
+• Government permit fees are non-refundable in all cases.
+• Refunds are processed within 7–10 business days to the original payment method.
+• Date changes are subject to availability and forest department approval.
+
+Last updated: January 2026
       `
     },
     shipping: {
       title: "Shipping & Delivery",
       icon: <Truck size={20} />,
       content: `
-        As a service-based business, we do not ship physical products. 
-        Booking Confirmation: Your digital safari permit and hotel vouchers will be delivered via Email/WhatsApp within 24 hours of successful payment.
+Jawai Unfiltered provides service-based travel experiences and does not ship physical products.
+
+Digital Delivery:
+• Safari permits, hotel vouchers, and booking confirmations are delivered digitally via Email and WhatsApp.
+• Delivery typically occurs within 24 hours of successful payment.
+
+For any assistance related to booking delivery or documentation, please contact:
+info@jawaiunfiltered.com
+
+Last updated: January 2026
       `
     }
   };

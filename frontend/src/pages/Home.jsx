@@ -261,6 +261,114 @@ export default function Home() {
     }
   };
 
+  // --- SEO: BreadcrumbList Schema ---
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://safariandhotels.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Safaris",
+        "item": "https://safariandhotels.com/safaris"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Hotels",
+        "item": "https://safariandhotels.com/hotels"
+      }
+    ]
+  };
+
+  // --- SEO: Organization Schema ---
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Jawai Unfiltered Safaris",
+    "url": "https://safariandhotels.com",
+    "logo": "https://safariandhotels.com/logo.png",
+    "sameAs": [
+      "https://facebook.com/jawaiunfiltered",
+      "https://instagram.com/jawaiunfiltered",
+      "https://twitter.com/jawaiunfiltered"
+    ],
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+919351411559",
+        "contactType": "customer support",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"]
+      }
+    ]
+  };
+
+  // --- SEO: FAQPage Schema ---
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I book a Jawai leopard safari?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Jawai leopard safari booking is easy through our online platform. Simply select your preferred dates, choose your safari type, and secure your spot instantly. Our team will confirm your booking and provide all necessary details for your adventure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best time to visit Jawai for leopard sightings?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The best time to visit Jawai is between October and April, when the weather is pleasant and leopards are frequently spotted during safari drives. Early morning and late afternoon safaris offer the highest chances for wildlife sightings."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are there luxury stays near Jawai Bandh?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, there are several luxury stays near Jawai Bandh, including heritage resorts and premium tented camps. Our curated selection features only the finest accommodations to ensure a memorable and comfortable wildlife experience."
+        }
+      }
+    ]
+  };
+
+  // --- SEO: ItemList Schema for Safaris and Hotels ---
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Jawai Safaris and Luxury Hotels",
+    "itemListElement": [
+      {
+        "@type": "TouristAttraction",
+        "name": "Leopard Safari in Jawai",
+        "url": "https://safariandhotels.com/safaris",
+        "description": "Best leopard safari in Jawai Rajasthan with expert guides and private jeep options."
+      },
+      {
+        "@type": "LodgingBusiness",
+        "name": "Luxury Hotels near Jawai Bandh",
+        "url": "https://safariandhotels.com/hotels",
+        "description": "Luxury wildlife resorts and heritage stays near Jawai Bandh for a premium experience."
+      },
+      {
+        "@type": "TouristAttraction",
+        "name": "Private Jeep Safari Jawai",
+        "url": "https://safariandhotels.com/safaris/private-jeep",
+        "description": "Book a private jeep safari in Jawai for exclusive wildlife and leopard sightings."
+      }
+    ]
+  };
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -287,6 +395,13 @@ export default function Home() {
         title="Book Leopard Safaris & Luxury Stays in Jawai"
         description="The #1 platform for Jawai Leopard Safaris. Book expert guides and heritage resorts instantly. Verified listings and secure payment."
         schema={homeSchema}
+        extraSchema={[
+          homeSchema,
+          breadcrumbSchema,
+          organizationSchema,
+          faqSchema,
+          itemListSchema
+        ]}
       />
       
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-black py-14 md:py-20 px-4 md:px-6 rounded-b-[2.5rem] shadow-2xl mb-12 md:mb-16 transition-all">
@@ -374,7 +489,7 @@ export default function Home() {
           </div>
           <h3 className="font-bold text-gray-900 mb-1">Local Support</h3>
           <p className="text-gray-500 text-sm leading-relaxed">
-            We are based in Rajasthan — real people, real help,testing.
+            We are based in Rajasthan — real people, real help .
           </p>
         </div>
 
@@ -397,8 +512,17 @@ export default function Home() {
       {/* RENDER NEW INTERACTIVE ELEMENTS */}
       <LiveIncentive />
       <AdminVisitorCounter />
-     
 
+      {/* SEO: Hidden semantic section for search engines */}
+      <section className="sr-only" aria-hidden="true">
+        <h2>Jawai Leopard Safaris, Luxury Stays & Rajasthan Wildlife Tourism</h2>
+        <p>
+          Experience the thrill of authentic Jawai leopard safaris guided by local experts, and unwind in handpicked luxury resorts nestled in the heart of Rajasthan. Discover the unique biodiversity and mesmerizing landscapes of Jawai, where wildlife roams freely and every safari promises an unforgettable adventure. Our platform connects you with verified hotels and heritage stays, ensuring both comfort and safety. Trust Jawai Unfiltered for secure bookings, expert travel advice, and a seamless journey into Rajasthan’s wild beauty. Book your next wildlife escape with confidence and explore the best of Jawai’s safaris and luxury hospitality.
+        </p>
+        <p>
+          Looking for the best leopard safari in Jawai? We offer easy Jawai Bandh safari booking, transparent Jawai safari price per person, and exclusive access to luxury wildlife resorts in Rajasthan. Choose from private jeep safari Jawai experiences or stay at the finest luxury hotels near Jawai Bandh for an unforgettable adventure in the heart of Rajasthan’s wilderness.
+        </p>
+      </section>
     </main>
   );
 }

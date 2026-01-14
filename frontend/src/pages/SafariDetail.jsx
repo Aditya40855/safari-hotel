@@ -6,6 +6,7 @@ import ReviewSection from "../components/ReviewSection"; // Import Reviews
 import { API_BASE } from '../lib/api';
 import { useAuth } from "../context/AuthContext";
 import Price from "../components/Price";
+import { Helmet } from "react-helmet-async";
 
 
 export default function SafariDetail() {
@@ -58,8 +59,77 @@ export default function SafariDetail() {
     mainImg = `${ASSET_BASE}${mainImg}`;
   }
 
+  // --- SEO HELPER CONSTANTS ---
+  const seoTitle = `${safari.name || safari.title} Safari in Jawai | Jawai Unfiltered`;
+  const safeDescription = safari.description ? safari.description.replace(/(<([^>]+)>)/gi, "").trim() : "";
+  const seoDescription = safeDescription.length > 155 ? safeDescription.slice(0, 152) + "..." : (safeDescription || "Experience the best safari tours in Jawai with Jawai Unfiltered.");
+  const canonicalUrl = window.location.origin + window.location.pathname;
+  const imageUrl = mainImg.startsWith("http") ? mainImg : window.location.origin + mainImg;
+
+  const jsonLdTouristAttraction = {
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    "name": safari.name || safari.title,
+    "description": safeDescription || "Experience the best safari tours in Jawai with Jawai Unfiltered.",
+    "image": [imageUrl],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Jawai",
+      "addressRegion": "Rajasthan",
+      "addressCountry": "India"
+    },
+    "provider": {
+      "@type": "Organization",
+      "name": "Jawai Unfiltered"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": finalPrice.toString(),
+      "priceCurrency": "INR",
+      "availability": "https://schema.org/InStock"
+    }
+  };
+
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": window.location.origin + "/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Safaris",
+        "item": window.location.origin + "/safaris"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": safari.name || safari.title,
+        "item": canonicalUrl
+      }
+    ]
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6 grid md:grid-cols-2 gap-8 py-12">
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <script type="application/ld+json">{JSON.stringify(jsonLdTouristAttraction)}</script>
+        <script type="application/ld+json">{JSON.stringify(jsonLdBreadcrumb)}</script>
+      </Helmet>
       
       {/* LEFT COLUMN: Image & Info */}
       <div>
@@ -123,6 +193,27 @@ export default function SafariDetail() {
          <ReviewSection type="safari" itemId={safari.id} />
       </div>
       {/* --------------------------------------------- */}
+
+      {/* FAQ Section */}
+      <section className="col-span-1 md:col-span-2 mt-8 pt-8 border-t" aria-labelledby="faq-heading">
+        <h2 id="faq-heading" className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
+        <details className="mb-3">
+          <summary className="cursor-pointer font-medium">What is the typical duration of the safari?</summary>
+          <p className="mt-2 text-gray-700">The safari duration varies but typically lasts between 3 to 6 hours depending on the package selected.</p>
+        </details>
+        <details className="mb-3">
+          <summary className="cursor-pointer font-medium">How do I book a safari?</summary>
+          <p className="mt-2 text-gray-700">You can book your safari seat using the booking widget on this page. Select your preferred date and complete the booking form.</p>
+        </details>
+        <details className="mb-3">
+          <summary className="cursor-pointer font-medium">When is the best time to visit Jawai for a safari?</summary>
+          <p className="mt-2 text-gray-700">The best time to visit Jawai for a safari is from October to March when the weather is pleasant and wildlife sightings are more frequent.</p>
+        </details>
+        <details className="mb-3">
+          <summary className="cursor-pointer font-medium">How will I receive confirmation of my booking?</summary>
+          <p className="mt-2 text-gray-700">After booking, you will receive a confirmation email with your safari details and contact information for the agent.</p>
+        </details>
+      </section>
       
     </div>
   );
