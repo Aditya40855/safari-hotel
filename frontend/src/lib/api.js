@@ -315,7 +315,8 @@ export async function uploadImage(file) {
   formData.append("photo", file);
 
   const token = getAuthToken();
-  const res = await fetch(`${API_BASE.replace('/api', '')}/upload`, {
+  // FIXED: Removed the .replace('/api', '') to use the standard API_BASE
+  const res = await fetch(`${API_BASE}/upload`, { 
     method: "POST",
     headers: token ? { Authorization: `Bearer ${token}` } : {},
     body: formData,
@@ -327,5 +328,6 @@ export async function uploadImage(file) {
   }
 
   const data = await res.json();
-  return `${ASSET_BASE}/${data.filename}`;
+  // This will return something like "/uploads/opt-123.webp"
+  return data.url; 
 }
