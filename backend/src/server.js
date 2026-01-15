@@ -2,6 +2,7 @@ require('dotenv').config();
 process.env.UNDICI_NO_WASM = '1'; // Memory optimization for shared hosting
 //Aditya Singh Ranawat
 const express = require("express");
+const sitemapRoute = require('./routes/sitemap');
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
