@@ -60,6 +60,20 @@ export default function Header() {
                   </NavLink>
                 </li>
                 <li>
+                  <NavLink
+                    to="/jawai-guide"
+                    title="Complete Jawai Travel Guide"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-orange-600 transition"
+                        : "hover:text-orange-600 transition"
+                    }
+                    aria-current={({ isActive }) => (isActive ? "page" : undefined)}
+                  >
+                    Jawai Guide
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink to="/hotels" title="Hotels" className={({ isActive }) => isActive ? "text-orange-600 transition" : "hover:text-orange-600 transition"} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>
                     Hotels
                   </NavLink>
@@ -171,6 +185,15 @@ export default function Header() {
             <ul>
               <li><Link to="/" title="Home" className="text-lg font-medium text-gray-800">Home</Link></li>
               <li><Link to="/safaris" title="Safaris" className="text-lg font-medium text-gray-800">Safaris</Link></li>
+              <li>
+                <Link
+                  to="/jawai-guide"
+                  title="Explore Jawai Travel Guide"
+                  className="text-lg font-medium text-gray-800"
+                >
+                  Jawai Guide
+                </Link>
+              </li>
               <li><Link to="/hotels" title="Hotels" className="text-lg font-medium text-gray-800">Hotels</Link></li>
               
               {token && (

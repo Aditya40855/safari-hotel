@@ -258,7 +258,7 @@ export default function Safaris() {
       <section aria-hidden="true" className="sr-only">
         <h2>Safari Adventures Keywords</h2>
         <p>
-          Safari, wildlife tours, guided safaris, African safaris, nature exploration, adventure travel, eco-tourism, safari booking, wild tours, safari destinations, safari packages, safari holidays, safari experiences, safari vacations, safari tours, safari wildlife, safari lodges, safari guides, safari trips, safari expeditions.
+          Safari, wildlife tours, guided safaris, nature exploration, adventure travel, eco-tourism, safari booking, wild tours, safari destinations, safari packages, safari holidays, safari experiences, safari vacations, safari tours, safari wildlife, safari lodges, safari guides, safari trips, safari expeditions.
         </p>
       </section>
 

@@ -19,6 +19,15 @@ const HotelDetail = lazy(() => import("./pages/HotelDetail"));
 const Safaris = lazy(() => import("./pages/Safaris"));
 const SafariDetail = lazy(() => import("./pages/SafariDetail"));
 
+const JawaiGuideIndex = lazy(() => import("./pages/jawai-guide/JawaiGuideIndex"));
+const LeopardSafariGuide = lazy(() => import("./pages/jawai-guide/LeopardSafariGuide"));
+const BestTimeToVisitJawai = lazy(() =>
+  import("./pages/jawai-guide/BestTimeToVisitJawai")
+);
+const SafariBudget = lazy(() => import("./pages/jawai-guide/safaribudget"));
+const JawaiVsOtherSafaris = lazy(() => import("./pages/jawai-guide/JawaiVsOtherSafaris"));
+
+
 // 3. NON-CRITICAL: User Utilities
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -43,6 +52,23 @@ export default function App() {
             {/* Home and SEO pages load instantly */}
             <Route path="/" element={<Home />} />
             <Route path="/faq" element={<FAQPage />} />
+            <Route path="/jawai-guide" element={<JawaiGuideIndex />} />
+            <Route
+  path="/jawai-guide/leopard-safari-guide"
+  element={<LeopardSafariGuide />}
+/>
+<Route
+  path="/jawai-guide/best-time-to-visit"
+  element={<BestTimeToVisitJawai />}
+/>
+<Route
+  path="/jawai-guide/safari-pricing-guide"
+  element={<SafariBudget />}
+/>
+<Route
+  path="/jawai-guide/jawai-vs-other-safaris"
+  element={<JawaiVsOtherSafaris />}
+/>
             
             {/* Lazy-loaded routes */}
             <Route path="/login" element={<Login />} />
