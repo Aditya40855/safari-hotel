@@ -50,10 +50,79 @@ export default function Footer() {
         <nav className="hidden md:block" aria-label="Explore site navigation">
           <h2 className="text-white font-bold text-lg mb-6">Explore</h2>
           <ul className="space-y-4 text-sm">
-            <li><Link to="/" className="hover:text-orange-500 transition-colors" aria-label="Go to Home page">Home</Link></li>
-            <li><Link to="/safaris" className="hover:text-orange-500 transition-colors" aria-label="Explore Jeep Safaris">Jeep Safaris</Link></li>
-            <li><Link to="/hotels" className="hover:text-orange-500 transition-colors" aria-label="View Luxury Stays">Luxury Stays</Link></li>
-            <li><Link to="/bookings" className="hover:text-orange-500 transition-colors" aria-label="View My Bookings">My Bookings</Link></li>
+            <li>
+              <Link to="/" className="hover:text-orange-500 transition-colors" aria-label="Go to Home page">Home</Link>
+            </li>
+            <li>
+              <Link to="/safaris" className="hover:text-orange-500 transition-colors" aria-label="Explore Jeep Safaris">Jeep Safaris</Link>
+            </li>
+            <li>
+              <Link
+                to="/jawai-guide"
+                className="hover:text-orange-500 transition-colors"
+                aria-label="Read Jawai Travel and Safari Guide"
+              >
+                Jawai Guide
+              </Link>
+            </li>
+            <li>
+              <Link to="/hotels" className="hover:text-orange-500 transition-colors" aria-label="View Luxury Stays">Luxury Stays</Link>
+            </li>
+            <li>
+              <Link to="/bookings" className="hover:text-orange-500 transition-colors" aria-label="View My Bookings">My Bookings</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* 2b. JAWAI GUIDES LINKS */}
+        <nav className="hidden md:block" aria-label="Jawai guides navigation">
+          <h2 className="text-white font-bold text-lg mb-6">Jawai Guides</h2>
+          <ul className="space-y-4 text-sm">
+            <li>
+              <Link
+                to="/jawai-guide"
+                className="hover:text-orange-500 transition-colors"
+                aria-label="Read Jawai Travel Guide"
+              >
+                Jawai Travel Guide
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/jawai-guide/leopard-safari-guide"
+                className="hover:text-orange-500 transition-colors"
+                aria-label="Read Leopard Safari Guide"
+              >
+                Leopard Safari Guide
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/jawai-guide/best-time-to-visit-jawai"
+                className="hover:text-orange-500 transition-colors"
+                aria-label="Read Best Time to Visit Jawai"
+              >
+                Best Time to Visit Jawai
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/jawai-guide/jawai-safari-budget"
+                className="hover:text-orange-500 transition-colors"
+                aria-label="Read Jawai Safari Cost and Budget"
+              >
+                Jawai Safari Cost &amp; Budget
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/jawai-guide/jawai-vs-other-safaris"
+                className="hover:text-orange-500 transition-colors"
+                aria-label="Read Jawai vs Other Safaris"
+              >
+                Jawai vs Other Safaris
+              </Link>
+            </li>
           </ul>
         </nav>
 
