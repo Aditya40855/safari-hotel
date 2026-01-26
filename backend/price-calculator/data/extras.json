@@ -1,0 +1,17 @@
+[
+    {
+      "id": "pickup",
+      "label": "Pickup & Drop",
+      "price": 1500
+    },
+    {
+      "id": "village",
+      "label": "Village & Temple Visit",
+      "price": 1000
+    },
+    {
+      "id": "photography",
+      "label": "Photography Assistance",
+      "price": 2000
+    }
+  ]

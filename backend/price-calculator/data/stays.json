@@ -1,0 +1,26 @@
+[
+    {
+      "id": "eco",
+      "label": "Eco Heritage Stay",
+      "basePrice": 9000,
+      "tier": "budget",
+      "capacity": 2,
+      "features": ["basic room", "nature view"]
+    },
+    {
+      "id": "heritage",
+      "label": "Heritage Stay",
+      "basePrice": 14000,
+      "tier": "comfort",
+      "capacity": 2,
+      "features": ["heritage property", "traditional meals"]
+    },
+    {
+      "id": "luxury",
+      "label": "Luxury Safari Lodge",
+      "basePrice": 22000,
+      "tier": "luxury",
+      "capacity": 2,
+      "features": ["luxury room", "private sit‑out", "premium meals"]
+    }
+  ]

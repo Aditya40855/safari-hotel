@@ -419,6 +419,7 @@ export default function Home() {
         </div>
       </section>
 
+
       <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16">
         <div className="flex justify-between items-end mb-6">
           <div>
@@ -454,6 +455,68 @@ export default function Home() {
           ) : (
              hotels.map(h => <StableCard key={h.id} item={h} type="hotel" />)
           )}
+        </div>
+      </section>
+
+      {/* Jawai Safari Calculator Entry */}
+      <section
+        className="max-w-5xl mx-auto px-4 md:px-6 mb-20 relative"
+        aria-labelledby="jawai-safari-calculator-heading"
+        itemScope
+        itemType="https://schema.org/Service"
+      >
+        <meta itemProp="serviceType" content="Jawai Safari Cost Calculator" />
+        <meta itemProp="areaServed" content="Jawai, Rajasthan, India" />
+
+        <div className="rounded-3xl bg-gradient-to-br from-white via-white to-orange-50 border border-gray-200 shadow-xl p-6 md:p-10 text-center">
+
+          <span className="inline-block mb-3 text-xs font-black uppercase tracking-widest text-orange-600">
+            Safari Planner
+          </span>
+
+          <h2
+            id="jawai-safari-calculator-heading"
+            className="text-2xl md:text-3xl font-black text-gray-900 mb-3 leading-tight"
+          >
+            Calculate Your <span className="text-orange-600">Jawai Safari Cost</span>
+          </h2>
+
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto mb-10">
+            Instantly estimate your Jawai leopard safari budget based on stay type,
+            safari experience, number of guests, and comfort preferences — curated
+            by local Jawai experts.
+          </p>
+
+          {/* Primary CTA */}
+          <div className="flex justify-center mb-6">
+            <Link
+              to="/price-calculator"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-black px-10 py-4 text-base shadow-lg shadow-orange-500/30 active:scale-95 transition-all"
+              aria-label="Calculate Jawai Safari Price"
+            >
+              🧮 Calculate Jawai Safari
+              <ArrowRight size={18} />
+            </Link>
+          </div>
+
+          {/* Trust Signals */}
+          <ul
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold text-gray-600"
+            aria-label="Trust signals"
+          >
+            <li className="flex items-center gap-1">
+              ⭐ Trusted by <strong>1,200+</strong> Jawai travelers
+            </li>
+            <li className="hidden sm:block text-gray-300">•</li>
+            <li className="flex items-center gap-1">
+              📍 Local experts based in Jawai
+            </li>
+            <li className="hidden sm:block text-gray-300">•</li>
+            <li className="flex items-center gap-1">
+              🚫 No third‑party resellers
+            </li>
+          </ul>
+
         </div>
       </section>
 
@@ -507,6 +570,7 @@ export default function Home() {
       </div>
     </div>
   </div>
+
 </section>
 
       {/* RENDER NEW INTERACTIVE ELEMENTS */}

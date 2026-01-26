@@ -1,0 +1,20 @@
+[
+    {
+      "id": "morning",
+      "label": "Morning Leopard Safari",
+      "price": 5000,
+      "type": "shared"
+    },
+    {
+      "id": "evening",
+      "label": "Evening Leopard Safari",
+      "price": 6500,
+      "type": "shared"
+    },
+    {
+      "id": "private",
+      "label": "Private Jeep Safari",
+      "price": 12000,
+      "type": "private"
+    }
+  ]

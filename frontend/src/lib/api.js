@@ -167,6 +167,26 @@ export async function getSafarisByCity(slug, opts = {}) {
 export async function getSafariById(id, opts = {}) {
   return fetchJson(`/safaris/${encodeURIComponent(id)}`, { method: "GET", ...opts });
 }
+// ==========================================
+// 5.x PRICE CALCULATOR
+// ==========================================
+
+export async function calculatePrice(payload, opts = {}) {
+  return fetchJson("/price-calculator/calculate", {
+    method: "POST",
+    body: JSON.stringify(payload),
+    ...opts,
+  });
+}
+
+// CREATE BOOKING REQUEST (PRICE CALCULATOR → ADMIN)
+export async function createBookingRequest(payload, opts = {}) {
+  return fetchJson("/booking-requests", {
+    method: "POST",
+    body: JSON.stringify(payload),
+    ...opts,
+  });
+}
 
 // Hotels
 // Hotels (FINAL – keep this)
@@ -258,9 +278,29 @@ export async function signup(data) {
   });
 }
 
+
 // ==========================================
 // 7. ADMIN
 // ==========================================
+
+// ADMIN – BOOKING REQUESTS (PRICE CALCULATOR)
+export async function adminGetBookingRequests(opts = {}) {
+  return getList("/admin/booking-requests", opts);
+}
+
+export async function adminGetBookingRequestById(id, opts = {}) {
+  return fetchJson(`/admin/booking-requests/${encodeURIComponent(id)}`, {
+    method: "GET",
+    ...opts,
+  });
+}
+
+export async function adminUpdateBookingRequestStatus(id, status) {
+  return fetchJson(`/admin/booking-requests/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+}
 
 export async function adminCreateHotel(payload) {
   return fetchJson("/admin/hotels", {

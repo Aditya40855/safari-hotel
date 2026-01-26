@@ -26,6 +26,7 @@ const BestTimeToVisitJawai = lazy(() =>
 );
 const SafariBudget = lazy(() => import("./pages/jawai-guide/safaribudget"));
 const JawaiVsOtherSafaris = lazy(() => import("./pages/jawai-guide/JawaiVsOtherSafaris"));
+const PriceCalculator = lazy(() => import("./pages/PriceCal/PriceCalculator"));
 
 
 // 3. NON-CRITICAL: User Utilities
@@ -39,6 +40,7 @@ const AdminBookings = lazy(() => import("./pages/admin/AdminBooking"));
 const AdminAddHotel = lazy(() => import("./pages/admin/AdminAddHotel"));
 const AdminAddSafari = lazy(() => import("./pages/admin/AdminAddSafari"));
 const AdminInventory = lazy(() => import("./pages/admin/AdminInventory"));
+const AdminBookingRequests = lazy(() => import("./pages/admin/AdminBookingRequests") )
 
 export default function App() {
   return (
@@ -80,12 +82,17 @@ export default function App() {
             <Route path="/safaris/:id" element={<SafariDetail />} />
             <Route path="/legal" element={<LegalPages />} />
             <Route path="/celebrate" element={<Celebrations />} />
+            <Route path="/price-calculator" element={<PriceCalculator />} />
             {/* Protected routes */}
             <Route path="/bookings" element={<RequireAuth><Dashboard /></RequireAuth>} />
             <Route path="/admin/bookings" element={<RequireAuth><AdminBookings /></RequireAuth>} />
             <Route path="/admin/inventory" element={<RequireAuth><AdminInventory /></RequireAuth>} />
             <Route path="/admin/hotels/new" element={<RequireAuth><AdminAddHotel /></RequireAuth>} />
             <Route path="/admin/safaris/new" element={<RequireAuth><AdminAddSafari /></RequireAuth>} />
+            <Route
+  path="/admin/booking-requests"
+  element={<RequireAuth><AdminBookingRequests /></RequireAuth>}
+/>
           </Routes>
         </Suspense>
       </main>
