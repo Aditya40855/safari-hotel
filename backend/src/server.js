@@ -44,7 +44,9 @@ app.options('*', (req, res) => {
 });
 
 app.options('*', cors());
+
 app.use(express.json());
+
 
 app.use(require('./routes/sitemap'));
 
@@ -152,6 +154,48 @@ async function ensureSchema() {
         )
       `);
       console.log("✅ Created 'reviews' table.");
+    }
+
+    // --- BOOKING REQUESTS TABLE ---
+    const [bookingReqCheck] = await db.pool.execute(`SHOW TABLES LIKE 'booking_requests'`);
+    if (bookingReqCheck.length === 0) {
+      console.log("⚠️ Table 'booking_requests' missing. Creating it...");
+      await db.query(`
+        CREATE TABLE booking_requests (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT NULL,
+          source VARCHAR(50) DEFAULT 'price_calculator',
+          guest JSON NULL,
+          calculator JSON NOT NULL,
+          pricing JSON NOT NULL,
+          status VARCHAR(50) DEFAULT 'new',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      console.log("✅ Created 'booking_requests' table.");
+    }
+
+    // --- Ensure booking_requests flat admin columns exist ---
+    const bookingRequestsCols = [
+      { name: "guest_name", type: "TEXT" },
+      { name: "guest_phone", type: "TEXT" },
+      { name: "guest_email", type: "TEXT" },
+      { name: "stay_name", type: "TEXT" },
+      { name: "safari_name", type: "TEXT" },
+      { name: "budget_amount", type: "INT" },
+      { name: "estimated_total", type: "INT" },
+      { name: "confidence_score", type: "INT" }
+    ];
+    for (const col of bookingRequestsCols) {
+      const res = await db.query(`
+        SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME='booking_requests' AND COLUMN_NAME=? AND TABLE_SCHEMA=DATABASE()
+      `, [col.name]);
+      if (res.rows.length === 0) {
+        console.log(`⚠️ Missing column '${col.name}' in booking_requests. Adding it...`);
+        await db.query(`ALTER TABLE booking_requests ADD COLUMN ${col.name} ${col.type}`);
+        console.log(`✅ Added '${col.name}' to booking_requests.`);
+      }
     }
 
     console.log("✅ Database Schema check complete.");
@@ -354,6 +398,170 @@ app.get("/api/safaris/:identifier", async (req, res) => {
 // ==========================================
 // CACHE INVALIDATION HELPERS (IMPORTANT)
 // ==========================================
+
+// --- PRICE CALCULATOR API ---
+const priceCalculatorRouter = require('../price-calculator/priceCalculator.route.js');
+app.use('/api/price-calculator', priceCalculatorRouter);
+
+// --- DATA for backend-authoritative stay/safari name resolution ---
+const staysData = require('../price-calculator/data/stays.json');
+const safarisData = require('../price-calculator/data/safaris.json');
+
+// --- BOOKING REQUESTS ROUTES ---
+const { promisify } = require('util');
+
+// POST /api/booking-requests
+app.post('/api/booking-requests', async (req, res) => {
+  try {
+    let userId = null;
+    const authHeader = req.headers['authorization'];
+    let token = null;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+    }
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        userId = decoded.id;
+      } catch (e) {
+        // Ignore invalid token, treat as guest
+      }
+    }
+    const { guest, calculator, pricing } = req.body;
+    if (!calculator || !pricing) {
+      return res.status(400).json({ error: "Missing required fields: calculator and pricing" });
+    }
+    // --- Extract flat admin fields from JSON payload (authoritative) ---
+    const guestName = guest?.name || null;
+    const guestPhone = guest?.phone || null;
+    const guestEmail = guest?.email || null;
+
+    // IDs from calculator (frontend sends IDs only)
+    const stayId = calculator?.stayId ?? null;
+    const safariId = calculator?.safariId ?? null;
+
+    // Resolve canonical names from backend data
+    const stayObj = stayId ? staysData.find(s => String(s.id) === String(stayId)) : null;
+    const safariObj = safariId ? safarisData.find(s => String(s.id) === String(safariId)) : null;
+
+    const stayName = stayObj ? (stayObj.label || stayObj.name) : null;
+    const safariName = safariObj ? (safariObj.label || safariObj.name) : null;
+
+    // ===== AUTHORITATIVE EXTRACTION FROM PRICING JSON =====
+    // User-selected budget (what user selected in calculator)
+    const budgetAmount =
+      typeof pricing?.selected?.budget === 'number'
+        ? pricing.selected.budget
+        : null;
+
+    // Final calculated total (backend truth)
+    const estimatedTotal =
+      typeof pricing?.bookingMeta?.total === 'number'
+        ? pricing.bookingMeta.total
+        : null;
+
+    // Confidence score (0–100)
+    const confidenceScore =
+      typeof pricing?.bookingMeta?.confidenceScore === 'number'
+        ? pricing.bookingMeta.confidenceScore
+        : null;
+    // --- END extraction ---
+    const [result] = await db.pool.execute(
+      `INSERT INTO booking_requests (
+        user_id,
+        guest,
+        calculator,
+        pricing,
+        guest_name,
+        guest_phone,
+        guest_email,
+        stay_name,
+        safari_name,
+        budget_amount,
+        estimated_total,
+        confidence_score
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        userId,
+        guest ? JSON.stringify(guest) : null,
+        JSON.stringify(calculator),
+        JSON.stringify(pricing),
+        guestName,
+        guestPhone,
+        guestEmail,
+        stayName,
+        safariName,
+        budgetAmount,
+        estimatedTotal,
+        confidenceScore
+      ]
+    );
+    res.json({ success: true, id: result.insertId });
+  } catch (err) {
+    console.error("❌ Booking request failed:", err);
+    res.status(500).json({ error: "Failed to save booking request" });
+  }
+});
+
+// GET /api/admin/booking-requests
+app.get('/api/admin/booking-requests', requireAdmin, async (req, res) => {
+  try {
+    const [rows] = await db.pool.execute(
+          `SELECT * FROM booking_requests ORDER BY created_at DESC`
+        );
+
+        const mapped = rows.map((r) => {
+          let calculator = {};
+          let pricing = {};
+
+          try {
+            calculator = r.calculator ? JSON.parse(r.calculator) : {};
+          } catch (e) {}
+
+          try {
+            pricing = r.pricing ? JSON.parse(r.pricing) : {};
+          } catch (e) {}
+
+          return {
+            id: r.id,
+            status: r.status,
+            created_at: r.created_at,
+
+            guest_name: r.guest_name,
+            guest_phone: r.guest_phone,
+            guest_email: r.guest_email,
+
+            calculator_snapshot: {
+              budget: r.budget_amount ?? calculator.budget ?? null,
+              guestsSummary: calculator.guests ?? null,
+              selected: {
+                stay: r.stay_name ? { name: r.stay_name } : null,
+                safari: r.safari_name ? { name: r.safari_name } : null,
+                extras: calculator.extras ?? []
+              },
+              result: {
+                estimatedTotal:
+                  r.estimated_total ??
+                  pricing.total ??
+                  null,
+                confidenceScore:
+                  r.confidence_score ??
+                  pricing.confidenceScore ??
+                  null,
+                savingsText: pricing.savingsText ?? null,
+                priceNarrative: pricing.priceNarrative ?? null
+              }
+            }
+          };
+        });
+
+        res.json(mapped);
+  } catch (err) {
+    console.error("❌ Fetch booking requests failed:", err);
+    res.status(500).json({ error: "Failed to fetch booking requests" });
+  }
+});
 
 function clearHotelCache() {
   myCache.keys().forEach((k) => {

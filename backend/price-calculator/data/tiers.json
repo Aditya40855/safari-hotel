@@ -1,0 +1,14 @@
+{
+    "budget": {
+      "max": 20000,
+      "label": "Budget Explorer"
+    },
+    "comfort": {
+      "max": 35000,
+      "label": "Comfort Experience"
+    },
+    "luxury": {
+      "max": 60000,
+      "label": "Luxury Jawai Escape"
+    }
+  }
