@@ -127,16 +127,19 @@ export default function PriceCalculator() {
   return (
     <div className="min-h-screen bg-[#f7f7f7] flex flex-col">
       <Helmet>
-        <title>Jawai Safari Price Calculator | Leopard Safari Cost & Budget Planner</title>
+        {/* Primary SEO */}
+        <title>
+          Jawai Safari Price Calculator | Leopard Safari Cost & Budget Planner
+        </title>
 
         <meta
           name="description"
-          content="Estimate Jawai leopard safari cost instantly. Compare safari types, heritage stays, guest count, extras, and budget comfort to plan your perfect Jawai safari."
+          content="Use our Jawai Safari Price Calculator to instantly estimate leopard safari cost based on stay type, safari experience, number of guests, and budget comfort. Trusted Jawai experts."
         />
 
         <meta
-          name="keywords"
-          content="Jawai safari cost, leopard safari Jawai, Jawai safari price calculator, Jawai leopard safari budget, Jawai safari stays"
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
         />
 
         <link
@@ -144,12 +147,63 @@ export default function PriceCalculator() {
           href="https://www.jawaiunfiltered.com/price-calculator"
         />
 
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
         <meta property="og:title" content="Jawai Safari Price Calculator" />
         <meta
           property="og:description"
-          content="Plan your Jawai leopard safari with an intelligent price calculator for stays, safaris, guests, and budget comfort."
+          content="Instantly calculate Jawai leopard safari cost with our intelligent budget planner."
         />
-        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.jawaiunfiltered.com/price-calculator"
+        />
+
+        {/* Breadcrumb Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.jawaiunfiltered.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Jawai Safari Planner",
+                "item": "https://www.jawaiunfiltered.com/jawai-safari"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Price Calculator",
+                "item": "https://www.jawaiunfiltered.com/price-calculator"
+              }
+            ]
+          })}
+        </script>
+
+        {/* Software Application Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Jawai Safari Price Calculator",
+            "applicationCategory": "TravelApplication",
+            "operatingSystem": "Web",
+            "description":
+              "An interactive tool to calculate Jawai leopard safari prices based on stays, safari type, guests, and budget preferences.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "INR"
+            }
+          })}
+        </script>
       </Helmet>
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200">
         <div className="max-w-xl mx-auto px-4 py-2 flex items-center gap-2">
@@ -162,10 +216,20 @@ export default function PriceCalculator() {
             ←
           </button>
           <h1 className="text-sm font-medium text-slate-900">
-            Jawai Safari Price Calculator & Budget Planner
+            Jawai Safari Price Calculator
           </h1>
         </div>
       </header>
+
+      <section className="sr-only">
+        <h2>Estimate Jawai Leopard Safari Cost</h2>
+        <p>
+          This Jawai Safari Price Calculator helps travelers estimate leopard safari
+          costs based on accommodation type, safari experience, number of guests,
+          optional extras, and budget comfort level. It provides transparent pricing
+          guidance before booking a Jawai safari.
+        </p>
+      </section>
 
       <p className="sr-only">
         This Jawai safari price calculator helps travelers estimate leopard safari

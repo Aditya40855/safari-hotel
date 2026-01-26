@@ -88,6 +88,46 @@ const faqData = [
   },
   // --- NEW FAQ ITEMS ---
   {
+    question: "What is the Jawai Safari Price Calculator?",
+    answer: "The Jawai Safari Price Calculator is an interactive tool that helps you estimate the total cost of your safari and stay based on selected options like hotel type, safari slots, number of guests, and add-on experiences."
+  },
+  {
+    question: "Is the Jawai budget calculator free to use?",
+    answer: "Yes, the Jawai budget calculator is completely free. You can experiment with different combinations of stays and safaris without any obligation to book."
+  },
+  {
+    question: "Can I calculate Jawai safari costs for families and groups?",
+    answer: "Absolutely. The calculator allows you to add adults and children separately and instantly adjusts the estimated cost for families and group travelers."
+  },
+  {
+    question: "Are children charged for Jawai safaris?",
+    answer: "Children below the specified age limit are often free or discounted on safaris. The calculator automatically applies child-friendly pricing rules while estimating your budget."
+  },
+  {
+    question: "Does the calculator include hotel stay prices?",
+    answer: "Yes, the calculator includes estimated prices for eco stays, heritage resorts, and luxury accommodations in Jawai based on your selection."
+  },
+  {
+    question: "Can I compare different Jawai safari packages using the calculator?",
+    answer: "Yes, you can easily compare different safari combinations, hotel tiers, and experiences to find the best value for your budget."
+  },
+  {
+    question: "Are the prices shown in the calculator final?",
+    answer: "The prices shown are estimates based on current rates. Final pricing may vary slightly depending on availability, season, and special offers confirmed by our team."
+  },
+  {
+    question: "Does the Jawai calculator show budget-friendly options?",
+    answer: "Yes, the calculator intelligently highlights budget-friendly combinations and suggests optimized plans to keep your safari experience within your preferred budget."
+  },
+  {
+    question: "Can I request a custom Jawai safari plan after using the calculator?",
+    answer: "Yes, after viewing your estimated budget, you can request a personalized plan where our local experts refine the experience to match your preferences and budget."
+  },
+  {
+    question: "Why should I trust the Jawai Safari Price Calculator?",
+    answer: "The calculator is built using real pricing rules, local expertise, and transparent logic. There are no hidden charges, and all estimates are designed to reflect realistic safari costs."
+  },
+  {
     question: "What is included in the pricing of a safari?",
     answer: "Our pricing typically includes the safari vehicle, guide, permits, and meals as specified in the package. Extras like tips, personal expenses, or optional activities may not be included."
   },
