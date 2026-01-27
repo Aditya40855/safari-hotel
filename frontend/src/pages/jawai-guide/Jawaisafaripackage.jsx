@@ -437,7 +437,7 @@ export default function JawaiSafariPackage() {
         <ul className="list-disc ml-6 space-y-2">
           <li><Link to="/price-calculator" className="text-orange-600">Jawai Safari Cost Calculator</Link></li>
           <li><Link to="/jawai-guide/leopard-safari-guide" className="text-orange-600">Leopard Safari Guide</Link></li>
-          <li><Link to="/jawai-guide/best-time-to-visit-jawai" className="text-orange-600">Best Time to Visit Jawai</Link></li>
+          <li><Link to="/jawai-guide/best-time-to-visit" className="text-orange-600">Best Time to Visit Jawai</Link></li>
           <li><Link to="/jawai-guide/jawai-vs-other-safaris" className="text-orange-600">Jawai vs Other Safari Destinations</Link></li>
           <li><Link to="/jawai-guide/jawai-safari-price-calculator" className="text-orange-600">Custom Safari Planning Guide</Link></li>
         </ul>

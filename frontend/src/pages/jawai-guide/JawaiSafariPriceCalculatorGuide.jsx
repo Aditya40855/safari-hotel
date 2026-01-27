@@ -170,13 +170,13 @@ export default function JawaiSafariPriceCalculatorGuide() {
               <a href="/price-calculator" className="underline hover:text-orange-800">Jawai Safari Price Calculator</a>
             </li>
             <li>
-              <a href="/jawai-guide/jawai-leopard-safari-guide" className="underline hover:text-orange-800">Jawai Leopard Safari Guide</a>
+              <a href="/jawai-guide/leopard-safari-guide" className="underline hover:text-orange-800">Jawai Leopard Safari Guide</a>
             </li>
             <li>
               <a href="/jawai-guide/jawai-vs-other-safaris" className="underline hover:text-orange-800">Jawai vs Other Safaris</a>
             </li>
             <li>
-              <a href="/jawai-guide/best-time-to-visit-jawai" className="underline hover:text-orange-800">Best Time to Visit Jawai</a>
+              <a href="/jawai-guide/best-time-to-visit" className="underline hover:text-orange-800">Best Time to Visit Jawai</a>
             </li>
             <li>
               <a href="/jawai-guide/jawai-booking-guide" className="underline hover:text-orange-800">Jawai Safari Booking Guide</a>
@@ -216,11 +216,11 @@ export default function JawaiSafariPriceCalculatorGuide() {
           </p>
           <p className="text-gray-700 leading-relaxed mb-4">
             Jawai safaris are experience-based rather than ticket-based. This means your costs reflect curated wildlife encounters, personalized guides, and unique cultural interactions rather than just access fees. For deeper insights, explore our{" "}
-            <a href="/jawai-guide/jawai-leopard-safari-guide" className="text-orange-600 underline">
+            <a href="/jawai-guide/jawai-booking-guide" className="text-orange-600 underline">
               Jawai Leopard Safari Guide
             </a>{" "}
             and learn about the{" "}
-            <a href="/jawai-guide/best-time-to-visit-jawai" className="text-orange-600 underline">
+            <a href="/jawai-guide/best-time-to-visit" className="text-orange-600 underline">
               Best Time to Visit Jawai
             </a>
             .
@@ -491,13 +491,13 @@ export default function JawaiSafariPriceCalculatorGuide() {
             Recommended Jawai Safari Resources
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <a href="/jawai-guide/jawai-leopard-safari-guide" className="block border rounded-xl p-4 bg-gray-50 hover:bg-orange-50 transition">
+            <a href="/jawai-guide/leopard-safari-guide" className="block border rounded-xl p-4 bg-gray-50 hover:bg-orange-50 transition">
               <span className="font-semibold text-orange-700">Jawai Leopard Safari Guide</span>
             </a>
             <a href="/jawai-guide/jawai-vs-other-safaris" className="block border rounded-xl p-4 bg-gray-50 hover:bg-orange-50 transition">
               <span className="font-semibold text-orange-700">Jawai vs Other Safaris</span>
             </a>
-            <a href="/jawai-guide/best-time-to-visit-jawai" className="block border rounded-xl p-4 bg-gray-50 hover:bg-orange-50 transition">
+            <a href="/jawai-guide/best-time-to-visit" className="block border rounded-xl p-4 bg-gray-50 hover:bg-orange-50 transition">
               <span className="font-semibold text-orange-700">Best Time to Visit Jawai</span>
             </a>
             <a href="/price-calculator" className="block border rounded-xl p-4 bg-gray-50 hover:bg-orange-50 transition">
@@ -573,7 +573,7 @@ export default function JawaiSafariPriceCalculatorGuide() {
           </h2>
           <ul className="list-disc pl-6 space-y-2 text-orange-600 font-semibold">
             <li>
-              <a href="/jawai-guide/jawai-leopard-safari-guide" className="underline hover:text-orange-700">
+              <a href="/jawai-guide/leopard-safari-guide" className="underline hover:text-orange-700">
                 Jawai Leopard Safari Guide
               </a>
             </li>
@@ -583,7 +583,7 @@ export default function JawaiSafariPriceCalculatorGuide() {
               </a>
             </li>
             <li>
-              <a href="/jawai-guide/best-time-to-visit-jawai" className="underline hover:text-orange-700">
+              <a href="/jawai-guide/best-time-to-visit" className="underline hover:text-orange-700">
                 Best Time to Visit Jawai
               </a>
             </li>

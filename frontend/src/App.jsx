@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import FAQPage from './pages/SEO/Header_Faq';
 import LegalPages from "./pages/LegalPages";
 import Celebrations from "./pages/Celebrations";
+import JawaiPhotography from "./pages/jawai-guide/JawaiPhotography";
 
 // 2. SEMI-CRITICAL: Lazy load but prioritized by the browser
 const Hotels = lazy(() => import("./pages/Hotels"));
@@ -30,6 +31,7 @@ const PriceCalculator = lazy(() => import("./pages/PriceCal/PriceCalculator"));
 const JawaiSafariPriceCalculatorGuide = lazy(() => import("./pages/jawai-guide/JawaiSafariPriceCalculatorGuide"));
 const JawaiSafariCostBreakdown = lazy(() => import("./pages/jawai-guide/JawaiSafariCostBreakdown"));
 const Jawaisafaripackage = lazy(() => import("./pages/jawai-guide/Jawaisafaripackage"));
+
 
 // 3. NON-CRITICAL: User Utilities
 const Login = lazy(() => import("./pages/Login"));
@@ -82,8 +84,16 @@ export default function App() {
     element={<JawaiSafariCostBreakdown />}
   />
 <Route
-  path="/jawai-guide/JawaiSafariPriceCalculatorGuide"
+  path="/jawai-guide/jawai-safari-price-calculator"
   element={<JawaiSafariPriceCalculatorGuide />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-photography-guide"
+  element={<JawaiPhotography />}
+/>
+<Route
+  path="/jawai-guide/jawai-booking-guide"
+  element={<JawaiGuideIndex />}
 />
             
             {/* Lazy-loaded routes */}
