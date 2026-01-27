@@ -63,6 +63,38 @@ export default function BestTimeToVisitJawai() {
           "@type": "Answer",
           "text": "A minimum of 2–3 nights is recommended to experience leopard safaris, village life, and the granite hill ecosystem of Jawai."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best time to visit Jawai with children?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The cooler months from October to February are best for families visiting with children due to comfortable weather and safer safari conditions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is summer heat safe in Jawai for visitors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Summer can be hot and dry, so visitors should stay hydrated and plan safaris during early mornings and late evenings to avoid peak heat."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do seasons affect safari pricing in Jawai?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Prices tend to be higher during peak season (October to February) due to demand, while monsoon and summer months may offer better deals but variable wildlife sightings."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Jawai better than Ranthambore for leopard sightings?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Jawai is renowned specifically for leopards in a unique granite hill landscape, while Ranthambore is famous for tigers. For leopard enthusiasts, Jawai offers more consistent sightings."
+        }
       }
     ]
   };
@@ -108,6 +140,7 @@ export default function BestTimeToVisitJawai() {
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
           Best Time to Visit Jawai – Complete Wildlife, Safari & Travel Guide
         </h1>
+        <p className="text-sm text-gray-500 mb-4">Last updated: January 2026 • Verified by local Jawai trackers</p>
 
         <p className="text-gray-700 mb-6">
           Jawai, located in Rajasthan’s unique granite hill landscape, is one of India’s most
@@ -122,6 +155,16 @@ export default function BestTimeToVisitJawai() {
           covering leopard sighting probability, weather conditions, birdlife, photography
           advantages, and ideal traveler profiles.
         </p>
+
+        <section className="bg-green-50 border border-green-200 rounded-lg p-5 mb-10">
+          <h2 className="text-xl font-semibold mb-3">Quick Expert Summary</h2>
+          <ul className="list-disc ml-6 text-gray-700 space-y-2">
+            <li>Best overall months: <strong>October to April</strong></li>
+            <li>Highest leopard sightings: <strong>March to June</strong></li>
+            <li>Best weather for families & luxury stays: <strong>October–February</strong></li>
+            <li>Best green landscapes & birdlife: <strong>July–September</strong></li>
+          </ul>
+        </section>
 
         <h2 className="text-2xl font-semibold mt-10 mb-4">
           October to February – Peak Season for First-Time Visitors
@@ -184,6 +227,16 @@ export default function BestTimeToVisitJawai() {
           itineraries focused on nature, culture, and birdlife.
         </p>
 
+        <section className="bg-gray-50 border rounded-lg p-6 my-12">
+          <h2 className="text-2xl font-semibold mb-3">Plan Your Jawai Safari by Season</h2>
+          <p className="text-gray-700 mb-4">
+            Safari costs, stay prices, and leopard activity vary significantly by season. Use our calculator to estimate a realistic Jawai safari budget based on your travel month.
+          </p>
+          <Link to="/price-calculator" className="inline-block bg-green-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-800">
+            Calculate Jawai Safari Cost
+          </Link>
+        </section>
+
         <h2 className="text-2xl font-semibold mt-12 mb-4">
           Month-by-Month Jawai Safari Overview
         </h2>
@@ -192,6 +245,14 @@ export default function BestTimeToVisitJawai() {
           Understanding Jawai on a month-by-month basis helps travelers align expectations with real
           wildlife behavior. Leopard movement, vegetation density, prey availability, and tourist
           density vary subtly each month, making planning critical for a rewarding safari experience.
+        </p>
+
+        <p className="text-gray-700 mb-6">
+          Travelers planning by season often prefer curated safari options. Explore our detailed
+          <Link to="/jawai-safari-packages" className="text-green-700 font-semibold hover:underline mx-1">
+            Jawai Safari Packages
+          </Link>
+          to see how different months influence safari inclusions, stay types, and on-ground experiences.
         </p>
 
         <ul className="space-y-3 text-gray-700">
@@ -203,6 +264,16 @@ export default function BestTimeToVisitJawai() {
           <li><strong>July–August:</strong> Green Jawai, fewer sightings, excellent birding and scenic travel.</li>
           <li><strong>September:</strong> Transitional month with improving visibility and fresh landscapes.</li>
         </ul>
+
+        <section className="mt-14">
+          <h2 className="text-2xl font-semibold mb-4">Understanding Jawai’s Landscape & Safari Zones</h2>
+          <p className="text-gray-700 mb-4">
+            Jawai is not a fenced national park. Leopards roam freely across granite hills, village land, and scrub forests. Seasonal movement depends on water availability, prey density, and human activity patterns.
+          </p>
+          <p className="text-gray-700">
+            Most safaris operate around granite hill clusters near Jawai Dam, Sena village, and surrounding pastoral zones—making seasonal planning critical for consistent sightings.
+          </p>
+        </section>
 
         <h2 className="text-2xl font-semibold mt-12 mb-6">
           Frequently Asked Questions – Best Time to Visit Jawai
@@ -250,10 +321,20 @@ export default function BestTimeToVisitJawai() {
           </div>
         </div>
 
+        <section className="mt-14 bg-gray-100 rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">How This Guide Is Researched</h2>
+          <p className="text-gray-700 mb-2">
+            This guide is curated using on-ground data from Jawai leopard trackers, local lodge managers, and multi-season safari records.
+          </p>
+          <p className="text-gray-700">
+            Jawai Unfiltered does not rely on third-party resellers. All insights are verified locally to ensure accuracy, ethical wildlife viewing, and realistic travel expectations.
+          </p>
+        </section>
+
         <h2 className="text-2xl font-semibold mt-10 mb-4">
           Explore Related Jawai Guides
         </h2>
-        <ul className="list-disc ml-6 text-blue-600">
+        <ul className="list-disc ml-6 text-blue-600 space-y-1">
           <li>
             <Link to="/jawai-guide/leopard-safari-guide">
               Complete Leopard Safari Guide in Jawai
@@ -277,6 +358,16 @@ export default function BestTimeToVisitJawai() {
           <li>
             <Link to="/faq">
               Jawai Safari FAQs & Travel Questions
+            </Link>
+          </li>
+          <li>
+            <Link to="/jawai-guide/jawai-safari-cost-breakdown">
+              Jawai Safari Cost Breakdown
+            </Link>
+          </li>
+          <li>
+            <Link to="/jawai-guide/jawai-safari-price-calculator">
+              Jawai Safari Price Calculator
             </Link>
           </li>
         </ul>

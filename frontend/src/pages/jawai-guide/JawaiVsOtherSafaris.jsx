@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function JawaiVsOtherSafaris() {
   return (
-    <main className="container mx-auto px-4 py-10 max-w-6xl">
+    <main className="container mx-auto px-4 py-10 max-w-6xl" role="article">
 
       {/* Breadcrumb */}
       <nav className="text-sm mb-6 text-gray-500">
@@ -12,10 +12,24 @@ export default function JawaiVsOtherSafaris() {
         <span className="text-gray-800">Jawai vs Other Safaris</span>
       </nav>
 
+      {/* Quick Expert Summary */}
+      <section id="expert-summary" className="bg-green-50 border-l-4 border-green-600 p-4 mb-10">
+        <h2 className="sr-only">Expert Summary</h2>
+        <p className="font-semibold text-gray-800 mb-2">
+          Jawai Safari is fundamentally different from traditional Indian wildlife safaris.
+        </p>
+        <ul className="list-disc pl-5 text-gray-700 space-y-1">
+          <li>Open leopard landscape (no fenced park, no fixed routes)</li>
+          <li>Community-led conservation verified by local trackers</li>
+          <li>Lower crowd pressure, higher ethical standards</li>
+          <li>Flexible safari timing and terrain-based tracking</li>
+        </ul>
+      </section>
+
       {/* Hero */}
       <header className="mb-12">
         <h1 className="text-3xl md:text-4xl font-bold mb-4">
-          Jawai Safari vs Other Wildlife Safaris in India
+          Jawai Safari vs Other Wildlife Safaris in India (Honest, Ground-Level Comparison)
         </h1>
         <p className="text-lg text-gray-700 leading-relaxed mb-4">
           Confused between Jawai, Ranthambore, Gir, Jaisalmer, or Ranakpur? This detailed comparison explains how Jawai Safari is fundamentally different from traditional forest safaris — in terrain, wildlife, experience, ethics, and exclusivity.
@@ -32,7 +46,7 @@ export default function JawaiVsOtherSafaris() {
       </header>
 
       {/* Why Comparison Matters */}
-      <section className="mb-14">
+      <section id="why-jawai-different" className="mb-14">
         <h2 className="text-2xl font-semibold mb-4">
           Why Jawai Cannot Be Compared Like a Regular Safari
         </h2>
@@ -45,7 +59,7 @@ export default function JawaiVsOtherSafaris() {
       </section>
 
       {/* Understanding Safari Models in India */}
-      <section className="mb-14">
+      <section id="safari-models-india" className="mb-14">
         <h2 className="text-2xl font-semibold mb-4">
           Understanding Safari Models in India
         </h2>
@@ -64,7 +78,7 @@ export default function JawaiVsOtherSafaris() {
       </section>
 
       {/* Comparison Table */}
-      <section className="mb-16">
+      <section id="comparison-table" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           Jawai vs Other Popular Safari Destinations
         </h2>
@@ -159,7 +173,7 @@ export default function JawaiVsOtherSafaris() {
       </section>
 
       {/* Jawai vs Ranthambore: Leopard vs Tiger Experience */}
-      <section className="mb-16">
+      <section id="jawai-vs-ranthambore" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           Jawai vs Ranthambore: Leopard vs Tiger Experience
         </h2>
@@ -178,7 +192,7 @@ export default function JawaiVsOtherSafaris() {
       </section>
 
       {/* Jawai vs Gir, Jaisalmer & Ranakpur */}
-      <section className="mb-16">
+      <section id="ethics-and-experience" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           Jawai vs Gir, Jaisalmer & Ranakpur
         </h2>
@@ -206,7 +220,7 @@ export default function JawaiVsOtherSafaris() {
       </section>
 
       {/* Unique Experiences */}
-      <section className="mb-16">
+      <section id="unique-experiences" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           What Makes Jawai Safari Truly Unique
         </h2>
@@ -234,7 +248,7 @@ export default function JawaiVsOtherSafaris() {
       </section>
 
       {/* Who Should Choose Jawai Safari? */}
-      <section className="mb-16">
+      <section id="who-should-choose" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           Who Should Choose Jawai Safari?
         </h2>
@@ -247,8 +261,41 @@ export default function JawaiVsOtherSafaris() {
         </ul>
       </section>
 
+      {/* Best Time vs Budget Comparison Box */}
+      <section id="best-time-vs-budget" className="mb-16">
+        <h2 className="text-2xl font-semibold mb-4">
+          Best Time to Visit Jawai vs Safari Budget
+        </h2>
+        <table className="w-full border text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border px-3 py-2">Season</th>
+              <th className="border px-3 py-2">Safari Experience</th>
+              <th className="border px-3 py-2">Typical Budget</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border px-3 py-2">Oct – Nov</td>
+              <td className="border px-3 py-2">Clear terrain, active leopards</td>
+              <td className="border px-3 py-2">Moderate</td>
+            </tr>
+            <tr>
+              <td className="border px-3 py-2">Dec – Feb</td>
+              <td className="border px-3 py-2">Peak sightings, pleasant weather</td>
+              <td className="border px-3 py-2">Higher</td>
+            </tr>
+            <tr>
+              <td className="border px-3 py-2">Mar – Apr</td>
+              <td className="border px-3 py-2">Heat-driven leopard visibility</td>
+              <td className="border px-3 py-2">Lower</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
       {/* FAQ */}
-      <section className="mb-16">
+      <section id="faqs" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           Jawai vs Other Safaris – FAQs
         </h2>
@@ -303,7 +350,35 @@ export default function JawaiVsOtherSafaris() {
             <strong>How does Jawai support local communities?</strong><br />
             Through community-based tourism initiatives, employment of local guides, and conservation partnerships that benefit both people and wildlife.
           </p>
+          <p>
+            <strong>Why is Jawai better for ethical safaris?</strong><br />
+            Jawai’s open landscape and community-led approach ensure minimal disturbance to wildlife. Local trackers avoid crowding or chasing animals, and safaris operate with flexible timing and strict respect for animal movement, resulting in a more ethical, less intrusive experience compared to many tiger parks.
+          </p>
+          <p>
+            <strong>Is Jawai suitable for luxury travelers?</strong><br />
+            Yes, Jawai offers a range of luxury lodges and camps that provide personalized safaris, fine dining, and exclusive experiences — all while maintaining high ethical and conservation standards.
+          </p>
+          <p>
+            <strong>How does Jawai compare for photographers versus tiger parks?</strong><br />
+            Jawai offers greater freedom of movement and fewer restrictions for photographers, plus unique light and backdrops from granite hills. While tiger parks can be crowded and have fixed routes, Jawai’s flexible safaris and open terrain allow for more creative, intimate wildlife photography opportunities.
+          </p>
         </div>
+      </section>
+
+      {/* Calculator CTA */}
+      <section id="calculator-cta" className="bg-gray-100 rounded-lg p-6 mb-16 text-center">
+        <h2 className="text-2xl font-semibold mb-3">
+          Compare Jawai Safari Cost Based on Your Travel Style
+        </h2>
+        <p className="text-gray-700 mb-4">
+          Jawai pricing varies by season, stay type, and safari style. Use our calculator for an instant, realistic estimate.
+        </p>
+        <Link
+          to="/price-calculator"
+          className="inline-block bg-green-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-800 transition"
+        >
+          Calculate Jawai Safari Cost
+        </Link>
       </section>
 
       {/* Final Verdict */}
@@ -313,6 +388,15 @@ export default function JawaiVsOtherSafaris() {
         </h2>
         <p className="text-gray-700 leading-relaxed">
           Jawai offers a safari experience unlike any other in India — blending rugged landscapes, elusive leopards, and a thriving human-wildlife coexistence model. For travelers seeking ethical, flexible, and deeply immersive wildlife adventures, Jawai’s open landscape and community-driven conservation provide a compelling alternative to traditional national parks. Whether you prioritize photography, cultural connections, or serene nature, Jawai stands apart as a destination that respects both wildlife and local heritage.
+        </p>
+      </section>
+
+      {/* Author / Local Verification Box */}
+      <section id="author-verification" className="bg-gray-50 border p-5 rounded mb-10">
+        <p className="text-sm text-gray-700">
+          <strong>Local Verification:</strong> This comparison is compiled with inputs from Jawai-based trackers,
+          lodge operators, and on-ground safari coordinators. Data reflects real safari routes,
+          terrain behavior, and ethical tracking practices observed in Jawai, Rajasthan.
         </p>
       </section>
 
@@ -329,6 +413,13 @@ export default function JawaiVsOtherSafaris() {
           <Link to="/jawai-guide/safari-pricing-guide" className="underline">
             Safari Cost & Budget
           </Link> - Understand pricing and budget options for Jawai safaris.
+          <br />
+          <Link to="/jawai-guide/jawai-safari-cost-breakdown" className="underline">
+            Jawai Safari Cost Breakdown
+          </Link> – Detailed pricing by stay, season, and safari type.<br />
+          <Link to="/jawai-guide/jawai-safari-price-calculator" className="underline">
+            Jawai Safari Price Calculator
+          </Link> – Get an instant, personalized cost estimate.
         </p>
       </footer>
 
