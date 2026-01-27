@@ -25,6 +25,11 @@
   <priority>0.9</priority>
   <changefreq>weekly</changefreq>
  </url>
+ <url>
+  <loc>https://www.jawaiunfiltered.com/jawai-guide/JawaiSafariPriceCalculatorGuide</loc>
+  <priority>0.9</priority>
+  <changefreq>monthly</changefreq>
+</url>
 
   <url>
     <loc>https://www.jawaiunfiltered.com/celebrate</loc>

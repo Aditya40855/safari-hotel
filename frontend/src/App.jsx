@@ -27,7 +27,9 @@ const BestTimeToVisitJawai = lazy(() =>
 const SafariBudget = lazy(() => import("./pages/jawai-guide/safaribudget"));
 const JawaiVsOtherSafaris = lazy(() => import("./pages/jawai-guide/JawaiVsOtherSafaris"));
 const PriceCalculator = lazy(() => import("./pages/PriceCal/PriceCalculator"));
-
+const JawaiSafariPriceCalculatorGuide = lazy(() => import("./pages/jawai-guide/JawaiSafariPriceCalculatorGuide"));
+const JawaiSafariCostBreakdown = lazy(() => import("./pages/jawai-guide/JawaiSafariCostBreakdown"));
+const Jawaisafaripackage = lazy(() => import("./pages/jawai-guide/Jawaisafaripackage"));
 
 // 3. NON-CRITICAL: User Utilities
 const Login = lazy(() => import("./pages/Login"));
@@ -70,6 +72,18 @@ export default function App() {
 <Route
   path="/jawai-guide/jawai-vs-other-safaris"
   element={<JawaiVsOtherSafaris />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-package"
+  element={<Jawaisafaripackage />}
+/>
+<Route
+    path="/jawai-guide/jawai-safari-cost-breakdown"
+    element={<JawaiSafariCostBreakdown />}
+  />
+<Route
+  path="/jawai-guide/JawaiSafariPriceCalculatorGuide"
+  element={<JawaiSafariPriceCalculatorGuide />}
 />
             
             {/* Lazy-loaded routes */}

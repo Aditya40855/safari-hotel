@@ -1,10 +1,120 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function SafariBudgetGuide() {
   return (
     <main className="container mx-auto px-4 py-10 max-w-6xl">
-      {/* SEO: Jawai safari cost, Jawai safari budget, Jawai safari price guide */}
+      <Helmet>
+        <title>Jawai Safari Cost & Budget Guide 2025 | Jawai Unfiltered</title>
+        <meta
+          name="description"
+          content="Detailed Jawai safari cost and budget guide. Compare safari prices, hotel stays, seasons, and calculate your Jawai safari budget with local experts."
+        />
+        <link
+          rel="canonical"
+          href="https://www.jawaiunfiltered.com/jawai-guide/safari-pricing-guide"
+        />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.jawaiunfiltered.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Jawai Guide",
+                "item": "https://www.jawaiunfiltered.com/jawai-guide"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Safari Cost & Budget",
+                "item": "https://www.jawaiunfiltered.com/jawai-guide/safari-pricing-guide"
+              }
+            ]
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is Jawai safari expensive?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Jawai safaris are flexible. Budget options start from ₹4,000, while premium experiences cost more due to exclusivity and expertise."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does higher cost guarantee leopard sighting?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Wildlife sightings are never guaranteed, but expert-led private safaris significantly improve probability."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the best budget for first-time visitors?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "₹6,000–8,000 per safari offers a balanced experience without compromising ethics or comfort."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the cheapest month to visit Jawai?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The monsoon months (June to September) generally offer the lowest prices but come with limited safari availability and lower sighting chances due to weather."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are weekend safaris worth the extra cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Weekend safaris are busier and costlier but can be worthwhile for those who prefer a lively atmosphere. For a calmer, more budget-friendly experience, weekdays are recommended."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can prices change last minute?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, prices can fluctuate based on demand, especially during peak seasons and weekends. Advance booking helps lock in rates."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is advance payment required?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Most operators require advance payment or a deposit to confirm your booking, ensuring your jeep and guide are reserved."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are group safaris cheaper?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Group safaris often reduce per-person costs as expenses are shared, but may limit flexibility and personalized tracking."
+                }
+              }
+            ]
+          })}
+        </script>
+      </Helmet>
+
       {/* Breadcrumb */}
       <nav className="text-sm mb-6 text-gray-500">
         <Link to="/" className="hover:underline">Home</Link> ›{" "}
@@ -17,6 +127,11 @@ export default function SafariBudgetGuide() {
         <h1 className="text-3xl md:text-4xl font-bold mb-4">
           Jawai Safari Cost & Budget Guide (2025)
         </h1>
+        <div className="flex flex-wrap gap-6 mb-6 text-gray-700 font-semibold text-sm md:text-base">
+          <div>Trusted by 1,200+ Jawai travelers</div>
+          <div>Local Jawai leopard tracking experts</div>
+          <div>No third‑party resellers</div>
+        </div>
         <p className="text-lg text-gray-700 leading-relaxed">
           Planning a Jawai leopard safari and confused about costs? This complete
           Jawai safari budget guide explains safari prices, hotel costs, and
@@ -25,8 +140,26 @@ export default function SafariBudgetGuide() {
         </p>
       </header>
 
+      {/* Sticky Table of Contents (desktop only) */}
+      <nav className="hidden md:block sticky top-20 mb-10 bg-white border border-gray-200 p-4 rounded-xl max-w-xs text-gray-700 text-sm font-medium">
+        <p className="font-semibold mb-2">On this page</p>
+        <ul className="space-y-2 list-disc pl-5">
+          <li><a href="#overview" className="hover:underline">Average Jawai Safari Cost Breakdown</a></li>
+          <li><a href="#seasonal-pricing" className="hover:underline">How Jawai Safari Prices Change by Season</a></li>
+          <li><a href="#weekday-weekend" className="hover:underline">Weekend vs Weekday Safari Pricing</a></li>
+          <li><a href="#booking-advantage" className="hover:underline">Why Advance Booking Saves Money</a></li>
+          <li><a href="#safari-types" className="hover:underline">Types of Jawai Safaris & Their Costs</a></li>
+          <li><a href="#comparison" className="hover:underline">Jawai Safari Cost Comparison</a></li>
+          <li><a href="#stay-costs" className="hover:underline">Jawai Hotel & Stay Costs</a></li>
+          <li><a href="#trip-budget" className="hover:underline">Total Jawai Trip Budget Estimate (2N/3D)</a></li>
+          <li><a href="#why-unfiltered" className="hover:underline">Why Jawai Unfiltered Offers Better Value</a></li>
+          <li><a href="#eeat" className="hover:underline">Our Experience in Jawai</a></li>
+          <li><a href="#faqs" className="hover:underline">Jawai Safari Cost FAQs</a></li>
+        </ul>
+      </nav>
+
       {/* Overview */}
-      <section className="mb-12">
+      <section id="overview" className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">
           Average Jawai Safari Cost Breakdown
         </h2>
@@ -38,13 +171,23 @@ export default function SafariBudgetGuide() {
         </ul>
       </section>
 
+      {/* New Comparison Summary Box */}
+      <section className="mb-12 bg-gray-50 p-6 rounded-xl border border-gray-200 max-w-3xl">
+        <h3 className="text-xl font-semibold mb-4">Quick Comparison Summary</h3>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li><strong>Budget Safari:</strong> Affordable shared jeeps with basic tracking, ideal for first-timers.</li>
+          <li><strong>Standard Safari:</strong> Shared or semi-private jeeps with moderate tracker expertise and flexibility.</li>
+          <li><strong>Jawai Unfiltered:</strong> Private jeeps, expert local trackers, ethical tracking, and premium experience.</li>
+        </ul>
+      </section>
+
       {/* How Jawai Safari Prices Change by Season */}
-      <section className="mb-12">
+      <section id="seasonal-pricing" className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">
           How Jawai Safari Prices Change by Season
         </h2>
         <p className="text-gray-700 mb-4">
-          The cost of a Jawai safari varies significantly with the season. During the <strong>peak season (October to March)</strong>, demand is highest due to pleasant weather and the best chances of leopard sightings. This results in premium pricing as many tourists flock to the region. For detailed timing and tips, see our <Link to="/jawai-guide/best-time-to-visit" className="underline">Best Time to Visit Jawai</Link> guide.
+          The cost of a Jawai safari varies significantly with the season. During the <strong>peak season (October to March)</strong>, demand is highest due to pleasant weather and the best chances of leopard sightings. This results in premium pricing as many tourists flock to the region. For detailed timing and tips, see our <Link to="/jawai-guide/best-time-to-visit" className="underline">best time to visit Jawai for leopard sightings</Link> guide.
         </p>
         <p className="text-gray-700 mb-4">
           The <strong>shoulder season (September and April)</strong> offers a balance between cost and experience. Prices are moderate, crowds are fewer, and the chances of spotting leopards remain good, making it a popular choice for budget travelers.
@@ -58,7 +201,7 @@ export default function SafariBudgetGuide() {
       </section>
 
       {/* Weekend vs Weekday Safari Pricing */}
-      <section className="mb-12">
+      <section id="weekday-weekend" className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">
           Weekend vs Weekday Safari Pricing
         </h2>
@@ -69,12 +212,12 @@ export default function SafariBudgetGuide() {
           On <strong>Monday through Thursday</strong>, prices are generally lower and the safari experience is calmer and more personalized. This is especially beneficial for photographers and budget-conscious travelers who want to avoid crowds.
         </p>
         <p className="text-gray-700">
-          For more information on safari types and what to expect, visit our <Link to="/jawai-guide/leopard-safari-guide" className="underline">Leopard Safari Guide</Link>.
+          For more information on safari types and what to expect, visit our <Link to="/jawai-guide/leopard-safari-guide" className="underline">compare Jawai safari prices in our Leopard Safari Guide</Link>.
         </p>
       </section>
 
       {/* Why Advance Booking Saves Money */}
-      <section className="mb-16 bg-gray-50 p-6 rounded-xl border border-gray-200">
+      <section id="booking-advantage" className="mb-16 bg-gray-50 p-6 rounded-xl border border-gray-200">
         <h2 className="text-2xl font-semibold mb-4">
           Why Advance Booking Saves Money
         </h2>
@@ -92,7 +235,7 @@ export default function SafariBudgetGuide() {
       </section>
 
       {/* Safari Types */}
-      <section className="mb-14">
+      <section id="safari-types" className="mb-14">
         <h2 className="text-2xl font-semibold mb-6">
           Types of Jawai Safaris & Their Costs
         </h2>
@@ -120,7 +263,7 @@ export default function SafariBudgetGuide() {
       </section>
 
       {/* Comparison Table */}
-      <section className="mb-16">
+      <section id="comparison" className="mb-16">
         <h2 className="text-2xl font-semibold mb-6">
           Jawai Safari Cost Comparison
         </h2>
@@ -166,7 +309,7 @@ export default function SafariBudgetGuide() {
       </section>
 
       {/* Hotel Costs */}
-      <section className="mb-14">
+      <section id="stay-costs" className="mb-14">
         <h2 className="text-2xl font-semibold mb-4">
           Jawai Hotel & Stay Costs
         </h2>
@@ -182,7 +325,7 @@ export default function SafariBudgetGuide() {
       </section>
 
       {/* Total Jawai Trip Budget Estimate (2N/3D) */}
-      <section className="mb-16">
+      <section id="trip-budget" className="mb-16">
         <h2 className="text-2xl font-semibold mb-4">
           Total Jawai Trip Budget Estimate (2N/3D)
         </h2>
@@ -202,7 +345,7 @@ export default function SafariBudgetGuide() {
       </section>
 
       {/* Why Jawai Unfiltered */}
-      <section className="mb-16 bg-gray-50 p-6 rounded-xl">
+      <section id="why-unfiltered" className="mb-16 bg-gray-50 p-6 rounded-xl">
         <h2 className="text-2xl font-semibold mb-4">
           Why Jawai Unfiltered Offers Better Value
         </h2>
@@ -213,8 +356,16 @@ export default function SafariBudgetGuide() {
         </p>
       </section>
 
+      {/* EEAT reinforcement section */}
+      <section id="eeat" className="mb-16 p-6 border border-gray-200 rounded-xl bg-white max-w-3xl">
+        <h2 className="text-2xl font-semibold mb-4">Our Experience in Jawai</h2>
+        <p className="text-gray-700 leading-relaxed">
+          With over 10 years of local operation, Jawai Unfiltered brings authentic and ethical leopard tracking to your safari experience. We prioritize real guest stories, respect for wildlife, and community-driven tourism to ensure every visitor enjoys a responsible and memorable journey.
+        </p>
+      </section>
+
       {/* FAQs */}
-      <section>
+      <section id="faqs">
         <h2 className="text-2xl font-semibold mb-6">
           Jawai Safari Cost FAQs
         </h2>
@@ -271,15 +422,15 @@ export default function SafariBudgetGuide() {
           Continue reading:
           {" "}
           <Link to="/jawai-guide/leopard-safari-guide" className="underline">
-            Leopard Safari Guide
+            compare Jawai safari prices in our Leopard Safari Guide
           </Link>
           {" · "}
           <Link to="/jawai-guide/best-time-to-visit" className="underline">
-            Best Time to Visit Jawai
+            best time to visit Jawai for leopard sightings
           </Link>
           {" · "}
           <Link to="/safaris" className="underline">
-            Explore Safaris
+            calculate Jawai safari budget with Jawai Unfiltered
           </Link>
         </p>
       </footer>
