@@ -14,6 +14,17 @@
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://www.jawaiunfiltered.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.jawaiunfiltered.com/jawai-safari-photography-guide</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
 
   <url>
     <loc>https://www.jawaiunfiltered.com/hotels</loc>
@@ -79,5 +90,28 @@
     <loc>https://www.jawaiunfiltered.com/jawai-guide/jawai-vs-other-safaris</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-cost-breakdown</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.jawaiunfiltered.com/jawai-safari-package</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-price-calculator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.jawaiunfiltered.com/jawai-guide/safari-pricing-guide</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

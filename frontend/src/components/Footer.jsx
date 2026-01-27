@@ -98,7 +98,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                to="/jawai-guide/best-time-to-visit-jawai"
+                to="/jawai-guide/best-time-to-visit"
                 className="hover:text-orange-500 transition-colors"
                 aria-label="Read Best Time to Visit Jawai"
               >

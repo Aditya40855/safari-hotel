@@ -184,7 +184,7 @@ export default function JawaiSafariCostBreakdown() {
           </h2>
           <ol className="list-decimal ml-6 space-y-2 text-gray-800">
             <li>
-              <strong>Choosing dates:</strong> Decide when to visit (see our <Link to="/jawai-guide/best-time-to-visit-jawai" className="text-orange-600 hover:underline font-medium">best time to visit Jawai</Link> guide for seasonal tips).
+              <strong>Choosing dates:</strong> Decide when to visit (see our <Link to="/jawai-guide/best-time-to-visit" className="text-orange-600 hover:underline font-medium">best time to visit Jawai</Link> guide for seasonal tips).
             </li>
             <li>
               <strong>Selecting your stay:</strong> Pick between homestays, lodges, or luxury camps based on your comfort and budget.

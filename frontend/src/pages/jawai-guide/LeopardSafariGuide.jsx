@@ -427,7 +427,7 @@ function LeopardSafariGuideContent() {
             </Link>
           </li>
           <li>
-            <Link to="/jawai-guide/best-time-for-leopard-safari" className="text-blue-600 hover:underline">
+            <Link to="/jawai-guide/best-time-to-visit" className="text-blue-600 hover:underline">
               Best Time for Leopard Safari in Jawai – Month‑by‑Month Guide
             </Link>
           </li>
@@ -448,7 +448,7 @@ function LeopardSafariGuideContent() {
             </Link>
           </li>
           <li>
-            <Link to="/jawai-guide/jawai-safari-booking-guide" className="text-blue-600 hover:underline">
+            <Link to="/jawai-guide/jawai-booking-guide" className="text-blue-600 hover:underline">
               Jawai Safari Booking Guide – Step‑by‑Step Process
             </Link>
           </li>
