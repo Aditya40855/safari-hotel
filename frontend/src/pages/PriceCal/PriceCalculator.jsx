@@ -239,23 +239,23 @@ export default function PriceCalculator() {
 
       <section className="max-w-xl mx-auto px-4 mt-2">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-          {STEP_LABELS.map((label, index) => {
+          {Array.from({ length: TOTAL_STEPS }).map((_, index) => {
             const stepNumber = index + 1;
             const isActive = step === stepNumber;
             const isCompleted = step > stepNumber;
 
             return (
               <div
-                key={label}
-                className={`flex items-center gap-1 px-3 py-1 rounded-full text-[11px] whitespace-nowrap transition-all
-                  ${isActive
+                key={stepNumber}
+                className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold transition-all
+                  ${isCompleted
+                    ? "bg-green-500 text-white"
+                    : isActive
                     ? "bg-slate-900 text-white"
-                    : isCompleted
-                    ? "bg-slate-200 text-slate-700"
-                    : "bg-slate-100 text-slate-400"}`}
+                    : "bg-slate-200 text-slate-600"}`}
+                aria-label={`Step ${stepNumber}`}
               >
-                <span className="font-medium">{label}</span>
-                {isCompleted && <span>✓</span>}
+                {isCompleted ? "✓" : stepNumber}
               </div>
             );
           })}

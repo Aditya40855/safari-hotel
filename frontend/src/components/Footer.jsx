@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <footer
-      className="bg-slate-900 text-gray-300 pt-10 md:pt-16 pb-8 font-sans border-t border-gray-800"
+      className="bg-slate-900 text-gray-300 pt-6 md:pt-8 pb-6 font-sans border-t border-gray-800"
       itemScope
       itemType="https://schema.org/LocalBusiness"
       aria-label="Footer with company information and navigation links"
     >
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-6 md:mb-8">
         
         {/* 1. BRAND & DESCRIPTION */}
         <div itemProp="parentOrganization" itemScope itemType="https://schema.org/Organization">
@@ -48,8 +48,8 @@ export default function Footer() {
 
         {/* 2. EXPLORE LINKS */}
         <nav className="hidden md:block" aria-label="Explore site navigation">
-          <h2 className="text-white font-bold text-lg mb-6">Explore</h2>
-          <ul className="space-y-4 text-sm">
+          <h2 className="text-white font-bold text-lg mb-4">Explore</h2>
+          <ul className="space-y-3 text-sm">
             <li>
               <Link to="/" className="hover:text-orange-500 transition-colors" aria-label="Go to Home page">Home</Link>
             </li>
@@ -76,8 +76,8 @@ export default function Footer() {
 
         {/* 2b. JAWAI GUIDES LINKS */}
         <nav className="hidden md:block" aria-label="Jawai guides navigation">
-          <h2 className="text-white font-bold text-lg mb-6">Jawai Guides</h2>
-          <ul className="space-y-4 text-sm">
+          <h2 className="text-white font-bold text-lg mb-4">Jawai Guides</h2>
+          <ul className="space-y-3 text-sm">
             <li>
               <Link
                 to="/jawai-guide"
@@ -128,8 +128,8 @@ export default function Footer() {
 
         {/* 3. SUPPORT LINKS */}
         <nav className="hidden md:block" aria-label="Support and legal navigation">
-          <h2 className="text-white font-bold text-lg mb-6">Support</h2>
-          <ul className="space-y-4 text-sm">
+          <h2 className="text-white font-bold text-lg mb-4">Support</h2>
+          <ul className="space-y-3 text-sm">
             <li><Link to="/contact" className="hover:text-orange-500 transition-colors" aria-label="Contact Us page">Contact Us</Link></li>
             <li><Link to="/legal" className="hover:text-orange-500 transition-colors" aria-label="Privacy Policy page">Privacy Policy</Link></li>
             <li><Link to="/legal" className="hover:text-orange-500 transition-colors" aria-label="Terms and Conditions page">Terms & Conditions</Link></li>
@@ -139,13 +139,13 @@ export default function Footer() {
 
         {/* 4. CONTACT INFO */}
         <address 
-          className="pt-4 md:pt-0 border-t border-gray-800 md:border-none not-italic"
+          className="pt-3 md:pt-0 border-t border-gray-800 md:border-none not-italic"
           itemProp="address" 
           itemScope 
           itemType="https://schema.org/PostalAddress"
         >
           <h2 className="text-white font-bold text-lg mb-4 md:mb-6">Contact</h2>
-          <ul className="space-y-4 text-sm">
+          <ul className="space-y-3 text-sm">
             <li className="flex items-start gap-3">
               <span className="text-orange-500 mt-1" aria-hidden="true">📍</span>
               <span itemProp="streetAddress">
@@ -167,7 +167,7 @@ export default function Footer() {
 
       {/* RAZORPAY COMPLIANCE & MSME REGISTRATION ROW */}
       <nav 
-        className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-6 text-xs text-gray-400 mt-10 border-t border-gray-800 pt-6"
+        className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-4 text-xs text-gray-400 mt-6 border-t border-gray-800 pt-4"
         aria-label="Legal and registration information"
       >
         <Link to="/legal" className="hover:text-orange-500 transition-colors" aria-label="Terms of Service page">Terms of Service</Link>
@@ -180,7 +180,7 @@ export default function Footer() {
 
       {/* COPYRIGHT BAR */}
       <div 
-        className="max-w-7xl mx-auto px-6 pt-8 mt-8 border-t border-gray-800 text-center flex flex-col md:flex-row justify-between items-center text-xs text-gray-500"
+        className="max-w-7xl mx-auto px-6 pt-5 mt-5 border-t border-gray-800 text-center flex flex-col md:flex-row justify-between items-center text-xs text-gray-500"
         aria-label="Copyright and credits"
       >
         <p>&copy; {new Date().getFullYear()} <span itemProp="name">Jawai Unfiltered</span>. All rights reserved.</p>
