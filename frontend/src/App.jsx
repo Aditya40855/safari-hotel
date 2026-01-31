@@ -31,7 +31,13 @@ const PriceCalculator = lazy(() => import("./pages/PriceCal/PriceCalculator"));
 const JawaiSafariPriceCalculatorGuide = lazy(() => import("./pages/jawai-guide/JawaiSafariPriceCalculatorGuide"));
 const JawaiSafariCostBreakdown = lazy(() => import("./pages/jawai-guide/JawaiSafariCostBreakdown"));
 const Jawaisafaripackage = lazy(() => import("./pages/jawai-guide/Jawaisafaripackage"));
-
+const TravelSafetyInJawai= lazy(() => import("./pages/jawai-guide/TravelSafetyInJawai"));
+const JawaiSafariRoutesExplained = lazy(() => import("./pages/jawai-guide/JawaiSafariRoutesExplained"));
+const JawaiSafariPriceVsExperience  = lazy(() => import("./pages/jawai-guide/travel-awareness/JawaiSafariPriceVsExperience"));
+const JawaiSafariSafetyGuide  = lazy(() => import("./pages/jawai-guide/travel-awareness/JawaiSafariSafetyGuide"));
+const  HowToBookGenuineJawaiSafari = lazy(() => import("./pages/jawai-guide/travel-awareness/HowToBookGenuineJawaiSafari"));
+const CommonMistakesBookingJawaiSafari = lazy(() => import("./pages/jawai-guide/travel-awareness/CommonMistakesBookingJawaiSafari"));
+const DriverAndFamilyFacilitiesInJawai = lazy(() => import("./pages/jawai-guide/travel-awareness/DriverAndFamilyFacilitiesInJawai"));
 
 // 3. NON-CRITICAL: User Utilities
 const Login = lazy(() => import("./pages/Login"));
@@ -95,6 +101,35 @@ export default function App() {
   path="/jawai-guide/jawai-booking-guide"
   element={<JawaiGuideIndex />}
 />
+<Route
+  path="/jawai-guide/travel-safety"
+  element={<TravelSafetyInJawai />}
+/>
+<Route
+  path="/jawai-guide/price-vs-experience"
+  element={<JawaiSafariPriceVsExperience />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-routes"
+  element={<JawaiSafariRoutesExplained />}
+/>
+<Route
+  path="/jawai-guide/travel-awareness/jawai-safari-safety"
+  element={<JawaiSafariSafetyGuide />}
+/>
+<Route
+  path="/jawai-guide/travel-awareness/book-genuine-jawai-safari"
+  element={<HowToBookGenuineJawaiSafari />}
+/>
+<Route
+  path="/jawai-guide/travel-awareness/common-booking-mistakes"
+  element={<CommonMistakesBookingJawaiSafari />}
+/>
+<Route
+  path="/jawai-guide/travel-awareness/driver-family-facilities"
+  element={<DriverAndFamilyFacilitiesInJawai />}
+/>
+
             
             {/* Lazy-loaded routes */}
             <Route path="/login" element={<Login />} />

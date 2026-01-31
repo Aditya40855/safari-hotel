@@ -319,6 +319,32 @@ export default function JawaiGuideIndex() {
                   description="Detailed breakdown of every cost element — from safari to stay to travel."
                   link="/jawai-guide/safari-pricing-guide"
                 />
+                {/* Travel Awareness and Price/Experience new guides */}
+                <GuideCard
+                  title="Jawai Safari Price vs Experience"
+                  description="Understand why Jawai safari prices vary and how cost impacts routes, time, and overall experience."
+                  link="/jawai-guide/price-vs-experience"
+                />
+                <GuideCard
+                  title="Jawai Safari Safety Guide"
+                  description="A detailed safety guide covering leopard behavior, safari vehicles, family safety, and common myths."
+                  link="/jawai-guide/travel-awareness/jawai-safari-safety"
+                />
+                <GuideCard
+                  title="How to Book a Genuine Jawai Safari"
+                  description="Step-by-step guide to booking a genuine Jawai safari, avoiding scams, and ensuring verified confirmations."
+                  link="/jawai-guide/travel-awareness/book-genuine-jawai-safari"
+                />
+                <GuideCard
+                  title="Common Mistakes While Booking Jawai Safari"
+                  description="Learn the most common booking mistakes travelers make in Jawai — from unrealistic pricing to route shortcuts — and how to avoid compromising your safari experience."
+                  link="/jawai-guide/travel-awareness/common-booking-mistakes"
+                />
+                <GuideCard
+                  title="What About Drivers and Elderly Famaly Members ?"
+                  description= "As part of our on-ground coordination, we provide free..."
+                  link="/jawai-guide/travel-awareness/driver-family-facilities"
+                />
               </div>
             </section>
 
