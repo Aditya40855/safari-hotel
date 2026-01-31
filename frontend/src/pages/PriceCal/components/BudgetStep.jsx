@@ -108,14 +108,6 @@ export default function BudgetStep({ budget, setBudget }) {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-6">
-      <h2 className="text-2xl font-semibold mb-2 text-center select-none">
-        🎯 Fine‑Tune Your Experience Comfort
-      </h2>
-
-      <p className="text-gray-600 text-center mb-6 select-none">
-        Based on everything you selected, adjust how premium you’d like your final experience to feel.
-      </p>
-
       <div className="bg-white rounded-2xl shadow-xl p-6 space-y-6 relative">
         {/* Budget Display with tier animation */}
         <div
@@ -127,11 +119,11 @@ export default function BudgetStep({ budget, setBudget }) {
           aria-live="polite"
           aria-atomic="true"
         >
-          <div className="text-xs text-gray-500 uppercase tracking-wide select-none">
-            Experience Comfort Range
+          <div className="text-xs text-gray-600 uppercase tracking-wide select-none">
+            Your Expected Trip Budget
           </div>
 
-          <div className="text-4xl font-extrabold text-green-600 transition-all select-text">
+          <div className="text-2xl font-extrabold text-green-600 transition-all select-text">
             ₹{displayValue.toLocaleString()}
           </div>
 
@@ -141,13 +133,18 @@ export default function BudgetStep({ budget, setBudget }) {
             {tier.emoji} {tier.label} Comfort Level
           </span>
 
-          <div className="text-xs text-gray-400 select-none">
-            Flexible estimate • We optimise this before final confirmation
+          <div className="text-xs text-gray-600 select-none">
+            This helps us design the best plan for you. Final details are discussed personally.
           </div>
         </div>
 
+        {/* Instructional hint above slider */}
+        <div className="text-xs text-gray-600 select-none">
+          Drag the slider to tell us what budget you’re comfortable with. This is not a final price — it helps us plan better for you.
+        </div>
+
         {/* Slider */}
-        <div className={`space-y-3 ${sliderClickAnim ? "animate-sliderClick" : ""}`}>
+        <div className={`space-y-4 ${sliderClickAnim ? "animate-sliderClick" : ""}`}>
           <input
             type="range"
             min={10000}
@@ -167,10 +164,19 @@ export default function BudgetStep({ budget, setBudget }) {
             }}
           />
 
-          <div className="flex justify-between text-xs text-gray-500 select-none">
+          <div className="flex justify-between text-xs text-gray-600 select-none">
             <span>₹10K</span>
             <span>₹1L+</span>
           </div>
+
+          <div className="text-xs text-gray-600 select-none">
+            No booking or payment happens at this step.
+          </div>
+        </div>
+
+        {/* Benefits label */}
+        <div className="text-sm font-semibold text-gray-600 select-none mb-2">
+          What this level typically includes
         </div>
 
         {/* Tier Benefits with fade/slide animation */}
@@ -218,7 +224,7 @@ export default function BudgetStep({ budget, setBudget }) {
         )}
 
         {/* Trust Note */}
-        <div className="text-xs text-gray-400 text-center pt-2 select-none">
+        <div className="text-xs text-gray-600 text-center pt-2 select-none">
           This is a comfort guide — we always optimise the final plan to match value & expectations.
         </div>
       </div>

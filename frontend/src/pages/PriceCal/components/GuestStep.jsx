@@ -38,11 +38,14 @@ const GuestStep = ({ guests, setGuests }) => {
       <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
         Who’s traveling with you?
       </h2>
+      <p className="text-sm text-gray-500 text-center mb-6">
+        This helps us plan comfort & safari flow — you can adjust this later.
+      </p>
       <p className="text-center text-gray-600 mb-8 text-base">
         Tell us the group size to tailor rooms, safaris & comfort
       </p>
 
-      <div className="space-y-10">
+      <div className="space-y-12">
         {/* Adults */}
         <div className="flex items-center justify-between">
           <div>
@@ -57,7 +60,7 @@ const GuestStep = ({ guests, setGuests }) => {
             >
               −
             </button>
-            <span className="w-12 text-center text-2xl font-bold text-green-600">
+            <span className="w-12 text-center text-3xl font-bold text-green-600">
               {adults}
             </span>
             <button
@@ -69,6 +72,8 @@ const GuestStep = ({ guests, setGuests }) => {
             </button>
           </div>
         </div>
+
+        <hr className="border-t border-gray-300 opacity-40" />
 
         {/* Children */}
         <div className="flex items-center justify-between">
@@ -84,7 +89,7 @@ const GuestStep = ({ guests, setGuests }) => {
             >
               −
             </button>
-            <span className="w-12 text-center text-2xl font-bold text-green-600">
+            <span className="w-12 text-center text-2xl font-bold text-gray-600">
               {children}
             </span>
             <button
@@ -99,11 +104,15 @@ const GuestStep = ({ guests, setGuests }) => {
         </div>
       </div>
 
-      <div className="mt-10 text-center">
+      <p className="text-center text-gray-500 text-sm mt-8">
+        We’ll reconfirm guest details with you before finalizing the plan.
+      </p>
+
+      <div className="mt-12 text-center">
         <span className="inline-block px-5 py-2 rounded-full bg-green-50 text-green-700 font-medium text-sm transition">
-          {totalGuests <= 2 && "Perfect for couples 🥂"}
-          {totalGuests > 2 && totalGuests <= 4 && "Great for families 👨‍👩‍👧"}
-          {totalGuests > 4 && "Ideal for groups & friends 🐆"}
+          {totalGuests <= 2 && "Couples often prefer private or calmer safari routes 🥂"}
+          {totalGuests > 2 && totalGuests <= 4 && "Families enjoy relaxed morning safaris 👨‍👩‍👧"}
+          {totalGuests > 4 && "Groups usually plan flexible safari timings 🐆"}
         </span>
       </div>
     </div>

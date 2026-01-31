@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 const EXTRAS = [
@@ -47,6 +47,9 @@ const EXTRAS = [
 ];
 
 export default function ExtrasStep({ extras = [], setExtras, constraints }) {
+  const [showMore, setShowMore] = useState(false);
+  const PRIMARY_EXTRAS_IDS = ["pickup", "village", "photography"];
+
   const allowedIds = constraints?.extras?.allowed || [];
   const lockedIds = constraints?.extras?.locked || [];
 
@@ -63,6 +66,13 @@ export default function ExtrasStep({ extras = [], setExtras, constraints }) {
       return [...prev, extra.id];
     });
   };
+
+  const primaryExtras = EXTRAS.filter((extra) =>
+    PRIMARY_EXTRAS_IDS.includes(extra.id)
+  );
+  const moreExtras = EXTRAS.filter(
+    (extra) => !PRIMARY_EXTRAS_IDS.includes(extra.id)
+  );
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
@@ -111,20 +121,28 @@ export default function ExtrasStep({ extras = [], setExtras, constraints }) {
           })}
         </script>
       </Helmet>
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">
-        Enhance Your Jawai Safari Experience
-      </h1>
-      <p className="text-gray-600 mb-6">
-        Optional activities to make your Jawai trip more memorable
-      </p>
-      <p className="sr-only">
-        Jawai safari experiences include cultural village walks, guided trekking
-        across granite hills, bird watching, wildlife photography assistance,
-        airport transfers, and evening bonfire activities near Jawai hills in Rajasthan.
-      </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {EXTRAS.map((extra) => {
+      {/* Experience Focus selector UI */}
+      <div className="mb-6 flex flex-wrap gap-3">
+        {["Calm & Relaxed", "Nature & Culture", "Adventure", "Photography"].map(
+          (label) => (
+            <button
+              key={label}
+              type="button"
+              className="cursor-pointer rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              {label}
+            </button>
+          )
+        )}
+      </div>
+
+      {/* Primary Experiences */}
+      <h2 className="mb-4 text-lg font-semibold text-gray-900">
+        Primary Experiences
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-4">
+        {primaryExtras.map((extra) => {
           const active = extras.includes(extra.id);
           const locked = isLocked(extra.id);
 
@@ -136,10 +154,10 @@ export default function ExtrasStep({ extras = [], setExtras, constraints }) {
               aria-pressed={active}
               aria-label={`Add ${extra.label} experience to Jawai safari`}
               className={`
-                relative text-left p-5 rounded-xl border transition-all duration-300
+                relative text-left p-6 rounded-xl border transition-all duration-300
                 ${
                   active
-                    ? "border-green-500 bg-green-50 ring-2 ring-green-200 scale-[1.02]"
+                    ? "border-green-500 bg-green-50"
                     : "border-gray-200 bg-white hover:shadow-md hover:-translate-y-1"
                 }
                 ${locked ? "opacity-50 cursor-not-allowed" : ""}
@@ -156,19 +174,19 @@ export default function ExtrasStep({ extras = [], setExtras, constraints }) {
               </div>
 
               <div className="mt-4 flex items-center justify-between">
-                <span className="text-lg font-bold text-gray-900">
-                  ₹{extra.price} · Jawai Safari Add-on
+                <span
+                  className={`text-sm ${
+                    active ? "text-gray-500" : "text-gray-400"
+                  } font-medium`}
+                >
+                  {active
+                    ? `Estimated add-on value: ₹${extra.price}`
+                    : "View estimate after selection"}
                 </span>
-
-                {active && (
-                  <span className="text-sm font-medium text-green-700">
-                    ✔ Added
-                  </span>
-                )}
               </div>
               {locked && (
                 <span className="text-xs text-red-500 font-medium">
-                  Increase budget to unlock this Jawai safari experience
+                  Available when plan is customized
                 </span>
               )}
             </button>
@@ -176,11 +194,87 @@ export default function ExtrasStep({ extras = [], setExtras, constraints }) {
         })}
       </div>
 
+      {/* More Experiences */}
+      {moreExtras.length > 0 && (
+        <div className="mt-8">
+          <button
+            type="button"
+            onClick={() => setShowMore(!showMore)}
+            className="mb-4 text-sm font-semibold text-indigo-600 hover:underline focus:outline-none"
+            aria-expanded={showMore}
+          >
+            {showMore ? "Hide More Experiences" : "Show More Experiences"}
+          </button>
+
+          {showMore && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-4">
+              {moreExtras.map((extra) => {
+                const active = extras.includes(extra.id);
+                const locked = isLocked(extra.id);
+
+                return (
+                  <button
+                    key={extra.id}
+                    onClick={() => toggleExtra(extra)}
+                    disabled={locked}
+                    aria-pressed={active}
+                    aria-label={`Add ${extra.label} experience to Jawai safari`}
+                    className={`
+                      relative text-left p-6 rounded-xl border transition-all duration-300
+                      ${
+                        active
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-200 bg-white hover:shadow-md hover:-translate-y-1"
+                      }
+                      ${locked ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="text-3xl">{extra.icon}</div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">
+                          {extra.label} – Jawai Safari Experience
+                        </h3>
+                        <p className="text-sm text-gray-500">{extra.desc}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between">
+                      <span
+                        className={`text-sm ${
+                          active ? "text-gray-500" : "text-gray-400"
+                        } font-medium`}
+                      >
+                        {active
+                          ? `Estimated add-on value: ₹${extra.price}`
+                          : "View estimate after selection"}
+                      </span>
+                    </div>
+                    {locked && (
+                      <span className="text-xs text-red-500 font-medium">
+                        Available when plan is customized
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
       {extras.length > 0 && (
         <div className="mt-6 p-4 rounded-lg bg-gray-100 text-sm text-gray-700">
           🎉 <strong>{extras.length}</strong> Jawai safari experience(s) added
         </div>
       )}
+
+      {/* Reassurance block */}
+      <div className="mt-6 rounded-lg bg-gray-50 p-4 text-gray-700 text-sm">
+        💬 You can skip all of these.
+        <br />
+        We’ll help you decide later with a local expert.
+      </div>
     </div>
   );
 }

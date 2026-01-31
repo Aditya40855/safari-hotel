@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 // 1. CRITICAL IMPORTS: Load these instantly for the user
 import Header from "./components/Header";
@@ -53,6 +53,9 @@ const AdminInventory = lazy(() => import("./pages/admin/AdminInventory"));
 const AdminBookingRequests = lazy(() => import("./pages/admin/AdminBookingRequests") )
 
 export default function App() {
+  const location = useLocation();
+  const hideFooter = location.pathname === "/price-calculator";
+
   return (
     /* Added 'relative' and 'overflow-x-hidden' to ensure fixed elements stay in view */
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col relative overflow-x-hidden">
@@ -156,7 +159,7 @@ export default function App() {
         </Suspense>
       </main>
 
-      <Footer />
+      {!hideFooter && <Footer />}
 
       {/* CRITICAL: ContactHub must be OUTSIDE Suspense/Routes.
           This ensures it remains persistent and floats above the entire layout.

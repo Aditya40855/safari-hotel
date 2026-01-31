@@ -14,28 +14,28 @@ const TOTAL_STEPS = 6;
 
 const STEP_META = [
   {
-    title: "Choose Your Stay in Jawai",
-    subtitle: "Select heritage, eco-luxury or premium stays for your Jawai safari",
+    title: "Choose Stay",
+    subtitle: "Pick your preferred stay",
   },
   {
-    title: "Select Safari Experience",
-    subtitle: "Choose leopard safari type and jungle experience in Jawai",
+    title: "Select Safari",
+    subtitle: "Choose safari experience",
   },
   {
-    title: "Guests & Family",
-    subtitle: "Add adults and children for accurate Jawai safari pricing",
+    title: "Guests",
+    subtitle: "Adults & children",
   },
   {
-    title: "Add Safari Extras",
-    subtitle: "Enhance your Jawai trip with curated safari experiences",
+    title: "Extras",
+    subtitle: "Optional add-ons",
   },
   {
-    title: "Set Your Budget Comfort",
-    subtitle: "Adjust your comfort range to match your Jawai safari budget",
+    title: "Comfort Range",
+    subtitle: "Set budget preference",
   },
   {
-    title: "Jawai Safari Price Summary",
-    subtitle: "Review estimated safari cost, stays, and confidence score",
+    title: "Summary",
+    subtitle: "Review details",
   },
 ];
 
@@ -262,18 +262,24 @@ export default function PriceCalculator() {
         </div>
       </section>
 
-      <section className="max-w-xl mx-auto mt-6 relative rounded-2xl bg-white border border-slate-200">
+      <section className="max-w-xl mx-auto mt-4 relative rounded-2xl bg-white border border-slate-200 shadow-sm">
         <div>
-          <div className="px-5 pt-4 pb-2">
-            <h2 className="text-base font-semibold text-slate-900">
+          <div className="px-6 pt-6 pb-4 text-center bg-gradient-to-b from-slate-50 to-white border-b border-slate-200 rounded-t-2xl">
+            <h2 className="text-lg md:text-xl font-semibold text-slate-900 tracking-tight">
               {STEP_META[step - 1].title}
             </h2>
-            <p className="text-xs text-slate-500">
-              {STEP_META[step - 1].subtitle}
-            </p>
+
+            {STEP_META[step - 1].subtitle && (
+              <p className="mt-1 text-sm text-slate-500 max-w-xs mx-auto">
+                {STEP_META[step - 1].subtitle}
+              </p>
+            )}
+
+            {/* soft divider */}
+            <div className="mt-3 h-[2px] w-10 mx-auto bg-slate-900/10 rounded-full" />
           </div>
 
-          <div className="px-4 py-4 space-y-4">
+          <div className="px-4 py-3 space-y-3">
             {step === 1 && (
               <StayStep selectedStayId={stayId} onSelect={setStayId} />
             )}
@@ -333,5 +339,34 @@ export default function PriceCalculator() {
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  /* Hide selection tick icons inside stay cards */
+  .stay-card :where(:not(svg)):where(:is(*))::before,
+  .stay-card :where(:not(svg)):where(:is(*))::after {
+    content: none !important;
+  }
+  .stay-card *:not(svg):contains("✓") {
+    display: none !important;
+  }
+  /* Alternative simpler selector for text "✓" inside selectable cards */
+  .stay-card :where(*):where(:not(svg)) {
+    color: transparent !important;
+  }
+  /* Since :contains is not standard, better use attribute or class in StayStep */
+  /* Instead, use this rule to hide any element with text "✓" */
+  .stay-card :where(*):where(:not(svg)) {
+    user-select: none;
+  }
+  /* Hide tick */
+  .stay-card :where(*):where(:not(svg)):where(:is(*)) {
+    font-size: 0;
+  }
+  /* Actually, the simplest way: */
+  .stay-card :where(*):where(:not(svg)):where(:is(*)) {
+    display: none;
+  }
+  /* But to be safe, just hide any direct child element with text "✓" */
+  .stay-card :where(*):where(:not(svg)) {
+    display: none;
   }
 `}</style>
