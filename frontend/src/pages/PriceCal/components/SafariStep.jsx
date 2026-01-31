@@ -33,6 +33,9 @@ export default function SafariStep({ selectedSafariId, onSelect, constraints }) 
   
     return (
       <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="text-center mb-6 text-sm text-gray-500">
+          You can change this safari later after expert review — nothing is final yet.
+        </div>
         <Helmet>
           <title>Jawai Leopard Safari Options | Morning, Evening & Private Safari</title>
 
@@ -79,19 +82,6 @@ export default function SafariStep({ selectedSafariId, onSelect, constraints }) 
           </script>
         </Helmet>
         {/* Header */}
-        <div className="text-center mb-4">
-          <h1 className="text-lg font-semibold text-gray-800">
-            Choose Your Jawai Leopard Safari Experience
-          </h1>
-          <p className="mt-1 text-sm text-gray-500 max-w-xl mx-auto">
-            Select one safari option below. This will define the core experience of your Jawai journey.
-          </p>
-          <p className="sr-only">
-            Jawai leopard safari experiences include guided morning safaris, evening
-            safaris with sunset landscapes, and private jeep safaris offering exclusive
-            wildlife tracking near Jawai hills in Rajasthan.
-          </p>
-        </div>
   
         {/* Safari Options Container */}
         <div className="bg-gray-50 p-6 rounded-3xl">
@@ -113,12 +103,12 @@ export default function SafariStep({ selectedSafariId, onSelect, constraints }) 
                   aria-pressed={isSelected}
                   aria-label={`Select ${opt.title} for Jawai leopard safari`}
                   className={`
-                    relative text-left p-6 rounded-2xl border transition-shadow duration-200
+                    relative text-left p-5 sm:p-6 rounded-2xl border transition-shadow duration-200
                     bg-white shadow-sm
                     hover:shadow-md
                     ${
                       isSelected
-                        ? "border-green-600 bg-green-50"
+                        ? "border-green-600 bg-white shadow-[0_0_0_2px_rgba(22,163,74,0.15)]"
                         : "border-gray-200"
                     }
                     ${locked ? "opacity-50 cursor-not-allowed" : ""}
@@ -145,6 +135,12 @@ export default function SafariStep({ selectedSafariId, onSelect, constraints }) 
                   <p className="text-sm text-gray-600 mb-4 leading-relaxed">
                     {opt.desc}
                   </p>
+
+                  <p className="text-xs text-gray-500 mb-3">
+                    {opt.id === "morning" && "Best for first-time Jawai visitors and calm wildlife sightings."}
+                    {opt.id === "evening" && "Ideal for photographers, sunsets, and dramatic landscapes."}
+                    {opt.id === "private" && "Perfect for families, couples, and guests seeking exclusivity."}
+                  </p>
       
                   {/* Price */}
                   <div className="text-green-700 font-semibold text-sm">
@@ -152,19 +148,17 @@ export default function SafariStep({ selectedSafariId, onSelect, constraints }) 
                   </div>
                   {locked && (
                     <p className="mt-2 text-xs text-red-500 font-medium">
-                      Increase budget to unlock this Jawai safari option
+                      Available with higher comfort plans
                     </p>
-                  )}
-      
-                  {/* Selected Indicator */}
-                  {isSelected && (
-                    <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-medium px-3 py-1 rounded-full select-none">
-                      Selected
-                    </div>
                   )}
                 </button>
               );
             })}
+          </div>
+          <div className="mt-6 flex flex-wrap justify-center gap-3 text-xs text-gray-600">
+            <span className="px-3 py-1 bg-white rounded-full border border-gray-200">✔ Local Jawai drivers</span>
+            <span className="px-3 py-1 bg-white rounded-full border border-gray-200">✔ Forest-safe routes</span>
+            <span className="px-3 py-1 bg-white rounded-full border border-gray-200">✔ Ethical wildlife tracking</span>
           </div>
         </div>
   

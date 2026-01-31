@@ -23,21 +23,10 @@ export default function StayStep({ selectedStayId, onSelect, constraints }) {
 
   return (
     <div className="w-full">
-      <div className="mb-4">
-        <h2 className="text-base font-semibold text-slate-900">
-          Choose Your Jawai Safari Stay
-        </h2>
-        <p className="text-xs text-emerald-600 mt-0.5">
-          🌿 Near prime leopard territory
+      <div className="bg-slate-50 rounded-3xl p-7 space-y-6">
+        <p className="text-xs text-slate-500 mb-2">
+          You can change this later. Pricing is adjusted after expert review.
         </p>
-        <p className="sr-only">
-          Select from curated Jawai safari stays including eco lodges,
-          heritage properties, and nature resorts located near prime
-          leopard safari zones in Jawai, Rajasthan.
-        </p>
-      </div>
-
-      <div className="space-y-3">
         {stays.map((stay) => {
           const isActive = activeId === stay.id;
           const locked = isLocked(stay.id);
@@ -51,41 +40,47 @@ export default function StayStep({ selectedStayId, onSelect, constraints }) {
               aria-pressed={isActive}
               aria-label={`Select ${stay.name} stay for Jawai safari`}
               className={`
-                relative w-full text-left rounded-2xl p-4 transition
-                border flex flex-col gap-2
+                relative w-full text-left rounded-3xl p-7 transition
+                border flex flex-col gap-3
                 ${isActive
-                  ? "border-emerald-600 bg-emerald-600 text-white shadow-lg"
-                  : "border-slate-200 bg-slate-50"
+                  ? "border-emerald-600 bg-gradient-to-br from-emerald-50 to-white text-slate-900 shadow-lg shadow-emerald-100 scale-[1.01]"
+                  : "border-slate-200 bg-white text-slate-700"
                 }
                 ${locked ? "opacity-40" : "active:scale-[0.99]"}
               `}
             >
               <div className="flex items-center justify-between">
-                <div>
+                <div className="flex flex-col gap-2">
                   <h3 className="text-sm font-semibold">
-                    {stay.name} – Jawai Safari Stay
+                    {stay.name}
                   </h3>
-                  <p className={`text-xs font-medium ${isActive ? "text-emerald-200" : "text-slate-500"}`}>
-                    ₹{stay.price} per night · Jawai safari nature stay
-                  </p>
+                  {stay.id === "eco" && (
+                    <span className="inline-flex items-center gap-2 text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
+                      Best for nature lovers · Simple & peaceful
+                    </span>
+                  )}
+                  {stay.id === "heritage" && (
+                    <span className="inline-flex items-center gap-2 text-[11px] font-medium px-2 py-1 rounded-full bg-blue-50 text-blue-700">
+                      Most chosen · Authentic Jawai experience
+                    </span>
+                  )}
+                  {stay.id === "luxury" && (
+                    <span className="inline-flex items-center gap-2 text-[11px] font-medium px-2 py-1 rounded-full bg-amber-50 text-amber-700">
+                      Premium comfort · Private sit-outs & dining
+                    </span>
+                  )}
                 </div>
-
-                {isActive && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/90 text-slate-900 font-semibold">
-                    ✓ Selected
-                  </span>
-                )}
               </div>
 
               {stay.description && (
-                <p className={`text-xs leading-relaxed ${isActive ? "text-emerald-100" : "text-slate-600"}`}>
+                <p className={`text-xs leading-snug text-slate-500`}>
                   {stay.description}
                 </p>
               )}
 
               {locked && (
                 <p className="text-[11px] text-amber-600 font-medium">
-                  Available with higher Jawai safari comfort package
+                  Unlocks with higher comfort preference
                 </p>
               )}
             </button>
