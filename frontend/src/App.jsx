@@ -33,6 +33,10 @@ const JawaiSafariCostBreakdown = lazy(() => import("./pages/jawai-guide/JawaiSaf
 const Jawaisafaripackage = lazy(() => import("./pages/jawai-guide/Jawaisafaripackage"));
 const TravelSafetyInJawai= lazy(() => import("./pages/jawai-guide/TravelSafetyInJawai"));
 const JawaiSafariRoutesExplained = lazy(() => import("./pages/jawai-guide/JawaiSafariRoutesExplained"));
+const JawaiSafariCostForFamilies = lazy(() => import("./pages/jawai-guide/JawaiSafariCostForFamilies"));
+const JawaiSafariWorthThePrice = lazy(() =>
+  import("./pages/jawai-guide/JawaiSafariWorthThePrice")
+);
 const JawaiSafariPriceVsExperience  = lazy(() => import("./pages/jawai-guide/travel-awareness/JawaiSafariPriceVsExperience"));
 const JawaiSafariSafetyGuide  = lazy(() => import("./pages/jawai-guide/travel-awareness/JawaiSafariSafetyGuide"));
 const  HowToBookGenuineJawaiSafari = lazy(() => import("./pages/jawai-guide/travel-awareness/HowToBookGenuineJawaiSafari"));
@@ -131,6 +135,14 @@ export default function App() {
 <Route
   path="/jawai-guide/travel-awareness/driver-family-facilities"
   element={<DriverAndFamilyFacilitiesInJawai />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-cost-for-2-4-families"
+  element={<JawaiSafariCostForFamilies />}
+/>
+<Route
+  path="/jawai-guide/is-jawai-safari-worth-the-price"
+  element={<JawaiSafariWorthThePrice />}
 />
 
             
