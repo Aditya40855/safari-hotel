@@ -22,7 +22,7 @@ export default function StayStep({ selectedStayId, onSelect, constraints }) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-32">
       <div className="bg-slate-50 rounded-3xl p-7 space-y-6">
         <p className="text-xs text-slate-500 mb-2">
           You can change this later. Pricing is adjusted after expert review.

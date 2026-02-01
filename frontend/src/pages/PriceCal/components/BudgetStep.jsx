@@ -107,7 +107,7 @@ export default function BudgetStep({ budget, setBudget }) {
   const fixedBenefits = ["🍽️ Local cuisine", "🚗 Local transfers"];
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-6">
+    <div className="max-w-xl mx-auto px-4 py-6 pb-32">
       <div className="bg-white rounded-2xl shadow-xl p-6 space-y-6 relative">
         {/* Budget Display with tier animation */}
         <div

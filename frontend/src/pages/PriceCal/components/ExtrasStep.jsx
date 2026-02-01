@@ -75,7 +75,7 @@ export default function ExtrasStep({ extras = [], setExtras, constraints }) {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-5xl mx-auto px-4 py-6 pb-32">
       <Helmet>
         <title>Jawai Safari Experiences & Add-ons | Village Walk, Trekking & More</title>
 

@@ -34,7 +34,7 @@ const GuestStep = ({ guests, setGuests }) => {
   const totalGuests = adults + children;
 
   return (
-    <div className="w-full max-w-xl mx-auto px-6 py-8 bg-white/95 backdrop-blur rounded-3xl shadow-2xl border border-gray-100 animate-fadeIn">
+    <div className="w-full max-w-xl mx-auto px-6 py-8 bg-white/95 backdrop-blur rounded-3xl shadow-2xl border border-gray-100 animate-fadeIn pb-32">
       <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
         Who’s traveling with you?
       </h2>
