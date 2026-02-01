@@ -32,7 +32,7 @@ export default function SafariStep({ selectedSafariId, onSelect, constraints }) 
     const isLocked = (id) => lockedIds.includes(id);
   
     return (
-      <div className="max-w-5xl mx-auto px-4 py-10">
+      <div className="max-w-5xl mx-auto px-4 py-10 pb-32">
         <div className="text-center mb-6 text-sm text-gray-500">
           You can change this safari later after expert review — nothing is final yet.
         </div>
