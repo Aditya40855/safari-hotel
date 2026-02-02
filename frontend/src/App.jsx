@@ -37,11 +37,15 @@ const JawaiSafariCostForFamilies = lazy(() => import("./pages/jawai-guide/JawaiS
 const JawaiSafariWorthThePrice = lazy(() =>
   import("./pages/jawai-guide/JawaiSafariWorthThePrice")
 );
+const IsJawaiSafariWorthIt = lazy(() => import("./pages/jawai-guide/IsJawaiSafariWorthIt"));
+const JawaiSafariVsRanthamboreVsGir = lazy(() => import("./pages/jawai-guide/JawaiSafariVsRanthamboreVsGir"));
+const WhyJawaiSafariFeelsPersonal  = lazy(() => import("./pages/jawai-guide/WhyJawaiSafariFeelsPersonal"));
 const JawaiSafariPriceVsExperience  = lazy(() => import("./pages/jawai-guide/travel-awareness/JawaiSafariPriceVsExperience"));
 const JawaiSafariSafetyGuide  = lazy(() => import("./pages/jawai-guide/travel-awareness/JawaiSafariSafetyGuide"));
 const  HowToBookGenuineJawaiSafari = lazy(() => import("./pages/jawai-guide/travel-awareness/HowToBookGenuineJawaiSafari"));
 const CommonMistakesBookingJawaiSafari = lazy(() => import("./pages/jawai-guide/travel-awareness/CommonMistakesBookingJawaiSafari"));
 const DriverAndFamilyFacilitiesInJawai = lazy(() => import("./pages/jawai-guide/travel-awareness/DriverAndFamilyFacilitiesInJawai"));
+const IsLeopardSafariSaferThanTigerSafari = lazy(() => import("./pages/jawai-guide/travel-awareness/IsLeopardSafariSaferThanTigerSafari"));
 
 // 3. NON-CRITICAL: User Utilities
 const Login = lazy(() => import("./pages/Login"));
@@ -143,6 +147,22 @@ export default function App() {
 <Route
   path="/jawai-guide/is-jawai-safari-worth-the-price"
   element={<JawaiSafariWorthThePrice />}
+/>
+<Route
+  path="/jawai-guide/jawai-vs-ranthambore-vs-gir"
+  element={<JawaiSafariVsRanthamboreVsGir />}
+/>
+<Route
+  path="/jawai-guide/why-jawai-safari-feels-personal"
+  element={<WhyJawaiSafariFeelsPersonal />}
+/>
+<Route
+  path="/jawai-guide/is-jawai-safari-worth-it"
+  element={<IsJawaiSafariWorthIt />}
+/>
+<Route
+  path="/jawai-guide/travel-awareness/leopard-vs-tiger-safari-safety"
+  element={<IsLeopardSafariSaferThanTigerSafari />}
 />
 
             

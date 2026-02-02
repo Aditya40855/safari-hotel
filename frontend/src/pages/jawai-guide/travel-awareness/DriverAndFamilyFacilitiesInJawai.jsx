@@ -13,6 +13,10 @@ export default function DriverAndFamilyFacilitiesInJawai() {
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
+            <link
+          rel="canonical"
+          href="https://www.jawaiunfiltered.com/jawai-guide/travel-awareness/driver-family-facilities"
+        />
             "mainEntity": [
               {
                 "@type": "Question",

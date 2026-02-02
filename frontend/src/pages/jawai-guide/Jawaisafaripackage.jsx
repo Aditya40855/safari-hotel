@@ -15,7 +15,7 @@ export default function JawaiSafariPackage() {
         />
         <link
           rel="canonical"
-          href="https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-packages"
+          href="https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-package"
         />
       </Helmet>
       <script type="application/ld+json">

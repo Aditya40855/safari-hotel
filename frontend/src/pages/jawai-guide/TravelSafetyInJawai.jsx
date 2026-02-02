@@ -11,6 +11,10 @@ export default function TravelSafetyInJawai() {
           name="description"
           content="Is Jawai safari safe? Learn about leopard behavior, safety tips, what to verify before booking, and practical advice for first-time visitors to Jawai."
         />
+        <link
+          rel="canonical"
+          href="https://www.jawaiunfiltered.com/jawai-guide/travel-safety"
+        />
       </Helmet>
       {/* Breadcrumbs */}
       <nav className="text-sm text-gray-500 mb-6">

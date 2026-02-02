@@ -402,6 +402,7 @@ export default function Home() {
           faqSchema,
           itemListSchema
         ]}
+        canonical="https://www.jawaiunfiltered.com/"
       />
       
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-black py-14 md:py-20 px-4 md:px-6 rounded-b-[2.5rem] shadow-2xl mb-12 md:mb-16 transition-all">
