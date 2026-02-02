@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -8,43 +6,43 @@ export default function CommonMistakesBookingJawaiSafari() {
   const faqs = [
     {
       q: "Is Jawai Safari safe for families and children?",
-      a: "Yes. Jawai Safari is considered safe for families when booked through experienced local operators. Vehicles are open 4x4 jeeps driven by trained drivers, and routes are chosen based on safety and comfort."
+      a: <>Yes, it is safe when booked properly. Learn more about <Link to="/jawai-guide/travel-awareness/jawai-safari-safety" className="underline">Jawai Safari Safety</Link>.</>
     },
     {
       q: "Are very cheap Jawai safaris a scam?",
-      a: "Not always a scam, but extremely low prices usually mean shorter routes, limited zones, or reduced time. Jawai safaris involve real costs like fuel, vehicle maintenance, and driver time."
+      a: <>Low prices often mean limited experience. See <Link to="/jawai-guide/price-vs-experience" className="underline">Jawai Safari Price vs Experience</Link> for details.</>
     },
     {
       q: "What is a reasonable price range for Jawai Safari?",
-      a: "Most genuine Jawai safaris typically fall in a realistic price range that allows proper zone coverage, sufficient time, and a relaxed experience without rushing."
+      a: <>Reasonable prices cover key zones and time. Check <Link to="/jawai-guide/jawai-safari-cost-breakdown" className="underline">Cost Breakdown</Link> for guidance.</>
     },
     {
       q: "Are leopard sightings guaranteed in Jawai?",
-      a: "No wildlife safari can guarantee sightings. Leopards in Jawai are wild animals and sightings depend on timing, movement, weather, and natural behavior."
+      a: <>No sightings are guaranteed; wildlife is unpredictable. Understand routes at <Link to="/jawai-guide/jawai-safari-routes" className="underline">Jawai Safari Routes</Link>.</>
     },
     {
       q: "Do all Jawai safaris cover the same areas?",
-      a: "No. Jawai has multiple zones and routes. Coverage varies depending on timing, local conditions, and how much time the safari allocates."
+      a: <>Safari coverage varies by route and timing. Explore <Link to="/jawai-guide/jawai-safari-routes" className="underline">Jawai Safari Routes</Link> to know more.</>
     },
     {
       q: "Is it safe to book Jawai Safari online?",
-      a: "Yes, as long as the platform provides clear confirmation, timing details, and transparent communication. Avoid bookings with no written confirmation."
+      a: <>Booking is safe with clear confirmation. Learn how to book genuine tours <Link to="/jawai-guide/travel-awareness/book-genuine-jawai-safari" className="underline">here</Link>.</>
     },
     {
       q: "Can elderly travelers join Jawai Safari?",
-      a: "Yes, but it is important to inform the operator in advance so routes and driving style can be adjusted for comfort."
+      a: <>Yes, but inform in advance for comfort. See family and elderly tips at <Link to="/jawai-guide/jawai-safari-cost-for-2-4-families" className="underline">Family Safari Guide</Link>.</>
     },
     {
       q: "Why do Jawai Safari prices vary so much?",
-      a: "Prices vary due to route length, time spent in leopard zones, vehicle quality, fuel costs, and driver experience."
+      a: <>Prices depend on routes, time, and vehicle quality. Check <Link to="/jawai-guide/price-vs-experience" className="underline">Price vs Experience</Link> for insights.</>
     },
     {
       q: "Is Jawai Safari legal and regulated?",
-      a: "Yes. Jawai safaris operate under local norms and guidelines. Unauthorized or unverified offers should be avoided."
+      a: <>Yes, it follows local guidelines. Avoid unverified offers and book safely <Link to="/jawai-guide/travel-awareness/book-genuine-jawai-safari" className="underline">here</Link>.</>
     },
     {
       q: "What should I ask before confirming a safari?",
-      a: "Ask about route coverage, duration, vehicle type, timing, and what is included or excluded in the booking."
+      a: <>Ask about routes, timing, and inclusions. See detailed booking advice <Link to="/jawai-guide/travel-awareness/book-genuine-jawai-safari" className="underline">here</Link>.</>
     }
   ];
 
@@ -70,7 +68,7 @@ export default function CommonMistakesBookingJawaiSafari() {
               "name": f.q,
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": f.a
+                "text": typeof f.a === "string" ? f.a : f.a.props.children.filter(c => typeof c === "string").join(" ").trim()
               }
             }))
           })}

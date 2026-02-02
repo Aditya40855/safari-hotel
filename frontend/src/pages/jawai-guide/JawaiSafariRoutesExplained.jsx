@@ -13,7 +13,7 @@ export default function JawaiSafariRoutesExplained() {
         />
         <link
           rel="canonical"
-          href="https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-routes-explained"
+          href="https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-routes"
         />
         <script type="application/ld+json">
 {`

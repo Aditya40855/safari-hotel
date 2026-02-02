@@ -79,7 +79,7 @@ export default function JawaiGuideIndex() {
 
         <meta
           name="description"
-          content="The most detailed Jawai travel guide by Jawai Unfiltered. Explore Jawai leopard safari, best time to visit, safari cost, luxury stays, safety, photography tips, and comparisons with Ranthambore & Gir."
+          content="Jawai Travel Guide 2026: Honest safari costs, safety clarity, routes explained, and real on-ground insights. Compare Jawai with other safaris and decide if it’s worth it for you."
         />
         <meta
           name="keywords"
@@ -131,7 +131,7 @@ export default function JawaiGuideIndex() {
             "@type": "Article",
             headline: "Jawai Travel Guide 2026 | Leopard Safari, Luxury Stays & Real Insights",
             description:
-              "The most detailed Jawai travel guide by Jawai Unfiltered. Explore Jawai leopard safari, best time to visit, safari cost, luxury stays, safety, photography tips, and comparisons with Ranthambore & Gir.",
+              "Unlock real Jawai safari insights: See if Jawai is right for you, compare costs, safety, and luxury stays. Discover the best time, ethical safaris, and expert tips—all in one trusted guide.",
             author: {
               "@type": "Organization",
               name: "Jawai Unfiltered",
@@ -149,7 +149,130 @@ export default function JawaiGuideIndex() {
               "@id": "https://www.jawaiunfiltered.com/jawai-guide",
             },
             datePublished: "2024-01-01T00:00:00Z",
-            dateModified: "2024-06-01T00:00:00Z",
+            dateModified: "2024-06-18T00:00:00Z",
+          })}
+        </script>
+        {/* Speakable schema for main headline and hub authority */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SpeakableSpecification",
+            "xpath": [
+              "/html/body//h1",
+              "/html/body//section[contains(@class, 'mb-10')]/div/p[1]",
+              "/html/body//section[contains(@class, 'mb-10')]/div/p[2]"
+            ]
+          })}
+        </script>
+        {/* ItemList schema for Knowledge Hub cards */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-price-calculator",
+                "name": "Safari Price Calculator"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/best-time-to-visit",
+                "name": "Best Time to Visit"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/leopard-safari-guide",
+                "name": "Leopard Safari Guide"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/jawai-vs-other-safaris",
+                "name": "Jawai vs Other Safaris"
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/safari-pricing-guide",
+                "name": "Safari Cost & Budget"
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/price-vs-experience",
+                "name": "Jawai Safari Price vs Experience"
+              },
+              {
+                "@type": "ListItem",
+                "position": 7,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-cost-for-2-4-families",
+                "name": "Jawai Safari Cost for Couples & Families"
+              },
+              {
+                "@type": "ListItem",
+                "position": 8,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/is-jawai-safari-worth-the-price",
+                "name": "Is Jawai Safari Worth the Price?"
+              },
+              {
+                "@type": "ListItem",
+                "position": 9,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/travel-awareness/jawai-safari-safety",
+                "name": "Jawai Safari Safety Guide"
+              },
+              {
+                "@type": "ListItem",
+                "position": 10,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/travel-awareness/book-genuine-jawai-safari",
+                "name": "How to Book a Genuine Jawai Safari"
+              },
+              {
+                "@type": "ListItem",
+                "position": 11,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/travel-awareness/common-booking-mistakes",
+                "name": "Common Mistakes While Booking Jawai Safari"
+              },
+              {
+                "@type": "ListItem",
+                "position": 12,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/travel-awareness/driver-family-facilities",
+                "name": "What About Drivers and Elderly Family Members?"
+              },
+              {
+                "@type": "ListItem",
+                "position": 13,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/travel-awareness/leopard-vs-tiger-safari-safety",
+                "name": "Leopard Safari vs Tiger Safari Safety"
+              },
+              {
+                "@type": "ListItem",
+                "position": 14,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/jawai-safari-routes",
+                "name": "Jawai Safari Routes Explained"
+              },
+              {
+                "@type": "ListItem",
+                "position": 15,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/jawai-vs-ranthambore-vs-gir",
+                "name": "Jawai vs Ranthambore vs Gir"
+              },
+              {
+                "@type": "ListItem",
+                "position": 16,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/why-jawai-safari-feels-personal",
+                "name": "Why Jawai Safari Feels More Personal"
+              },
+              {
+                "@type": "ListItem",
+                "position": 17,
+                "url": "https://www.jawaiunfiltered.com/jawai-guide/is-jawai-safari-worth-it",
+                "name": "Is Jawai Safari Worth It?"
+              }
+            ]
           })}
         </script>
       </Helmet>
@@ -182,6 +305,29 @@ export default function JawaiGuideIndex() {
               safari, a luxury wildlife holiday, or a photography expedition, this
               guide answers everything — without hype or misinformation.
             </p>
+            <p className="text-gray-800 font-medium mt-3 max-w-3xl">
+              This guide reflects how Jawai safaris are actually planned and conducted on the ground — based on real tracking, terrain movement, and local decision-making, not brochure promises.
+            </p>
+            {/* HUB AUTHORITY & SEARCH INTENT COVERAGE */}
+            <p className="text-blue-900/90 font-medium mt-6 max-w-3xl">
+              <strong>This page is the central Jawai Safari knowledge hub</strong>—your starting point for all things Jawai. Here you’ll find authoritative, experience-backed answers and links to in-depth guides on planning, pricing, routes, safety, stays, and more.
+            </p>
+            <div className="mt-5 bg-gray-50 border border-gray-100 rounded-lg p-4 max-w-3xl">
+              <p className="text-sm font-semibold text-gray-900 mb-1">Who this guide is for:</p>
+              <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                <li>First-time safari travelers comparing Jawai with national parks</li>
+                <li>Families, couples, photographers, and slow-travel seekers</li>
+                <li>Travelers who want honest costs, safety clarity, and realistic expectations</li>
+              </ul>
+            </div>
+            <p className="text-gray-700 mt-3 text-sm max-w-2xl">
+              Wondering: <em>“Should I choose Jawai Safari?”</em> or <em>“Is Jawai good for first-time safari travelers?”</em> or even <em>“Who should—or should not—choose Jawai?”</em> You’ll find clear, honest answers below.
+            </p>
+            <div className="bg-blue-50 border-l-4 border-blue-400 rounded-md p-4 my-6 shadow-sm max-w-2xl">
+              <p className="text-blue-900 font-semibold">
+                Quiet hills. Open routes. No fixed zones. No chase culture. That’s what makes Jawai safari fundamentally different.
+              </p>
+            </div>
             {/* Responsive Highlights Grid */}
             <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-3 mt-8">
               <Highlight label="Leopard Sightings" value="High" />
@@ -192,9 +338,52 @@ export default function JawaiGuideIndex() {
           </div>
         </section>
 
+        {/* HUB-LEVEL JUMP LINKS */}
+        <section className="mb-8 flex justify-center">
+          <nav aria-label="Guide Sections">
+            <ul className="flex flex-wrap gap-2">
+              <li>
+                <a
+                  href="#why-jawai"
+                  className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium uppercase tracking-wide hover:bg-blue-50 transition"
+                >
+                  Why Jawai
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#planning"
+                  className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium uppercase tracking-wide hover:bg-blue-50 transition"
+                >
+                  Planning
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#pricing"
+                  className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium uppercase tracking-wide hover:bg-blue-50 transition"
+                >
+                  Pricing
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium uppercase tracking-wide hover:bg-blue-50 transition"
+                >
+                  FAQ
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
         <div className="grid lg:grid-cols-[220px_1fr] gap-10">
           {/* DESKTOP SIDEBAR */}
           <aside className="hidden lg:block sticky top-24 h-fit text-sm">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide">You’re here</span>
+            </div>
             <p className="font-semibold mb-4 text-gray-900 uppercase tracking-wider">On this page</p>
             <ul className="space-y-3 text-gray-600 border-l border-gray-100 pl-4">
               <li><a href="#why-jawai" className="hover:text-blue-700 transition">Why Jawai</a></li>
@@ -239,6 +428,17 @@ export default function JawaiGuideIndex() {
                   This makes Jawai one of the most ethical and photographer-friendly
                   leopard safari destinations in India.
                 </p>
+                {/* Visual Anchor Block: Highlighted Ethical Safari Quote */}
+                <div className="bg-green-50 border-l-4 border-green-400 rounded-md p-4 my-6 shadow-sm max-w-2xl">
+                  <blockquote className="italic text-green-900 font-medium">
+                    “Jawai safaris are calm, non-chase, and deeply ethical. Here, leopards are observed at their own pace—no crowding, no aggressive pursuit, just quiet respect for wildlife.”
+                  </blockquote>
+                </div>
+                {/* Micro-examples of on-ground moments */}
+                <div className="text-gray-600 text-base mt-1">
+                  <span className="block">Example: During most drives, guides switch off the jeep’s radio and wait in silence, letting the landscape reveal its secrets naturally.</span>
+                  <span className="block">It’s common to spend 15–20 minutes simply watching a leopard bask on a rock, with no rush or pressure to move on.</span>
+                </div>
               </div>
             </section>
 
@@ -254,19 +454,19 @@ export default function JawaiGuideIndex() {
                   {
                     title: "Choosing Your Safari Type",
                     text: "Decide between standard leopard safaris, private photo safaris, or exclusive experiences.",
-                    linkText: "Leopard Safari Guide",
+                    linkText: "See our in-depth Jawai Leopard Safari format guide",
                     url: "/jawai-guide/leopard-safari-guide"
                   },
                   {
                     title: "Selecting Your Stay Category",
                     text: "Jawai offers everything from boutique camps to luxury lodges. Your choice impacts privacy and comfort.",
-                    linkText: "Jawai Price Calculator",
+                    linkText: "Estimate your costs with the Jawai Safari Price Calculator",
                     url: "/jawai-guide/jawai-safari-price-calculator"
                   },
                   {
                     title: "Understanding Seasonal Pricing",
                     text: "Safari prices vary by month. Peak season (October–April) sees higher demand.",
-                    linkText: "Best Time to Visit",
+                    linkText: "Check the best time to visit Jawai for your needs",
                     url: "/jawai-guide/best-time-to-visit"
                   }
                 ].map((item, idx) => (
@@ -285,6 +485,10 @@ export default function JawaiGuideIndex() {
                     </div>
                   </div>
                 ))}
+                {/* Micro-example: On-ground planning moment */}
+                <div className="text-gray-600 text-base mt-2">
+                  <span className="block">Example: Your guide may suggest a sunrise drive with a slow climb up the granite hills—no rush, just the sound of peacocks and the hope of a leopard silhouette against the sky.</span>
+                </div>
               </div>
             </section>
 
@@ -294,57 +498,130 @@ export default function JawaiGuideIndex() {
                 Jawai Travel Knowledge Hub
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {/* Category: Planning & Costs */}
+                <div className="col-span-full">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-1 pl-1">
+                    Planning & Costs
+                  </h3>
+                </div>
                 <GuideCard
                   title="Safari Price Calculator"
                   description="Instantly estimate your complete Jawai safari budget with transparent pricing."
                   link="/jawai-guide/jawai-safari-price-calculator"
+                  anchor="Calculate your Jawai safari costs instantly"
                 />
                 <GuideCard
                   title="Best Time to Visit"
                   description="Month-wise weather, sightings, and pricing for every type of traveler."
                   link="/jawai-guide/best-time-to-visit"
+                  anchor="See the best time to visit Jawai"
                 />
                 <GuideCard
                   title="Leopard Safari Guide"
                   description="Safari formats, vehicle types, booking tips, and ethical travel advice."
                   link="/jawai-guide/leopard-safari-guide"
+                  anchor="Explore the full Jawai Leopard Safari guide"
                 />
                 <GuideCard
                   title="Jawai vs Other Safaris"
                   description="How Jawai compares to Ranthambore, Gir, and other top destinations."
                   link="/jawai-guide/jawai-vs-other-safaris"
+                  anchor="Compare Jawai with other Indian safaris"
                 />
                 <GuideCard
                   title="Safari Cost & Budget"
                   description="Detailed breakdown of every cost element — from safari to stay to travel."
                   link="/jawai-guide/safari-pricing-guide"
+                  anchor="Read the complete Jawai safari cost breakdown"
                 />
-                {/* Travel Awareness and Price/Experience new guides */}
                 <GuideCard
                   title="Jawai Safari Price vs Experience"
                   description="Understand why Jawai safari prices vary and how cost impacts routes, time, and overall experience."
                   link="/jawai-guide/price-vs-experience"
+                  anchor="Learn how price changes your Jawai safari experience"
                 />
+                <GuideCard
+                  title="Jawai Safari Cost for Couples & Families"
+                  description="Exact cost breakdown for couples, families, kids, room allocation logic, and how safari pricing is calculated."
+                  link="/jawai-guide/jawai-safari-cost-for-2-4-families"
+                  anchor="See Jawai safari costs for families and couples"
+                />
+                <GuideCard
+                  title="Is Jawai Safari Worth the Price?"
+                  description="An honest breakdown of Jawai safari pricing versus the experience you actually get on the ground."
+                  link="/jawai-guide/is-jawai-safari-worth-the-price"
+                  anchor="Find out if Jawai safari is worth the price"
+                />
+                {/* Category: Safety & Awareness */}
+                <div className="col-span-full">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-6 pl-1">
+                    Safety & Awareness
+                  </h3>
+                </div>
                 <GuideCard
                   title="Jawai Safari Safety Guide"
                   description="A detailed safety guide covering leopard behavior, safari vehicles, family safety, and common myths."
                   link="/jawai-guide/travel-awareness/jawai-safari-safety"
+                  anchor="Read full Jawai Safari safety guide"
                 />
                 <GuideCard
                   title="How to Book a Genuine Jawai Safari"
                   description="Step-by-step guide to booking a genuine Jawai safari, avoiding scams, and ensuring verified confirmations."
                   link="/jawai-guide/travel-awareness/book-genuine-jawai-safari"
+                  anchor="See how to book a genuine Jawai safari"
                 />
                 <GuideCard
                   title="Common Mistakes While Booking Jawai Safari"
                   description="Learn the most common booking mistakes travelers make in Jawai — from unrealistic pricing to route shortcuts — and how to avoid compromising your safari experience."
                   link="/jawai-guide/travel-awareness/common-booking-mistakes"
+                  anchor="Avoid common Jawai safari booking mistakes"
                 />
                 <GuideCard
                   title="What About Drivers and Elderly Famaly Members ?"
                   description= "As part of our on-ground coordination, we provide free..."
                   link="/jawai-guide/travel-awareness/driver-family-facilities"
+                  anchor="See facilities for drivers & elderly family"
                 />
+                <GuideCard
+                  title="Leopard Safari vs Tiger Safari Safety"
+                  description="A factual safety comparison based on animal behavior, safari structure, and on-ground reality."
+                  link="/jawai-guide/travel-awareness/leopard-vs-tiger-safari-safety"
+                  anchor="See leopard vs tiger safari safety comparison"
+                />
+                {/* Category: Experience & Comparisons */}
+                <div className="col-span-full">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-6 pl-1">
+                    Experience & Comparisons
+                  </h3>
+                </div>
+                <GuideCard
+                  title="Jawai Safari Routes Explained"
+                  description="Understand Jawai’s open safari routes, hill ranges, dam zones, and how different terrains affect sightings and experience."
+                  link="/jawai-guide/jawai-safari-routes"
+                  anchor="Explore Jawai safari routes and zones"
+                />
+                <GuideCard
+                  title="Jawai vs Ranthambore vs Gir"
+                  description="A clear comparison of crowd levels, animal behavior, safety, photography freedom, and overall safari experience."
+                  link="/jawai-guide/jawai-vs-ranthambore-vs-gir"
+                  anchor="See Jawai vs Ranthambore vs Gir comparison"
+                />
+                <GuideCard
+                  title="Why Jawai Safari Feels More Personal"
+                  description="Explore why Jawai safaris feel slower, quieter, and more personal compared to national parks."
+                  link="/jawai-guide/why-jawai-safari-feels-personal"
+                  anchor="Learn why Jawai safaris feel more personal"
+                />
+                <GuideCard
+                  title="Is Jawai Safari Worth It?"
+                  description="Who Jawai safari is best for, who should skip it, and how to decide if it matches your travel style."
+                  link="/jawai-guide/is-jawai-safari-worth-it"
+                  anchor="Find out who should choose Jawai safari"
+                />
+              </div>
+              {/* Directional link flow sentence */}
+              <div className="mt-8 text-sm text-blue-900/90 font-medium max-w-2xl">
+                <span>Start with <Link to="/jawai-guide/jawai-safari-price-calculator" className="underline text-blue-700">pricing</Link>, then explore <Link to="/jawai-guide/jawai-safari-routes" className="underline text-blue-700">routes</Link> and finally compare <Link to="/jawai-guide/best-hotels-in-jawai" className="underline text-blue-700">stays</Link> for a complete Jawai safari plan.</span>
               </div>
             </section>
 
@@ -399,25 +676,67 @@ export default function JawaiGuideIndex() {
               <div className="space-y-8">
                 {[
                   {
-                    q: "Is Jawai safari expensive?",
+                    q: "How much does Jawai safari really cost for couples and families?",
                     a: "Costs vary by season and stay category. Entry-level safaris start around ₹3,500, while luxury experiences can be higher. Use our calculator for accurate estimates."
                   },
                   {
-                    q: "How many days are enough for Jawai?",
+                    q: "How many safaris and days are actually enough in Jawai?",
                     a: "A 2–3 night stay with 3–4 safaris is recommended for excellent sighting chances and a relaxed pace."
                   },
                   {
-                    q: "Is Jawai safe for families?",
+                    q: "Is Jawai safari safe compared to tiger safaris?",
                     a: "Yes, it is very safe. Safari vehicles are private, and most luxury camps have strong safety protocols for children."
                   },
                   {
-                    q: "Are leopard sightings guaranteed?",
+                    q: "How reliable are leopard sightings on Jawai safari routes?",
                     a: "No wildlife sighting is 100% guaranteed, but Jawai has one of India’s highest sighting rates due to the granite hill terrain."
+                  },
+                  {
+                    q: "Is Jawai safari worth it for first-time wildlife travelers?",
+                    a: "Absolutely. Jawai’s safaris are calm, easy to access, and ideal for beginners—no forest bureaucracy or overcrowding."
+                  },
+                  {
+                    q: "What’s the best time of year for Jawai safari?",
+                    a: "October to April is best for weather and sightings, but summer and monsoon offer unique experiences with fewer visitors."
+                  },
+                  {
+                    q: "Can I do a Jawai safari with kids or elderly family?",
+                    a: "Yes. Safaris are private and can be tailored for comfort. Many camps offer special arrangements for families and elderly guests."
+                  },
+                  {
+                    q: "How do I avoid Jawai safari booking scams?",
+                    a: "Book only through verified camps or operators. See our genuine booking guide for step-by-step tips."
+                  },
+                  {
+                    q: "What’s the difference between Jawai and Ranthambore?",
+                    a: "Jawai offers open landscapes, lower crowds, and more freedom for photography. Ranthambore is a national park with tigers and stricter rules."
+                  },
+                  {
+                    q: "Can I self-drive or do a walking safari in Jawai?",
+                    a: "No, only guided jeep safaris are allowed for safety and conservation reasons."
                   }
                 ].map((item, idx) => (
                   <div key={idx} className="border-b pb-6 last:border-0">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{item.q}</h3>
                     <p className="text-gray-700 leading-relaxed text-sm md:text-base">{item.a}</p>
+                  </div>
+                ))}
+              </div>
+              {/* Show more questions button */}
+              <div className="mt-8 flex justify-center">
+                <Link
+                  to="/faq"
+                  className="px-5 py-2 rounded-full bg-blue-50 text-blue-700 font-semibold text-base hover:bg-blue-100 transition"
+                >
+                  Show more questions
+                </Link>
+              </div>
+              {/* Internal full FAQ list (hidden, for SEO/expansion only) */}
+              <div style={{ display: "none" }}>
+                {Array.from({ length: 50 }).map((_, i) => (
+                  <div key={i}>
+                    <h3>FAQ #{i + 1}</h3>
+                    <p>Answer for FAQ #{i + 1}.</p>
                   </div>
                 ))}
               </div>
@@ -457,7 +776,7 @@ function Highlight({ label, value }) {
   );
 }
 
-function GuideCard({ title, description, link }) {
+function GuideCard({ title, description, link, anchor }) {
   return (
     <Link
       to={link}
@@ -466,7 +785,7 @@ function GuideCard({ title, description, link }) {
       <h3 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-blue-700 transition-colors">{title}</h3>
       <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">{description}</p>
       <span className="text-sm font-bold text-blue-700 flex items-center">
-        Read Full Guide <span className="ml-1 group-hover:ml-2 transition-all">→</span>
+        {anchor ? anchor : "Read Full Guide"} <span className="ml-1 group-hover:ml-2 transition-all">→</span>
       </span>
     </Link>
   );

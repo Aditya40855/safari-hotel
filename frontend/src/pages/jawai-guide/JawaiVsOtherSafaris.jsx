@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function JawaiVsOtherSafaris() {
   return (
     <main className="container mx-auto px-4 py-10 max-w-6xl" role="article">
+      <Helmet>
+        <link
+          rel="canonical"
+          href="https://www.jawaiunfiltered.com/jawai-guide/jawai-vs-other-safaris"
+        />
+      </Helmet>
 
       {/* Breadcrumb */}
       <nav className="text-sm mb-6 text-gray-500">
