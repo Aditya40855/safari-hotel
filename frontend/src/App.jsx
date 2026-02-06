@@ -30,12 +30,41 @@ const JawaiVsOtherSafaris = lazy(() => import("./pages/jawai-guide/JawaiVsOtherS
 const PriceCalculator = lazy(() => import("./pages/PriceCal/PriceCalculator"));
 const JawaiSafariPriceCalculatorGuide = lazy(() => import("./pages/jawai-guide/JawaiSafariPriceCalculatorGuide"));
 const JawaiSafariCostBreakdown = lazy(() => import("./pages/jawai-guide/JawaiSafariCostBreakdown"));
-const Jawaisafaripackage = lazy(() => import("./pages/jawai-guide/Jawaisafaripackage"));
+const Jawaisafaripackage = lazy(() => import("./pages/jawai-guide/JawaiSafariPackage"));
 const TravelSafetyInJawai= lazy(() => import("./pages/jawai-guide/TravelSafetyInJawai"));
 const JawaiSafariRoutesExplained = lazy(() => import("./pages/jawai-guide/JawaiSafariRoutesExplained"));
+const JawaiLeopardSafariDosAndDonts = lazy(() => import("./pages/jawai-guide/JawaiLeopardSafariDosAndDonts"));
 const JawaiSafariCostForFamilies = lazy(() => import("./pages/jawai-guide/JawaiSafariCostForFamilies"));
+const JawaiLeopardSafariRules  = lazy(() => import("./pages/jawai-guide/JawaiLeopardSafariRules"));
 const JawaiSafariWorthThePrice = lazy(() =>
   import("./pages/jawai-guide/JawaiSafariWorthThePrice")
+);
+const JawaiSafariByMonth = lazy(() =>
+  import("./pages/jawai-guide/JawaiSafariByMonth")
+);
+const HowJawaiLeopardSafariWorks = lazy(() =>
+  import("./pages/jawai-guide/HowJawaiLeopardSafariWorks")
+);
+const FirstTimeJawaiSafariGuide = lazy(() =>
+  import("./pages/jawai-guide/FirstTimeJawaiSafariGuide")
+);
+const JawaiLeopardSightingChances = lazy(() =>
+  import("./pages/jawai-guide/JawaiLeopardSightingChances")
+);
+const JawaiSafariMythsVsReality = lazy(() =>
+  import("./pages/jawai-guide/JawaiSafariMythsVsReality")
+);
+const JawaiSafariPackingChecklist = lazy(() =>
+  import("./pages/jawai-guide/JawaiSafariPackingChecklist")
+);
+const MorningVsEveningJawaiSafari = lazy(() =>
+  import("./pages/jawai-guide/MorningVsEveningJawaiSafari")
+);
+const JawaiSafariWithChildren = lazy(() =>
+  import("./pages/jawai-guide/JawaiSafariWithChildren")
+);
+const JawaiLeopardConservationModel = lazy(() =>
+  import("./pages/jawai-guide/JawaiLeopardConservationModel")
 );
 const IsJawaiSafariWorthIt = lazy(() => import("./pages/jawai-guide/IsJawaiSafariWorthIt"));
 const JawaiSafariVsRanthamboreVsGir = lazy(() => import("./pages/jawai-guide/JawaiSafariVsRanthamboreVsGir"));
@@ -164,7 +193,50 @@ export default function App() {
   path="/jawai-guide/travel-awareness/leopard-vs-tiger-safari-safety"
   element={<IsLeopardSafariSaferThanTigerSafari />}
 />
-
+<Route
+  path="/jawai-guide/jawai-leopard-safari-rules"
+  element={<JawaiLeopardSafariRules />}
+/>
+<Route
+  path="/jawai-guide/jawai-leopard-safari-dos-and-donts"
+  element={<JawaiLeopardSafariDosAndDonts />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-by-month"
+  element={<JawaiSafariByMonth />}
+/>
+<Route
+  path="/jawai-guide/how-jawai-leopard-safari-works"
+  element={<HowJawaiLeopardSafariWorks />}
+/>
+<Route
+  path="/jawai-guide/first-time-jawai-safari"
+  element={<FirstTimeJawaiSafariGuide />}
+/>
+<Route
+  path="/jawai-guide/jawai-leopard-sighting-chances"
+  element={<JawaiLeopardSightingChances />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-myths-vs-reality"
+  element={<JawaiSafariMythsVsReality />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-packing-list"
+  element={<JawaiSafariPackingChecklist />}
+/>
+<Route
+  path="/jawai-guide/morning-vs-evening-jawai-safari"
+  element={<MorningVsEveningJawaiSafari />}
+/>
+<Route
+  path="/jawai-guide/jawai-safari-with-children"
+  element={<JawaiSafariWithChildren />}
+/>
+<Route
+  path="/jawai-guide/jawai-leopard-conservation-model"
+  element={<JawaiLeopardConservationModel />}
+/>
             
             {/* Lazy-loaded routes */}
             <Route path="/login" element={<Login />} />
