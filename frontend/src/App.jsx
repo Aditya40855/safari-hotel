@@ -48,12 +48,10 @@ const HowJawaiLeopardSafariWorks = lazy(() =>
 const FirstTimeJawaiSafariGuide = lazy(() =>
   import("./pages/jawai-guide/FirstTimeJawaiSafariGuide")
 );
-const JawaiLeopardSightingChances = lazy(() =>
-  import("./pages/jawai-guide/JawaiLeopardSightingChances")
-);
-const JawaiSafariMythsVsReality = lazy(() =>
-  import("./pages/jawai-guide/JawaiSafariMythsVsReality")
-);
+//const JawaiLeopardSightingChances = lazy(() =>
+ // import("./pages/jawai-guide/JawaiLeopardSightingChances"));
+//const JawaiSafariMythsVsReality = lazy(() =>
+ // import("./pages/jawai-guide/JawaiSafariMythsVsReality"));
 const JawaiSafariPackingChecklist = lazy(() =>
   import("./pages/jawai-guide/JawaiSafariPackingChecklist")
 );
@@ -63,9 +61,8 @@ const MorningVsEveningJawaiSafari = lazy(() =>
 const JawaiSafariWithChildren = lazy(() =>
   import("./pages/jawai-guide/JawaiSafariWithChildren")
 );
-const JawaiLeopardConservationModel = lazy(() =>
-  import("./pages/jawai-guide/JawaiLeopardConservationModel")
-);
+//const JawaiLeopardConservationModel = lazy(() =>
+ // import("./pages/jawai-guide/JawaiLeopardConservationModel"));
 const IsJawaiSafariWorthIt = lazy(() => import("./pages/jawai-guide/IsJawaiSafariWorthIt"));
 const JawaiSafariVsRanthamboreVsGir = lazy(() => import("./pages/jawai-guide/JawaiSafariVsRanthamboreVsGir"));
 const WhyJawaiSafariFeelsPersonal  = lazy(() => import("./pages/jawai-guide/WhyJawaiSafariFeelsPersonal"));
@@ -213,14 +210,7 @@ export default function App() {
   path="/jawai-guide/first-time-jawai-safari"
   element={<FirstTimeJawaiSafariGuide />}
 />
-<Route
-  path="/jawai-guide/jawai-leopard-sighting-chances"
-  element={<JawaiLeopardSightingChances />}
-/>
-<Route
-  path="/jawai-guide/jawai-safari-myths-vs-reality"
-  element={<JawaiSafariMythsVsReality />}
-/>
+
 <Route
   path="/jawai-guide/jawai-safari-packing-list"
   element={<JawaiSafariPackingChecklist />}
@@ -233,10 +223,7 @@ export default function App() {
   path="/jawai-guide/jawai-safari-with-children"
   element={<JawaiSafariWithChildren />}
 />
-<Route
-  path="/jawai-guide/jawai-leopard-conservation-model"
-  element={<JawaiLeopardConservationModel />}
-/>
+
             
             {/* Lazy-loaded routes */}
             <Route path="/login" element={<Login />} />
