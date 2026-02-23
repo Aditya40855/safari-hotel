@@ -182,6 +182,18 @@ function HeroSearch({ cities }) {
           Search
         </button>
       </form>
+      {/* Inquire Now Button (WhatsApp Redirect) */}
+      <div className="mt-4 text-center">
+        <a
+          href="https://wa.me/919351411559?text=Hello%20Jawai%20Unfiltered,%20I%20am%20interested%20in%20booking%20a%20Safari/Hotel.%20Please%20share%20details."
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"
+        >
+          Inquire Now on WhatsApp
+          <ArrowRight size={16} />
+        </a>
+      </div>
     </div>
   );
 }
