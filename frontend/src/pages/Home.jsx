@@ -33,33 +33,10 @@ function AdminVisitorCounter() {
   );
 }
 
-// --- COMPONENT: STICKY MOBILE BOOKING BAR ---
-/*function StickyBookingBar({ price = 4000 }) {
-  return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-[9998] animate-in slide-in-from-bottom-full duration-500">
-      <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] flex items-center justify-between">
-        <div className="flex flex-col">
-          <div className="flex items-center gap-1">
-            <span className="text-[10px] font-black text-orange-600 uppercase tracking-tighter">Starting from</span>
-            <div className="h-1 w-1 bg-green-500 rounded-full animate-pulse"></div>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-xl font-black text-gray-900">₹{price.toLocaleString()}</span>
-            <span className="text-[10px] text-gray-400 font-bold">/SAFARI</span>
-          </div>
-        </div>
-        <button 
-          onClick={() => window.location.href = "https://wa.me/919351411559?text=I'd%20like%20to%20book%20a%20Safari"}
-          className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 shadow-lg shadow-orange-500/30 active:scale-95 transition-all"
-        >
-          <Zap size={16} fill="currentColor" />
-          BOOK NOW
-          <ChevronRight size={16} />
-        </button>
-      </div>
-    </div>
-  );
-}*/
+// --- COMPONENT: STICKY WHATSAPP BUTTON ---
+function StickyWhatsAppButton() {
+  
+}
 
 // --- COMPONENT: URGENCY PLUS (Live Activity Pulse) ---
 function LiveIncentive() {
@@ -174,7 +151,7 @@ function HeroSearch({ cities }) {
           onChange={(e) => setCity(e.target.value)}
           className="w-full h-14 bg-white text-gray-900 font-bold text-base md:text-lg rounded-xl pl-4 pr-32 outline-none shadow-xl focus:ring-4 focus:ring-orange-500/30 appearance-none cursor-pointer"
         >
-          <option value="">Select Destination</option>
+          <option value="">Choose Your Safari Destination</option>
           {cities.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}
         </select>
         <div className="absolute right-36 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xs hidden md:block">▼</div>
@@ -183,17 +160,6 @@ function HeroSearch({ cities }) {
         </button>
       </form>
       {/* Inquire Now Button (WhatsApp Redirect) */}
-      <div className="mt-4 text-center">
-        <a
-          href="https://wa.me/919351411559?text=Hello%20Jawai%20Unfiltered,%20I%20am%20interested%20in%20booking%20a%20Safari/Hotel.%20Please%20share%20details."
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"
-        >
-          Inquire Now on WhatsApp
-          <ArrowRight size={16} />
-        </a>
-      </div>
     </div>
   );
 }
@@ -425,12 +391,39 @@ export default function Home() {
           <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700">
             Jawai <span className="text-orange-500">Unfiltered.</span>
           </h1>
-          <p className="text-gray-300 text-base md:text-lg mb-10 max-w-2xl mx-auto animate-in fade-in duration-1000">
-            Book authentic leopard safaris and premium heritage stays instantly.
-          </p>
+          <p className="text-gray-300 text-base md:text-lg mb-6 max-w-2xl mx-auto animate-in fade-in duration-1000">
+  Plan your Jawai leopard safari with local experts. Get instant safari availability, pricing and luxury stay recommendations.
+</p>
+
+<div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-xs md:text-sm font-semibold text-gray-300">
+  <span className="bg-white/10 px-3 py-1 rounded-full">⭐ 1200+ travelers hosted</span>
+  <span className="bg-white/10 px-3 py-1 rounded-full">🛻 Private Jeep Safaris</span>
+  <span className="bg-white/10 px-3 py-1 rounded-full">📍 Local Jawai Experts</span>
+</div>
+
+<div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+
+<a
+href="https://wa.me/919351411559?text=Hello%20Jawai%20Unfiltered,%20I%20want%20to%20plan%20a%20Jawai%20Leopard%20Safari.%20Please%20guide%20me."
+target="_blank"
+rel="noreferrer"
+className="inline-flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-black px-8 py-4 rounded-2xl shadow-lg shadow-orange-500/30 transition-all active:scale-95"
+>
+💬 Talk to Jawai Safari Expert
+</a>
+
+<Link
+to="/price-calculator"
+className="inline-flex items-center justify-center gap-2 bg-white text-gray-900 font-bold px-8 py-4 rounded-2xl shadow hover:shadow-lg transition-all"
+>
+🧮 Plan My Safari
+</Link>
+
+</div>
           <HeroSearch cities={cities} />
         </div>
       </section>
+
 
 
       <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16">
@@ -533,6 +526,149 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Safari Experience Types */}
+      <section className="max-w-7xl mx-auto px-4 md:px-6 mb-20">
+
+        <div className="text-center mb-10">
+          <span className="text-xs font-black uppercase tracking-widest text-orange-600">
+            Safari Experiences
+          </span>
+
+          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+            Choose Your Jawai Safari Experience
+          </h2>
+
+          <p className="text-gray-500 text-sm max-w-2xl mx-auto mt-2">
+            Different travelers want different experiences. Choose the safari that fits your adventure style.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-4 gap-6">
+
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 text-center hover:shadow-xl transition">
+            <div className="text-4xl mb-3">🛻</div>
+            <h3 className="font-bold text-gray-900">Private Leopard Safari</h3>
+            <p className="text-sm text-gray-500 mt-1">Exclusive jeep safari with expert tracker.</p>
+            <a href="https://wa.me/919351411559?text=Interested%20in%20Private%20Leopard%20Safari" target="_blank" rel="noreferrer" className="mt-3 inline-block text-orange-600 font-bold text-sm">Ask Details →</a>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 text-center hover:shadow-xl transition">
+            <div className="text-4xl mb-3">📸</div>
+            <h3 className="font-bold text-gray-900">Photography Safari</h3>
+            <p className="text-sm text-gray-500 mt-1">Perfect for wildlife photographers.</p>
+            <a href="https://wa.me/919351411559?text=Interested%20in%20Photography%20Safari" target="_blank" rel="noreferrer" className="mt-3 inline-block text-orange-600 font-bold text-sm">Ask Details →</a>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 text-center hover:shadow-xl transition">
+            <div className="text-4xl mb-3">🏕</div>
+            <h3 className="font-bold text-gray-900">Luxury Safari Stay</h3>
+            <p className="text-sm text-gray-500 mt-1">Luxury camps with safari included.</p>
+            <a href="https://wa.me/919351411559?text=Interested%20in%20Luxury%20Safari%20Stay" target="_blank" rel="noreferrer" className="mt-3 inline-block text-orange-600 font-bold text-sm">Ask Details →</a>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 text-center hover:shadow-xl transition">
+            <div className="text-4xl mb-3">👨‍👩‍👧</div>
+            <h3 className="font-bold text-gray-900">Family Safari</h3>
+            <p className="text-sm text-gray-500 mt-1">Safe and comfortable wildlife safari.</p>
+            <a href="https://wa.me/919351411559?text=Interested%20in%20Family%20Safari" target="_blank" rel="noreferrer" className="mt-3 inline-block text-orange-600 font-bold text-sm">Ask Details →</a>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* Recent Leopard Sightings */}
+      <section className="max-w-6xl mx-auto px-4 md:px-6 mb-16">
+        <div className="bg-white rounded-3xl border border-gray-200 shadow-xl p-6 md:p-10">
+          <div className="text-center mb-8">
+            <span className="text-xs font-black uppercase tracking-widest text-orange-600">
+              Recent Leopard Sightings
+            </span>
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+              Latest Jawai Wildlife Activity
+            </h2>
+            <p className="text-gray-500 text-sm mt-2 max-w-xl mx-auto">
+              Real safari updates from Jawai trackers. Leopard sightings change daily depending on wildlife movement.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <p className="text-xs font-bold text-orange-600 uppercase">Today Morning</p>
+              <h3 className="font-bold text-gray-900 mt-1">Leopard near Devgiri Hills</h3>
+              <p className="text-sm text-gray-500 mt-1">Tracked by local guide team during early safari route.</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <p className="text-xs font-bold text-green-600 uppercase">Yesterday Evening</p>
+              <h3 className="font-bold text-gray-900 mt-1">Leopard near Jawai Dam</h3>
+              <p className="text-sm text-gray-500 mt-1">Observed during sunset safari route close to rocky hills.</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <p className="text-xs font-bold text-blue-600 uppercase">Recent Activity</p>
+              <h3 className="font-bold text-gray-900 mt-1">Cub movement spotted</h3>
+              <p className="text-sm text-gray-500 mt-1">Local trackers reported young leopard activity in hill caves.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Safari Availability Planner */}
+      <section className="max-w-5xl mx-auto mt-12 px-4 md:px-6">
+        <div className="rounded-3xl bg-white border border-gray-200 shadow-xl p-6 md:p-10 text-center">
+
+          <span className="text-xs font-black uppercase tracking-widest text-orange-600">
+            Quick Safari Planner
+          </span>
+
+          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+            Check Jawai Leopard Safari Availability
+          </h2>
+
+          <p className="text-gray-500 text-sm md:text-base mt-2 max-w-2xl mx-auto">
+            Tell us your travel dates and group size. Our Jawai experts will instantly confirm safari slots and best wildlife zones.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-4 mt-8">
+
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <div className="text-3xl mb-2">📅</div>
+              <h3 className="font-bold text-gray-900">Choose Travel Date</h3>
+              <p className="text-xs text-gray-500">Morning or evening safari slots.</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <div className="text-3xl mb-2">👥</div>
+              <h3 className="font-bold text-gray-900">Group Size</h3>
+              <p className="text-xs text-gray-500">Up to 6 guests per jeep safari.</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <div className="text-3xl mb-2">🛻</div>
+              <h3 className="font-bold text-gray-900">Safari Type</h3>
+              <p className="text-xs text-gray-500">Private safari or photography safari.</p>
+            </div>
+
+          </div>
+
+          <div className="mt-8">
+            <a
+              href="https://wa.me/919351411559?text=Hello%20Jawai%20Unfiltered,%20I%20want%20to%20check%20safari%20availability%20for%20Jawai."
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-black px-10 py-4 rounded-2xl shadow-xl shadow-orange-500/30 transition-all active:scale-95"
+            >
+              💬 Get Safari Availability
+              <ArrowRight size={18} />
+            </a>
+          </div>
+
+        </div>
+      </section>
+
       <section className="max-w-7xl mx-auto px-4 md:px-6 mb-16">
   <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-black p-6 md:p-10 shadow-2xl">
     
@@ -545,7 +681,7 @@ export default function Home() {
       </h2>
 
       {/* Mobile: horizontal swipe | Desktop: grid */}
-      <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 scrollbar-hide">
+      <div className="flex md:grid md:grid-cols-4 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 scrollbar-hide">
         
         {/* Card 1 */}
         <div className="min-w-[260px] snap-center bg-white/95 backdrop-blur rounded-2xl p-6 text-center shadow-lg hover:scale-[1.03] transition-transform">
@@ -580,15 +716,29 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Card 4: High Leopard Sightings */}
+        <div className="min-w-[260px] snap-center bg-white/95 backdrop-blur rounded-2xl p-6 text-center shadow-lg hover:scale-[1.03] transition-transform">
+          <div className="h-12 w-12 mx-auto mb-4 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-2xl">
+            🐆
+          </div>
+          <h3 className="font-bold text-gray-900 mb-1">High Leopard Sightings</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            Jawai has one of India's highest leopard sighting rates with experienced local trackers.
+          </p>
+        </div>
+
       </div>
     </div>
   </div>
 
 </section>
+{/* Sticky WhatsApp CTA for Mobile */}
+
 
       {/* RENDER NEW INTERACTIVE ELEMENTS */}
       <LiveIncentive />
       <AdminVisitorCounter />
+      <StickyWhatsAppButton />
 
       {/* SEO: Hidden semantic section for search engines */}
       <section className="sr-only" aria-hidden="true">
